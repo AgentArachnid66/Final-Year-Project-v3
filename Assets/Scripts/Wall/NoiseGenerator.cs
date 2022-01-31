@@ -21,6 +21,9 @@ public class NoiseGenerator : MonoBehaviour
     public float falloff;
 
 
+    
+
+
     private Renderer _renderer;
     // Start is called before the first frame update
     void Start()
@@ -29,6 +32,7 @@ public class NoiseGenerator : MonoBehaviour
 
         UpdateTexture(globalMask);
         SaveRenderTexture(globalMask, "mask");
+        Debug.Log($"Saving Mask ot {CustomUtility.maskPath}");
     }
 
     [ContextMenu("Update Texture")]
@@ -85,6 +89,31 @@ public class NoiseGenerator : MonoBehaviour
 
     }
 
+    Texture2D GenerateCheckerTexture()
+    {
+        Texture2D texture = new Texture2D(width, height);
+
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                Color colour = CalculateChecker(i, j);
+                texture.SetPixel(i, j, colour);
+            }
+
+        }
+        texture.Apply();
+        return texture;
+
+
+
+    }
+
+    Color CalculateChecker(int x, int y)
+    {
+        return new Color(0f, 0f, 0f);
+    }
+
     Color CalculateColour(int x, int y)
     {
         float xCoord = (float)x / width * scale + offset_X;
@@ -135,6 +164,7 @@ public class NoiseGenerator : MonoBehaviour
 
         // Encodes the PNG file
         File.WriteAllBytes(fileSaveName, tex.EncodeToPNG());
+        CustomUtility.maskPath = fileSaveName;
 
         RenderTexture.active = oldRT;
 

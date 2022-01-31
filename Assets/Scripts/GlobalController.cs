@@ -13,7 +13,7 @@ public class GlobalController : MonoBehaviour
     public float totalTime;
 
     private bool activate = false;
-    private int direction = 1;
+    private int direction = -1;
     private float elapsedTime;
 
     private void Awake()
