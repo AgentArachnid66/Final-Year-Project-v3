@@ -42,6 +42,9 @@ public class GlobuleHandle : MonoBehaviour
         }
     }
 
+    #region Deprecated 
+
+    // Requires the Ray Marcher Plugin which might not be used
 
     private void LateUpdate()
     {
@@ -76,6 +79,8 @@ public class GlobuleHandle : MonoBehaviour
                 gameObject.transform.position.z,
                 _globRadius);        
     }
+
+    #endregion
 
 
     [ContextMenu("Test")]

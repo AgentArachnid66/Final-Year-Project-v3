@@ -5,8 +5,29 @@ using UnityEngine.Events;
 
 public class CustomEvents : MonoBehaviour
 {
+     private static CustomEvents customEvents;
+    
+    public static CustomEvents CustomEventsInstance
+    {
+        get
+        {
+            if (ReferenceEquals(customEvents, null))
+                customEvents = GameObject.FindObjectOfType<CustomEvents>();
+
+            return customEvents;
+        }
+    }
+
+
     public UnityEvent StartSimulation = new UnityEvent();
 
+    public UnityEvent Shoot = new UnityEvent();
+
+    public UnityEventFloat DroneHorizontal = new UnityEventFloat();
+    public UnityEventFloat DroneVertical = new UnityEventFloat();
+
+
+    public UnityEventString ChangeScene = new UnityEventString();
 
     private void Update()
     {
@@ -17,6 +38,16 @@ public class CustomEvents : MonoBehaviour
         }
     }
 }
+
+public class UnityEventFloat : UnityEvent<float>
+{
+}
+
+public class UnityEventString : UnityEvent<string>
+{
+}
+
+
 
 public static class CustomUtility
 {

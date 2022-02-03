@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
@@ -17,4 +18,11 @@ public class SceneController : MonoBehaviour
     }
 
     // This class will be in charge of switching the scenes
+
+
+    private void ChangeScene(string sceneName)
+    {
+        SceneManager.LoadSceneAsync(sceneName);
+    }
+
 }

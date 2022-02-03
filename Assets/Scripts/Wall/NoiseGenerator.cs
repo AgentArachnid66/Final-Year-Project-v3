@@ -38,7 +38,10 @@ public class NoiseGenerator : MonoBehaviour
     [ContextMenu("Update Texture")]
     void UpdateTexture(RenderTexture target) {
 
-        _renderer.material.mainTexture = GenerateTexture();
+        if (_renderer != null)
+        {
+            _renderer.material.mainTexture = GenerateTexture();
+        }
         Debug.Log("Update Texture");
         Graphics.Blit(GenerateTexture(), target);
     }
@@ -65,7 +68,6 @@ public class NoiseGenerator : MonoBehaviour
         dataController.sessionData.Masks[2] = SaveRenderTexture(second_Third, "Second_Third");
 
         */
-        RandomiseValues();
         UpdateTexture(globalMask);
         //dataController.sessionData.Masks[3] = SaveRenderTexture(globalMask, "GlobalMask");
 

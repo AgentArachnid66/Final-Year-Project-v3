@@ -40,6 +40,10 @@ public class Drone : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        CustomEvents.CustomEventsInstance.DroneHorizontal.AddListener(UpdateThetaDelta);
+        CustomEvents.CustomEventsInstance.DroneVertical.AddListener(UpdateHeightDelta);
+        CustomEvents.CustomEventsInstance.Shoot.AddListener(ShootGlobule);
+
 
         origin = transform.position;
     }
@@ -86,6 +90,25 @@ public class Drone : MonoBehaviour
         }
     }
 
+    void UpdateThetaDelta(float deltaTheta)
+    {
+        theta += deltaTheta;
+    }
+
+    void UpdateThetaAbs(float newTheta)
+    {
+        theta = newTheta;
+    }
+
+    void UpdateHeightDelta(float deltaHeight)
+    {
+        height += deltaHeight;
+    }
+
+    void UpdateHeightAbs(float newHeight)
+    {
+        height = newHeight;
+    }
 
     Vector3 GetPosition()
     {

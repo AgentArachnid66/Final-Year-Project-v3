@@ -1515,11 +1515,11 @@ MonoBehaviour:
   waterMask: {fileID: 8400000, guid: c9bf438b3ea75b14d9f11e50350ef43c, type: 2}
   globalMask: {fileID: 8400000, guid: 186f11487cf125543a7adb48e576934d, type: 2}
   dataController: {fileID: 1736048480}
-  width: 256
-  height: 256
+  width: 8192
+  height: 8192
   scale: 6
-  offset_X: 313.0549
-  offset_Y: -376.88806
+  offset_X: -857.07935
+  offset_Y: -280.11783
   numOfBands: 3
   falloff: 0.1
 --- !u!64 &1278701027
@@ -2422,7 +2422,7 @@ MonoBehaviour:
     Length: 0
     TimeStamp: 
     HitLocations: []
-    mask: 
+    mask: H:/GitHub/Final Year Project v3/Assets/../SavedImages/renderTarget.png
   participantData:
     ID: 18
     PIN: 9
@@ -2439,6 +2439,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StartSimulation:
+    m_PersistentCalls:
+      m_Calls: []
+  Shoot:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &1736048482
