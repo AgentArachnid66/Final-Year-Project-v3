@@ -25,6 +25,13 @@ public class CustomEvents : MonoBehaviour
 
     public UnityEventFloat DroneHorizontal = new UnityEventFloat();
     public UnityEventFloat DroneVertical = new UnityEventFloat();
+    public UnityEventFloat DroneDiagonal = new UnityEventFloat();
+
+    public UnityEvent ResetDroneVertical = new UnityEvent();
+    public UnityEvent ResetDroneHorizontal = new UnityEvent();
+    public UnityEvent ResetDroneDiagonal= new UnityEvent();
+
+
 
 
     public UnityEventString ChangeScene = new UnityEventString();
@@ -34,7 +41,65 @@ public class CustomEvents : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             StartSimulation.Invoke();
+        }
 
+        // Vertical Movement
+        if (Input.GetKey(KeyCode.Keypad8))
+        {
+            DroneVertical.Invoke(0.5f);
+        }
+        if (Input.GetKey(KeyCode.Keypad2))
+        {
+            DroneVertical.Invoke(-0.5f);
+        }
+
+        if (Input.GetKeyUp(KeyCode.Keypad8))
+        {
+            ResetDroneVertical.Invoke();
+        }
+        if (Input.GetKeyUp(KeyCode.Keypad2))
+        {
+            ResetDroneVertical.Invoke();
+        }
+
+
+        // Horizontal Movement
+        if (Input.GetKey(KeyCode.Keypad6))
+        {
+            DroneHorizontal.Invoke(0.5f);
+        }
+        if (Input.GetKey(KeyCode.Keypad4))
+        {
+            DroneHorizontal.Invoke(-0.5f);
+        }
+
+        if (Input.GetKeyUp(KeyCode.Keypad6))
+        {
+            ResetDroneHorizontal.Invoke();
+        }
+        if (Input.GetKeyUp(KeyCode.Keypad4))
+        {
+            ResetDroneHorizontal.Invoke();
+        }        
+        
+        
+        // Diagonal Movement
+        if(Input.GetKey(KeyCode.KeypadPlus))
+        {
+            DroneDiagonal.Invoke(0.5f);
+        }
+        if (Input.GetKey(KeyCode.KeypadMinus))
+        {
+            DroneDiagonal.Invoke(-0.5f);
+        }
+
+        if (Input.GetKeyUp(KeyCode.KeypadPlus))
+        {
+            ResetDroneDiagonal.Invoke();
+        }
+        if (Input.GetKeyUp(KeyCode.KeypadMinus))
+        {
+            ResetDroneDiagonal.Invoke();
         }
     }
 }
@@ -47,6 +112,12 @@ public class UnityEventString : UnityEvent<string>
 {
 }
 
+
+public enum Liquid
+{
+    None,
+    Water
+}
 
 
 public static class CustomUtility
