@@ -26,9 +26,15 @@ public class Player : MonoBehaviour
     public float banking;
     private Vector3 _rotationVelocity;
 
+
+    public bool on = false;
+    public float pressure;
+    public Transform waterSpout;
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
+       
     }
 
     private void Start()
@@ -46,6 +52,8 @@ public class Player : MonoBehaviour
         CustomEvents.CustomEventsInstance.DroneDiagonal.AddListener(DiagonalMovement);
         CustomEvents.CustomEventsInstance.ResetDroneDiagonal.AddListener(ResetDiagonal);
         CustomEvents.CustomEventsInstance.ResetDroneDiagonal.AddListener(ResetRotation);
+
+        CustomEvents.CustomEventsInstance.Shoot.AddListener(ShootWater);
             
             
     }
@@ -113,8 +121,9 @@ public class Player : MonoBehaviour
         _currentLerpDiagonal = 0;
         _diagonalForce = 0;
     }
-#endregion
+    #endregion
 
+    #region Rotation
 
     private void AddRotation(float input, ref float axis)
     {
@@ -127,5 +136,33 @@ public class Player : MonoBehaviour
         _targetRotation = Vector3.zero;
     }
 
+    #endregion
+
+
+    #region Shooting
+
+
+
+    private void ShootWater()
+    {
+        Debug.Log("Receivied");
+        GameObject globule = GlobuleObjectPool.sharedInstance.GetPooledObject();
+        if (globule != null)
+        {
+            WaterGlobule waterGlobule = globule.GetComponent<WaterGlobule>();
+            globule.transform.position = waterSpout.transform.position;
+            waterGlobule.launchVelocity = waterSpout.forward;
+
+            globule.GetComponent<Rigidbody>().AddForce(waterSpout.forward * pressure);
+
+            waterGlobule.pressure = pressure;
+
+            Debug.Log("Shooting Globule");
+
+            StartCoroutine(waterGlobule.ResetGlobule(2f));
+        }
+    }
+
+    #endregion
 
 }

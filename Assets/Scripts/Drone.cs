@@ -42,7 +42,7 @@ public class Drone : MonoBehaviour
     {
         CustomEvents.CustomEventsInstance.DroneHorizontal.AddListener(UpdateThetaDelta);
         CustomEvents.CustomEventsInstance.DroneVertical.AddListener(UpdateHeightDelta);
-        CustomEvents.CustomEventsInstance.Shoot.AddListener(ShootGlobule);
+        //CustomEvents.CustomEventsInstance.Shoot.AddListener(ShootGlobule);
 
 
         origin = transform.position;

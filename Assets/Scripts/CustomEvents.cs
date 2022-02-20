@@ -101,6 +101,11 @@ public class CustomEvents : MonoBehaviour
         {
             ResetDroneDiagonal.Invoke();
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Shoot.Invoke();
+        }
     }
 }
 

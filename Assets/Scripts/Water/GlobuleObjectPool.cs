@@ -29,6 +29,16 @@ public class GlobuleObjectPool : MonoBehaviour
         }
     }
 
+    private GameObject GenerateNewInstance()
+    {
+        GameObject temp = Instantiate(objectToPool);
+        temp.SetActive(false);
+        pooledObjects.Add(temp);
+
+        return temp;
+
+    }
+
     public GameObject GetPooledObject()
     {
         for (int i = 0; i < amountToPool; i++)
@@ -37,10 +47,13 @@ public class GlobuleObjectPool : MonoBehaviour
             if (!pooledObjects[i].activeInHierarchy)
             {
                 Debug.Log(i);
+                pooledObjects[i].SetActive(true);
                 return pooledObjects[i];
             }
         }
-        return null;
+        GameObject newInstance = GenerateNewInstance();
+        newInstance.SetActive(true);
+        return newInstance;
     }
 
 
