@@ -31,12 +31,14 @@ public class Hit
 	public float V;
 
 	public float pressure;
+    public int wallID;
 
-	public Hit(Vector2 uv, float pressure)
+	public Hit(Vector2 uv, float pressure, int wallID)
     {
 		this.U = uv.x;
 		this.V = uv.y;
 		this.pressure = pressure;
+        this.wallID = wallID;
     }
 }
 

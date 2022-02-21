@@ -2292,6 +2292,7 @@ MonoBehaviour:
   dataController: {fileID: 1736048480}
   pressure: 0
   launchVelocity: {x: 0, y: 0, z: 0}
+  _drawShader: {fileID: 4800000, guid: d3d13afcf2853704b94d3e870a8d44ca, type: 3}
 --- !u!54 &1486095577
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2644,7 +2645,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd452e672c5d1c649987572a0460c16d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  customEvents: {fileID: 1736048481}
   wallMat: {fileID: 0}
   startingRadius: -2
   endRadius: 25

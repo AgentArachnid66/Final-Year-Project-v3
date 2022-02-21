@@ -9,6 +9,9 @@ Shader "Custom/MainWall"
         _global("Global Mask", 2D) = "black"{}
         _numOfBands("Number Of Bands", int) = 3
         _falloff("Falloff", Range(0,1)) = 0.01
+
+
+
     }
     SubShader
     {
@@ -26,6 +29,10 @@ Shader "Custom/MainWall"
         //sampler2D _nf;
         //sampler2D _st;
         sampler2D _global;
+
+
+		
+
 
         struct Input
         {

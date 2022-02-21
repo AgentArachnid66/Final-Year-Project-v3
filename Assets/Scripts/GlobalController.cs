@@ -6,7 +6,6 @@ using UnityEngine;
 public class GlobalController : MonoBehaviour
 {
 
-    public CustomEvents customEvents;
     public Renderer wallMat;
     public float startingRadius;
     public float endRadius;
@@ -18,7 +17,7 @@ public class GlobalController : MonoBehaviour
 
     private void Awake()
     {
-        customEvents.StartSimulation.AddListener(ActivateSimulation);
+        CustomEvents.CustomEventsInstance.StartSimulation.AddListener(ActivateSimulation);
     }
 
 

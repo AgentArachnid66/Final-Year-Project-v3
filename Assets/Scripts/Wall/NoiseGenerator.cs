@@ -33,6 +33,8 @@ public class NoiseGenerator : MonoBehaviour
         UpdateTexture(globalMask);
         SaveRenderTexture(globalMask, "mask");
         Debug.Log($"Saving Mask ot {CustomUtility.maskPath}");
+
+        
     }
 
     [ContextMenu("Update Texture")]
@@ -44,6 +46,17 @@ public class NoiseGenerator : MonoBehaviour
         }
         Debug.Log("Update Texture");
         Graphics.Blit(GenerateTexture(), target);
+    }
+
+    [ContextMenu("Clear Water Mask")]
+    public void ClearWaterMask()
+    {
+        // https://forum.unity.com/threads/how-to-clear-a-render-texture-to-transparent-color-all-bytes-at-0.147431/
+        RenderTexture rt = RenderTexture.active;
+        RenderTexture.active = waterMask;
+        GL.Clear(true, true, Color.clear);
+        RenderTexture.active = rt;
+
     }
 
     [ContextMenu("Randomise Texture")]

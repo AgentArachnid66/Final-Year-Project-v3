@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
     public float pressure;
     public Transform waterSpout;
 
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -152,7 +153,6 @@ public class Player : MonoBehaviour
             WaterGlobule waterGlobule = globule.GetComponent<WaterGlobule>();
             globule.transform.position = waterSpout.transform.position;
             waterGlobule.launchVelocity = waterSpout.forward;
-
             globule.GetComponent<Rigidbody>().AddForce(waterSpout.forward * pressure);
 
             waterGlobule.pressure = pressure;
