@@ -6,7 +6,8 @@ using System.IO;
 
 public class NoiseGenerator : MonoBehaviour
 {
-    public RenderTexture waterMask;
+
+    public RenderTexture sourceTexture;
     //public RenderTexture no_First;
     //public RenderTexture second_Third;
     public RenderTexture globalMask;
@@ -21,6 +22,9 @@ public class NoiseGenerator : MonoBehaviour
     public float falloff;
 
 
+    public RenderTexture waterMask;
+    public int wallID;
+
     
 
 
@@ -29,11 +33,15 @@ public class NoiseGenerator : MonoBehaviour
     void Start()
     {
         _renderer = GetComponent<Renderer>();
+        waterMask = new RenderTexture(sourceTexture);
+        globalMask = new RenderTexture(sourceTexture);
 
         UpdateTexture(globalMask);
-        SaveRenderTexture(globalMask, "mask");
-        Debug.Log($"Saving Mask ot {CustomUtility.maskPath}");
+        SaveRenderTexture(globalMask, "mask" + gameObject.name);
+        Debug.Log($"Saving Mask to {CustomUtility.maskPath}");
 
+        _renderer.material.SetTexture("Texture2D_1C6CB6F8", waterMask);
+        _renderer.material.SetTexture("Texture2D_CA25BCB1", globalMask);
         
     }
 
@@ -45,6 +53,7 @@ public class NoiseGenerator : MonoBehaviour
             _renderer.material.mainTexture = GenerateTexture();
         }
         Debug.Log("Update Texture");
+        RandomiseValues();
         Graphics.Blit(GenerateTexture(), target);
     }
 
@@ -63,9 +72,9 @@ public class NoiseGenerator : MonoBehaviour
     void RandomiseValues()
     {
         scale = UnityEngine.Random.Range(5, 10);
-        offset_X = UnityEngine.Random.Range(-999f, 999f);
-        offset_Y = UnityEngine.Random.Range(-999f, 999f);
-        
+        offset_X = UnityEngine.Random.Range(-999f, 999f); // transform.position.x;
+        offset_Y = transform.position.y;
+
     }
 
     [ContextMenu("Update All Render Textures")]
@@ -189,7 +198,7 @@ public class NoiseGenerator : MonoBehaviour
     [ContextMenu("Save User Mask")]
     public void SaveWaterMask()
     {
-        dataController.sessionData.mask = SaveRenderTexture(waterMask, "renderTarget");
+        dataController.sessionData.mask = SaveRenderTexture(waterMask, "renderTarget_" +wallID.ToString());
     }
 
 

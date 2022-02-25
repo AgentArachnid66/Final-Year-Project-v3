@@ -13,9 +13,11 @@ public class WaterGlobule : MonoBehaviour
     private RenderTexture _targetRender;
     private Material _wallMaterial, _drawMaterial;
 
+    [SerializeField] private LayerMask _mask;
+
     private void OnDrawGizmos()
     {
-        Gizmos.DrawLine(transform.position, transform.position + launchVelocity * 500f);
+        Gizmos.DrawLine(transform.position + launchVelocity * -1, transform.position + launchVelocity * 500f);
     }
 
     private void Start()
@@ -29,21 +31,25 @@ public class WaterGlobule : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Wall"))
+
+        Debug.LogError("Collided with " + other.name);
+
+        Ray ray = new Ray(transform.position + launchVelocity * -1, transform.position + launchVelocity * 500f);
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, _mask))
         {
-            Ray ray = new Ray(transform.position, transform.position + launchVelocity * 500f);
 
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
+            Debug.Log("Hit: " + hit.textureCoord.ToString());
+            NoiseGenerator noise = hit.transform.GetComponent<NoiseGenerator>();
+            if (noise != null)
             {
-
-                Debug.Log("Hit: " + hit.textureCoord.ToString());
+                _targetRender = noise.waterMask;
                 // If the raycast hits, then apply the brush to the render target at the specific UV location
-                dataController.sessionData.HitLocations.Add(new Hit(hit.textureCoord, pressure, 0));
+                dataController.sessionData.HitLocations.Add(new Hit(hit.textureCoord, pressure, noise.wallID));
 
                 _wallMaterial = hit.transform.GetComponent<MeshRenderer>().material;
-                _targetRender = hit.transform.GetComponent<NoiseGenerator>().waterMask;
 
                 _drawMaterial.SetVector("_Coordinate", new Vector4(hit.textureCoord.x, hit.textureCoord.y, 0, 0));
                 RenderTexture temp = RenderTexture.GetTemporary(_targetRender.width, _targetRender.height, 0, RenderTextureFormat.ARGBFloat);
@@ -53,11 +59,15 @@ public class WaterGlobule : MonoBehaviour
 
 
                 StartCoroutine(ResetGlobule(0.5f));
-                
+            }
+            else
+            {
+                Debug.Log("Noise Null, hit " + hit.rigidbody.name);
             }
 
 
         }
+
     }
 
 
