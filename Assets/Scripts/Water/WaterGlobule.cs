@@ -11,9 +11,11 @@ public class WaterGlobule : MonoBehaviour
     private Rigidbody _rigidBody;
     public Shader _drawShader;
     private RenderTexture _targetRender;
-    private Material _wallMaterial, _drawMaterial;
+    private Material _wallMaterial, _drawMaterial, _waterMaterial;
+    
 
     [SerializeField] private LayerMask _mask;
+    private Vector3 _globuleOffset;
 
     private void OnDrawGizmos()
     {
@@ -26,7 +28,8 @@ public class WaterGlobule : MonoBehaviour
         _rigidBody = GetComponent<Rigidbody>();
         _drawMaterial = new Material(_drawShader);
         _drawMaterial.SetVector("_Colour", Color.red);
-
+        _waterMaterial = GetComponent<Renderer>().material;
+        _globuleOffset = new Vector3(Random.Range(-500, 500), Random.Range(-500, 500), Random.Range(-500, 500));
     }
 
     private void OnTriggerEnter(Collider other)
@@ -68,6 +71,12 @@ public class WaterGlobule : MonoBehaviour
 
         }
 
+    }
+
+
+    private void FixedUpdate()
+    {
+        _waterMaterial.SetVector("Vector3_B9E3988F", transform.position + _globuleOffset);
     }
 
 
