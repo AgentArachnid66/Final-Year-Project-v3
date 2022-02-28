@@ -43,8 +43,10 @@ public class CustomEvents : MonoBehaviour
             StartSimulation.Invoke();
         }
 
+
+
         // Vertical Movement
-        if (Input.GetKey(KeyCode.Keypad8))
+        if (Input.GetKey(KeyCode.Keypad2))
         {
             DroneVertical.Invoke(0.5f);
         }

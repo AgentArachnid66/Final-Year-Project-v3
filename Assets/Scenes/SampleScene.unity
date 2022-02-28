@@ -1613,6 +1613,7 @@ GameObject:
   - component: {fileID: 1250753839}
   - component: {fileID: 1250753838}
   - component: {fileID: 1250753843}
+  - component: {fileID: 1250753844}
   m_Layer: 0
   m_Name: Drone
   m_TagString: Untagged
@@ -1729,6 +1730,45 @@ MonoBehaviour:
   on: 0
   pressure: 1000
   waterSpout: {fileID: 928874813}
+--- !u!114 &1250753844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1250753837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: e4c89050b99801046a3028585af98027,
+    type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bcdcdda6-e8f2-4850-9295-51277c840125
+    m_ActionName: Xbox Control Scheme/Buttons
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 72b46b2d-0a38-48e1-940f-dd9205ded6a4
+    m_ActionName: Xbox Control Scheme/Sticks
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: Xbox Controller Scheme
+  m_DefaultActionMap: Xbox Control Scheme
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &1278701025
 GameObject:
   m_ObjectHideFlags: 0
