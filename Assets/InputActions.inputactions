@@ -1,0 +1,140 @@
+{
+    "name": "InputActions",
+    "maps": [
+        {
+            "name": "Drone",
+            "id": "26ddc2d0-cf94-4c3a-82da-1b9fecc14794",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "cb37d42c-4de5-4fcf-bdf6-38f16bd3e17a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "RotateCamera",
+                    "type": "Button",
+                    "id": "42fa9bd6-afc0-48b2-ba76-d9adfc70b25c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Select",
+                    "type": "Button",
+                    "id": "59d1b0ed-5bb5-49e6-9344-bfcf729a7c23",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Vertical Move Up",
+                    "type": "Button",
+                    "id": "2fd8618a-cb98-42c3-b816-75a6799328b5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Vertical Move Down",
+                    "type": "Button",
+                    "id": "9b980405-909c-41c3-a7e8-f375524a7572",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
+                },
+                {
+                    "name": "Shoot",
+                    "type": "Button",
+                    "id": "1bb462d9-4c30-4ad4-ba65-503044b14831",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "38f130b4-cade-483d-a172-db81c0ee3ef7",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "NormalizeVector2",
+                    "groups": "Xbox Control",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a8c9079a-3d99-4d55-9372-e9f56b8c9544",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Xbox Control",
+                    "action": "RotateCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a6368986-19fb-4ae6-a494-b2a7e2e31c10",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Xbox Control",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "feb75385-be04-4cdd-8778-4b1edd321279",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "Normalize(max=1)",
+                    "groups": "Xbox Control",
+                    "action": "Vertical Move Up",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ceda1df7-1755-4c91-8397-446f4d86c72f",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Xbox Control",
+                    "action": "Vertical Move Down",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8267d1d6-046d-45b9-97dc-f6581c58bddd",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Xbox Control",
+                    "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Xbox Control",
+            "bindingGroup": "Xbox Control",
+            "devices": [
+                {
+                    "devicePath": "<XInputController>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
+}

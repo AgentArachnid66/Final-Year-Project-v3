@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 public class CustomEvents : MonoBehaviour
 {
@@ -18,6 +19,14 @@ public class CustomEvents : MonoBehaviour
         }
     }
 
+
+    private InputActions _playerInput;
+    // Input from the left analog stick
+    private Vector2 _2dMove;
+   
+    private float _verticalMove;
+    // Bool to determine if the player is moving up/down this frame 
+    private bool _verticalMovement;
 
     public UnityEvent StartSimulation = new UnityEvent();
 
@@ -36,6 +45,69 @@ public class CustomEvents : MonoBehaviour
 
     public UnityEventString ChangeScene = new UnityEventString();
 
+
+
+
+
+    private void Awake()
+    {
+        _playerInput = new InputActions();
+        _playerInput.Drone.Move.Enable();
+        _playerInput.Drone.VerticalMoveUp.Enable();
+        _playerInput.Drone.VerticalMoveDown.Enable();
+        _playerInput.Drone.Shoot.Enable();
+
+        // Player Inputs
+
+        _playerInput.Drone.Move.performed += ctx => {
+            _2dMove = ctx.ReadValue<Vector2>();
+            DroneHorizontal.Invoke(_2dMove.x);
+            DroneDiagonal.Invoke(_2dMove.y);
+            };
+
+        _playerInput.Drone.VerticalMoveUp.performed += ctx =>
+        {
+            _verticalMovement = true;
+            _verticalMove = ctx.ReadValue<float>();
+        };
+
+        _playerInput.Drone.VerticalMoveDown.performed += ctx =>
+        {
+            _verticalMovement = true;
+            _verticalMove = ctx.ReadValue<float>() * -1f;
+        };
+
+        _playerInput.Drone.Shoot.performed += ctx =>
+        {
+            Shoot.Invoke();
+        };
+
+
+        // When Player no longer inputs
+
+        _playerInput.Drone.Move.canceled += ctx =>
+        {
+            _2dMove = Vector2.zero;
+            ResetDroneHorizontal.Invoke();
+            ResetDroneDiagonal.Invoke();
+        };
+
+        _playerInput.Drone.VerticalMoveUp.canceled += ctx =>
+        {
+            _verticalMovement = false;
+            _verticalMove = 0f;
+            ResetDroneVertical.Invoke();
+        };
+
+
+        _playerInput.Drone.VerticalMoveDown.canceled += ctx =>
+        {
+            _verticalMovement = false;
+            _verticalMove = 0f;
+            ResetDroneVertical.Invoke();
+        };
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
@@ -43,10 +115,11 @@ public class CustomEvents : MonoBehaviour
             StartSimulation.Invoke();
         }
 
+        if (_verticalMovement) DroneVertical.Invoke(_verticalMove);
 
-
+        /*
         // Vertical Movement
-        if (Input.GetKey(KeyCode.Keypad2))
+        if (Input.GetKey(KeyCode.Keypad8))
         {
             DroneVertical.Invoke(0.5f);
         }
@@ -108,6 +181,8 @@ public class CustomEvents : MonoBehaviour
         {
             Shoot.Invoke();
         }
+    
+        */
     }
 }
 
