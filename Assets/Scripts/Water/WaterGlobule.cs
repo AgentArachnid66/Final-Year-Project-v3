@@ -16,6 +16,7 @@ public class WaterGlobule : MonoBehaviour
 
     [SerializeField] private LayerMask _mask;
     private Vector3 _globuleOffset;
+    private bool _reseting;
 
     private void OnDrawGizmos()
     {
@@ -61,7 +62,6 @@ public class WaterGlobule : MonoBehaviour
                 RenderTexture.ReleaseTemporary(temp);
 
 
-                StartCoroutine(ResetGlobule(0.5f));
             }
             else
             {

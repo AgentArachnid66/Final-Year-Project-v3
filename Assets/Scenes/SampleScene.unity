@@ -1770,7 +1770,7 @@ MonoBehaviour:
     m_ActionName: Xbox/Select[/XInputControllerWindows/buttonSouth]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Xbox Control
-  m_DefaultActionMap: Xbox
+  m_DefaultActionMap: Drone
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!1 &1278701025
@@ -2809,7 +2809,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pooledObjects: []
   objectToPool: {fileID: 1486095571}
-  amountToPool: 10
+  amountToPool: 50
   dataController: {fileID: 1736048480}
 --- !u!114 &1736048483
 MonoBehaviour:
