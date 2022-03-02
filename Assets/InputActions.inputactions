@@ -61,7 +61,7 @@
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
                     "processors": "NormalizeVector2",
-                    "groups": "Xbox Control",
+                    "groups": "Drone",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -72,7 +72,7 @@
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Xbox Control",
+                    "groups": "Drone",
                     "action": "RotateCamera",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -83,7 +83,7 @@
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Xbox Control",
+                    "groups": "Drone",
                     "action": "Select",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -94,7 +94,7 @@
                     "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "Normalize(max=1)",
-                    "groups": "Xbox Control",
+                    "groups": "Drone",
                     "action": "Vertical Move Up",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -105,7 +105,7 @@
                     "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Xbox Control",
+                    "groups": "Drone",
                     "action": "Vertical Move Down",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -116,7 +116,7 @@
                     "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Xbox Control",
+                    "groups": "Drone",
                     "action": "Shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -126,11 +126,21 @@
     ],
     "controlSchemes": [
         {
-            "name": "Xbox Control",
-            "bindingGroup": "Xbox Control",
+            "name": "Drone",
+            "bindingGroup": "Drone",
             "devices": [
                 {
                     "devicePath": "<XInputController>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Mouse>",
                     "isOptional": false,
                     "isOR": false
                 }

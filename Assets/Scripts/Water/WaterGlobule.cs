@@ -44,7 +44,6 @@ public class WaterGlobule : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, _mask))
         {
-
             Debug.Log("Hit: " + hit.textureCoord.ToString());
             NoiseGenerator noise = hit.transform.GetComponent<NoiseGenerator>();
             if (noise != null)
@@ -60,15 +59,7 @@ public class WaterGlobule : MonoBehaviour
                 Graphics.Blit(_targetRender, temp);
                 Graphics.Blit(temp, _targetRender, _drawMaterial);
                 RenderTexture.ReleaseTemporary(temp);
-
-
             }
-            else
-            {
-                Debug.Log("Noise Null, hit " + hit.rigidbody.name);
-            }
-
-
         }
 
     }

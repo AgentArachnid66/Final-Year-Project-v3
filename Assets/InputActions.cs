@@ -74,7 +74,7 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": ""NormalizeVector2"",
-                    ""groups"": ""Xbox Control"",
+                    ""groups"": ""Drone"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -85,7 +85,7 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Xbox Control"",
+                    ""groups"": ""Drone"",
                     ""action"": ""RotateCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -96,7 +96,7 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Xbox Control"",
+                    ""groups"": ""Drone"",
                     ""action"": ""Select"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -107,7 +107,7 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": ""Normalize(max=1)"",
-                    ""groups"": ""Xbox Control"",
+                    ""groups"": ""Drone"",
                     ""action"": ""Vertical Move Up"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -118,7 +118,7 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Xbox Control"",
+                    ""groups"": ""Drone"",
                     ""action"": ""Vertical Move Down"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -129,7 +129,7 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Xbox Control"",
+                    ""groups"": ""Drone"",
                     ""action"": ""Shoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -139,11 +139,21 @@ public class @InputActions : IInputActionCollection, IDisposable
     ],
     ""controlSchemes"": [
         {
-            ""name"": ""Xbox Control"",
-            ""bindingGroup"": ""Xbox Control"",
+            ""name"": ""Drone"",
+            ""bindingGroup"": ""Drone"",
             ""devices"": [
                 {
                     ""devicePath"": ""<XInputController>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<Mouse>"",
                     ""isOptional"": false,
                     ""isOR"": false
                 }
@@ -277,13 +287,13 @@ public class @InputActions : IInputActionCollection, IDisposable
         }
     }
     public DroneActions @Drone => new DroneActions(this);
-    private int m_XboxControlSchemeIndex = -1;
-    public InputControlScheme XboxControlScheme
+    private int m_DroneSchemeIndex = -1;
+    public InputControlScheme DroneScheme
     {
         get
         {
-            if (m_XboxControlSchemeIndex == -1) m_XboxControlSchemeIndex = asset.FindControlSchemeIndex("Xbox Control");
-            return asset.controlSchemes[m_XboxControlSchemeIndex];
+            if (m_DroneSchemeIndex == -1) m_DroneSchemeIndex = asset.FindControlSchemeIndex("Drone");
+            return asset.controlSchemes[m_DroneSchemeIndex];
         }
     }
     public interface IDroneActions

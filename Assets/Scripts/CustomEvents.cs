@@ -30,7 +30,7 @@ public class CustomEvents : MonoBehaviour
 
     public UnityEvent StartSimulation = new UnityEvent();
 
-    public UnityEvent Shoot = new UnityEvent();
+    public UnityEventFloat Shoot = new UnityEventFloat();
 
     public UnityEventFloat DroneHorizontal = new UnityEventFloat();
     public UnityEventFloat DroneVertical = new UnityEventFloat();
@@ -40,7 +40,7 @@ public class CustomEvents : MonoBehaviour
     public UnityEvent ResetDroneHorizontal = new UnityEvent();
     public UnityEvent ResetDroneDiagonal= new UnityEvent();
 
-
+    public UnityEventVector2 OrientDrone = new UnityEventVector2();
 
 
     public UnityEventString ChangeScene = new UnityEventString();
@@ -56,6 +56,8 @@ public class CustomEvents : MonoBehaviour
         _playerInput.Drone.VerticalMoveUp.Enable();
         _playerInput.Drone.VerticalMoveDown.Enable();
         _playerInput.Drone.Shoot.Enable();
+        _playerInput.Drone.RotateCamera.Enable();
+
 
         // Player Inputs
 
@@ -79,9 +81,13 @@ public class CustomEvents : MonoBehaviour
 
         _playerInput.Drone.Shoot.performed += ctx =>
         {
-            Shoot.Invoke();
+            Shoot.Invoke(ctx.ReadValue<float>());
         };
 
+        _playerInput.Drone.RotateCamera.performed += ctx =>
+        {
+            OrientDrone.Invoke(ctx.ReadValue<Vector2>());
+        };
 
         // When Player no longer inputs
 
@@ -194,6 +200,10 @@ public class UnityEventString : UnityEvent<string>
 {
 }
 
+public class UnityEventVector2 : UnityEvent<Vector2>
+{
+
+}
 
 public enum Liquid
 {

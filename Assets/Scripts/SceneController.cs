@@ -20,9 +20,15 @@ public class SceneController : MonoBehaviour
     // This class will be in charge of switching the scenes
 
 
-    private void ChangeScene(string sceneName)
+    public void ChangeScene(string sceneName)
     {
+        Debug.Log("Loading: " + sceneName);
         SceneManager.LoadSceneAsync(sceneName);
+    }
+
+    public void TestButton(string testString)
+    {
+        Debug.Log(testString);
     }
 
 }

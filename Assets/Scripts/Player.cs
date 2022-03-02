@@ -25,10 +25,13 @@ public class Player : MonoBehaviour
     public Vector3 _targetRotation;
     public float banking;
     private Vector3 _rotationVelocity;
+    private Vector2 _orientation;
+    public float orientSpeed;
 
-
+    public float minPressure = 0f;
+    public float maxPressure = 1000f;
     public bool on = false;
-    public float pressure;
+    private float _pressure;
     public Transform waterSpout;
 
 
@@ -55,7 +58,7 @@ public class Player : MonoBehaviour
         CustomEvents.CustomEventsInstance.ResetDroneDiagonal.AddListener(ResetRotation);
 
         CustomEvents.CustomEventsInstance.Shoot.AddListener(ShootWater);
-            
+        CustomEvents.CustomEventsInstance.OrientDrone.AddListener(ChangeOrientation);
             
     }
 
@@ -63,14 +66,14 @@ public class Player : MonoBehaviour
     {
         // Movement
         _rigidbody.MovePosition(Vector3.SmoothDamp(transform.position, transform.position + 
-            (Vector3.up * _verticalForce) + 
-            (Vector3.right * _horizontalForce) +
-            (Vector3.forward * _diagonalForce), 
+            (transform.up * _verticalForce) + 
+            (transform.right * _horizontalForce) +
+            (transform.forward * _diagonalForce), 
             ref _velocity, speed*Time.deltaTime));
 
 
-        _currentRotation.x = Mathf.SmoothDamp(_currentRotation.x, _targetRotation.x, ref _rotationVelocity.x, banking);
-        _currentRotation.y = Mathf.SmoothDamp(_currentRotation.y, _targetRotation.y, ref _rotationVelocity.y, banking);
+        _currentRotation.x = Mathf.SmoothDamp(_currentRotation.x, _targetRotation.x + (-1f* _orientation.y), ref _rotationVelocity.x, banking);
+        _currentRotation.y = Mathf.SmoothDamp(_currentRotation.y, _targetRotation.y + _orientation.x, ref _rotationVelocity.y, banking);
         _currentRotation.z = Mathf.SmoothDamp(_currentRotation.z, _targetRotation.z, ref _rotationVelocity.z, banking);
 
         _rigidbody.MoveRotation(Quaternion.Euler(_currentRotation));
@@ -137,15 +140,20 @@ public class Player : MonoBehaviour
         _targetRotation = Vector3.zero;
     }
 
+
+    void ChangeOrientation(Vector2 newOrient)
+    {
+        _orientation += newOrient * orientSpeed;
+        _orientation = Mathf.Clamp(_orientation, -360f, 360);
+    }
     #endregion
 
 
     #region Shooting
 
-
-
-    private void ShootWater()
+    private void ShootWater(float input)
     {
+        _pressure = Mathf.Lerp(minPressure, maxPressure, input);
         Debug.Log("Receivied");
         GameObject globule = GlobuleObjectPool.sharedInstance.GetPooledObject();
         if (globule != null)
@@ -153,9 +161,9 @@ public class Player : MonoBehaviour
             WaterGlobule waterGlobule = globule.GetComponent<WaterGlobule>();
             globule.transform.position = waterSpout.transform.position;
             waterGlobule.launchVelocity = waterSpout.forward;
-            globule.GetComponent<Rigidbody>().AddForce(waterSpout.forward * pressure);
+            globule.GetComponent<Rigidbody>().AddForce(waterSpout.forward * _pressure);
 
-            waterGlobule.pressure = pressure;
+            waterGlobule.pressure = _pressure;
 
             Debug.Log("Shooting Globule");
 
