@@ -65,6 +65,22 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Liquid"",
+                    ""type"": ""Button"",
+                    ""id"": ""d4b1a5ba-dd1e-4bf3-9dfe-a08235d7bf56"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Temp"",
+                    ""type"": ""Button"",
+                    ""id"": ""c6470955-2aa3-4f6f-848b-dc43c211cc0b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -133,6 +149,72 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""action"": ""Shoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Switch Liquid"",
+                    ""id"": ""faf0ba83-a8ca-4fb1-a1b9-3b6924a8de5a"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Liquid"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Negative"",
+                    ""id"": ""6172a23d-56bf-4ffe-862e-6b3cb1530850"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Drone"",
+                    ""action"": ""Liquid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Positive"",
+                    ""id"": ""900ed522-8e5a-43f4-a35a-443254e2e7e5"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Drone"",
+                    ""action"": ""Liquid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""AdjustTemp"",
+                    ""id"": ""fef69de5-f7c6-43e5-899c-ca78f63fa63f"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Temp"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""81136f9b-ab27-4b0e-8cd0-841a05d9d54d"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Drone"",
+                    ""action"": ""Temp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""723e01eb-50be-46fd-ad6e-b6a547b2c566"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Drone"",
+                    ""action"": ""Temp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -169,6 +251,8 @@ public class @InputActions : IInputActionCollection, IDisposable
         m_Drone_VerticalMoveUp = m_Drone.FindAction("Vertical Move Up", throwIfNotFound: true);
         m_Drone_VerticalMoveDown = m_Drone.FindAction("Vertical Move Down", throwIfNotFound: true);
         m_Drone_Shoot = m_Drone.FindAction("Shoot", throwIfNotFound: true);
+        m_Drone_Liquid = m_Drone.FindAction("Liquid", throwIfNotFound: true);
+        m_Drone_Temp = m_Drone.FindAction("Temp", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -224,6 +308,8 @@ public class @InputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_Drone_VerticalMoveUp;
     private readonly InputAction m_Drone_VerticalMoveDown;
     private readonly InputAction m_Drone_Shoot;
+    private readonly InputAction m_Drone_Liquid;
+    private readonly InputAction m_Drone_Temp;
     public struct DroneActions
     {
         private @InputActions m_Wrapper;
@@ -234,6 +320,8 @@ public class @InputActions : IInputActionCollection, IDisposable
         public InputAction @VerticalMoveUp => m_Wrapper.m_Drone_VerticalMoveUp;
         public InputAction @VerticalMoveDown => m_Wrapper.m_Drone_VerticalMoveDown;
         public InputAction @Shoot => m_Wrapper.m_Drone_Shoot;
+        public InputAction @Liquid => m_Wrapper.m_Drone_Liquid;
+        public InputAction @Temp => m_Wrapper.m_Drone_Temp;
         public InputActionMap Get() { return m_Wrapper.m_Drone; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -261,6 +349,12 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @Shoot.started -= m_Wrapper.m_DroneActionsCallbackInterface.OnShoot;
                 @Shoot.performed -= m_Wrapper.m_DroneActionsCallbackInterface.OnShoot;
                 @Shoot.canceled -= m_Wrapper.m_DroneActionsCallbackInterface.OnShoot;
+                @Liquid.started -= m_Wrapper.m_DroneActionsCallbackInterface.OnLiquid;
+                @Liquid.performed -= m_Wrapper.m_DroneActionsCallbackInterface.OnLiquid;
+                @Liquid.canceled -= m_Wrapper.m_DroneActionsCallbackInterface.OnLiquid;
+                @Temp.started -= m_Wrapper.m_DroneActionsCallbackInterface.OnTemp;
+                @Temp.performed -= m_Wrapper.m_DroneActionsCallbackInterface.OnTemp;
+                @Temp.canceled -= m_Wrapper.m_DroneActionsCallbackInterface.OnTemp;
             }
             m_Wrapper.m_DroneActionsCallbackInterface = instance;
             if (instance != null)
@@ -283,6 +377,12 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @Shoot.started += instance.OnShoot;
                 @Shoot.performed += instance.OnShoot;
                 @Shoot.canceled += instance.OnShoot;
+                @Liquid.started += instance.OnLiquid;
+                @Liquid.performed += instance.OnLiquid;
+                @Liquid.canceled += instance.OnLiquid;
+                @Temp.started += instance.OnTemp;
+                @Temp.performed += instance.OnTemp;
+                @Temp.canceled += instance.OnTemp;
             }
         }
     }
@@ -304,5 +404,7 @@ public class @InputActions : IInputActionCollection, IDisposable
         void OnVerticalMoveUp(InputAction.CallbackContext context);
         void OnVerticalMoveDown(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
+        void OnLiquid(InputAction.CallbackContext context);
+        void OnTemp(InputAction.CallbackContext context);
     }
 }

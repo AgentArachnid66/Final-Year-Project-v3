@@ -34,11 +34,29 @@ public class Player : MonoBehaviour
     private float _pressure;
     public Transform waterSpout;
 
+    public AnimationCurve pressureCurve;
+    public AnimationCurve tempCurve;
+
+    public Liquid _currentLiquid;
+    private float _currentTempLerp;
+    private float _currentTemp;
+
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
-       
+        
+    }
+
+    [ContextMenu("Normalise Pressure Curve")]
+    public void NormalizePressureCurve()
+    {
+        Keyframe[] keys = pressureCurve.keys;
+        for (int i = 0; i < keys.Length; i++)
+        {
+            Keyframe newKey = new Keyframe(Mathf.Clamp((keys[i].time * (maxPressure - minPressure)) + minPressure, minPressure, maxPressure) , keys[i].value);
+            pressureCurve.MoveKey(i, newKey);
+        }
     }
 
     private void Start()
@@ -59,7 +77,9 @@ public class Player : MonoBehaviour
 
         CustomEvents.CustomEventsInstance.Shoot.AddListener(ShootWater);
         CustomEvents.CustomEventsInstance.OrientDrone.AddListener(ChangeOrientation);
-            
+
+        CustomEvents.CustomEventsInstance.ChangeLiquid.AddListener(ChangeLiquid);
+        CustomEvents.CustomEventsInstance.AdjustTemp.AddListener(AdjustTemp);
     }
 
     private void FixedUpdate()
@@ -144,10 +164,8 @@ public class Player : MonoBehaviour
     void ChangeOrientation(Vector2 newOrient)
     {
         _orientation += newOrient * orientSpeed;
-        _orientation = Mathf.Clamp(_orientation, -360f, 360);
     }
     #endregion
-
 
     #region Shooting
 
@@ -164,6 +182,7 @@ public class Player : MonoBehaviour
             globule.GetComponent<Rigidbody>().AddForce(waterSpout.forward * _pressure);
 
             waterGlobule.pressure = _pressure;
+            waterGlobule.SetVars(pressureCurve.Evaluate(_pressure), _currentTemp);
 
             Debug.Log("Shooting Globule");
 
@@ -171,6 +190,38 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void ChangeLiquid(int deltaL)
+    {
+        string[] liquids = System.Enum.GetNames(typeof(Liquid));
+
+        if ((int)(deltaL + _currentLiquid) >= liquids.Length)
+        {
+            Debug.Log("Need To Wrap Around");
+            _currentLiquid = 0;
+            Debug.Log(_currentLiquid);
+        }
+        else if ((int)(deltaL + _currentLiquid) < 0)
+        {
+            Debug.Log("Need to Wrap to End");
+            _currentLiquid = (Liquid)liquids.Length-1;
+            Debug.Log(_currentLiquid);
+        }
+        else
+        {
+            _currentLiquid += deltaL;
+            Debug.Log(_currentLiquid);
+        }
+    }
+
+    private void AdjustTemp(float deltaT)
+    {
+        _currentTempLerp += deltaT;
+        _currentTemp = tempCurve.Evaluate(_currentTempLerp);
+        Debug.Log(_currentTemp);
+    }
     #endregion
+
+
+
 
 }

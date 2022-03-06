@@ -17,6 +17,9 @@ public class WaterGlobule : MonoBehaviour
     [SerializeField] private LayerMask _mask;
     private Vector3 _globuleOffset;
     private bool _reseting;
+    private float _score;
+    private float _temp;
+
 
     private void OnDrawGizmos()
     {
@@ -50,7 +53,7 @@ public class WaterGlobule : MonoBehaviour
             {
                 _targetRender = noise.waterMask;
                 // If the raycast hits, then apply the brush to the render target at the specific UV location
-                dataController.sessionData.HitLocations.Add(new Hit(hit.textureCoord, pressure, noise.wallID));
+                dataController.sessionData.HitLocations.Add(new Hit(hit.textureCoord, _score, _temp ,noise.wallID));
 
                 _wallMaterial = hit.transform.GetComponent<MeshRenderer>().material;
 
@@ -85,5 +88,12 @@ public class WaterGlobule : MonoBehaviour
         Debug.LogWarning("Globule Reset");
 
     }
+
+    public void SetVars(float newScore, float newTemp)
+    {
+        _score = newScore;
+        _temp = newTemp;
+    }
+
 
 }

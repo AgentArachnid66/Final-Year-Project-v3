@@ -45,8 +45,8 @@ public class CustomEvents : MonoBehaviour
 
     public UnityEventString ChangeScene = new UnityEventString();
 
-
-
+    public UnityEventInt ChangeLiquid = new UnityEventInt();
+    public UnityEventFloat AdjustTemp = new UnityEventFloat();
 
 
     private void Awake()
@@ -57,7 +57,8 @@ public class CustomEvents : MonoBehaviour
         _playerInput.Drone.VerticalMoveDown.Enable();
         _playerInput.Drone.Shoot.Enable();
         _playerInput.Drone.RotateCamera.Enable();
-
+        _playerInput.Drone.Liquid.Enable();
+        _playerInput.Drone.Temp.Enable();
 
         // Player Inputs
 
@@ -87,6 +88,15 @@ public class CustomEvents : MonoBehaviour
         _playerInput.Drone.RotateCamera.performed += ctx =>
         {
             OrientDrone.Invoke(ctx.ReadValue<Vector2>());
+        };
+
+        _playerInput.Drone.Liquid.performed += ctx =>
+        {
+            ChangeLiquid.Invoke((int)ctx.ReadValue<float>());
+        };
+
+        _playerInput.Drone.Temp.performed += ctx =>{
+            AdjustTemp.Invoke(ctx.ReadValue<float>());
         };
 
         // When Player no longer inputs
@@ -122,73 +132,6 @@ public class CustomEvents : MonoBehaviour
         }
 
         if (_verticalMovement) DroneVertical.Invoke(_verticalMove);
-
-        /*
-        // Vertical Movement
-        if (Input.GetKey(KeyCode.Keypad8))
-        {
-            DroneVertical.Invoke(0.5f);
-        }
-        if (Input.GetKey(KeyCode.Keypad2))
-        {
-            DroneVertical.Invoke(-0.5f);
-        }
-
-        if (Input.GetKeyUp(KeyCode.Keypad8))
-        {
-            ResetDroneVertical.Invoke();
-        }
-        if (Input.GetKeyUp(KeyCode.Keypad2))
-        {
-            ResetDroneVertical.Invoke();
-        }
-
-
-        // Horizontal Movement
-        if (Input.GetKey(KeyCode.Keypad6))
-        {
-            DroneHorizontal.Invoke(0.5f);
-        }
-        if (Input.GetKey(KeyCode.Keypad4))
-        {
-            DroneHorizontal.Invoke(-0.5f);
-        }
-
-        if (Input.GetKeyUp(KeyCode.Keypad6))
-        {
-            ResetDroneHorizontal.Invoke();
-        }
-        if (Input.GetKeyUp(KeyCode.Keypad4))
-        {
-            ResetDroneHorizontal.Invoke();
-        }        
-        
-        
-        // Diagonal Movement
-        if(Input.GetKey(KeyCode.KeypadPlus))
-        {
-            DroneDiagonal.Invoke(0.5f);
-        }
-        if (Input.GetKey(KeyCode.KeypadMinus))
-        {
-            DroneDiagonal.Invoke(-0.5f);
-        }
-
-        if (Input.GetKeyUp(KeyCode.KeypadPlus))
-        {
-            ResetDroneDiagonal.Invoke();
-        }
-        if (Input.GetKeyUp(KeyCode.KeypadMinus))
-        {
-            ResetDroneDiagonal.Invoke();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Shoot.Invoke();
-        }
-    
-        */
     }
 }
 
@@ -205,12 +148,20 @@ public class UnityEventVector2 : UnityEvent<Vector2>
 
 }
 
+public class UnityEventInt : UnityEvent<int>{
+
+}
+
 public enum Liquid
 {
     None,
     Water
 }
 
+public enum Mode
+{
+    None
+}
 
 public static class CustomUtility
 {
