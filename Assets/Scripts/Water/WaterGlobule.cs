@@ -8,7 +8,7 @@ public class WaterGlobule : MonoBehaviour
     public float pressure;
     public Vector3 launchVelocity;
 
-    private Rigidbody _rigidBody;
+    [SerializeField]private Rigidbody _rigidBody;
     public Shader _drawShader;
     private RenderTexture _targetRender;
     private Material _wallMaterial, _drawMaterial, _waterMaterial;
@@ -20,16 +20,18 @@ public class WaterGlobule : MonoBehaviour
     private float _score;
     private float _temp;
 
-
     private void OnDrawGizmos()
     {
-        Gizmos.DrawLine(transform.position + launchVelocity * -1, transform.position + launchVelocity * 500f);
+        Gizmos.DrawLine(transform.position + _rigidBody.velocity *-1, transform.position + _rigidBody.velocity * 500f);
+    }
+
+    private void OnEnable()
+    {
+        _rigidBody = GetComponent<Rigidbody>();
     }
 
     private void Start()
     {
-        
-        _rigidBody = GetComponent<Rigidbody>();
         _drawMaterial = new Material(_drawShader);
         _drawMaterial.SetVector("_Colour", Color.red);
         _waterMaterial = GetComponent<Renderer>().material;
@@ -41,7 +43,7 @@ public class WaterGlobule : MonoBehaviour
 
         Debug.LogError("Collided with " + other.name);
 
-        Ray ray = new Ray(transform.position + launchVelocity * -1, transform.position + launchVelocity * 500f);
+        Ray ray = new Ray(transform.position + _rigidBody.velocity * -1, transform.position + _rigidBody.velocity * 500f);
 
         RaycastHit hit;
 
@@ -51,17 +53,14 @@ public class WaterGlobule : MonoBehaviour
             NoiseGenerator noise = hit.transform.GetComponent<NoiseGenerator>();
             if (noise != null)
             {
-                _targetRender = noise.waterMask;
+                PaintToNoiseTarget(noise, hit);
+                Debug.LogError("Hit Wall");
                 // If the raycast hits, then apply the brush to the render target at the specific UV location
-                dataController.sessionData.HitLocations.Add(new Hit(hit.textureCoord, _score, _temp ,noise.wallID));
+                //dataController.sessionData.HitLocations.Add(new Hit(hit.textureCoord, _score, _temp ,noise.wallID));
 
-                _wallMaterial = hit.transform.GetComponent<MeshRenderer>().material;
+                //_wallMaterial = hit.transform.GetComponent<MeshRenderer>().material;
 
-                _drawMaterial.SetVector("_Coordinate", new Vector4(hit.textureCoord.x, hit.textureCoord.y, 0, 0));
-                RenderTexture temp = RenderTexture.GetTemporary(_targetRender.width, _targetRender.height, 0, RenderTextureFormat.ARGBFloat);
-                Graphics.Blit(_targetRender, temp);
-                Graphics.Blit(temp, _targetRender, _drawMaterial);
-                RenderTexture.ReleaseTemporary(temp);
+                
             }
         }
 
@@ -73,7 +72,23 @@ public class WaterGlobule : MonoBehaviour
         _waterMaterial.SetVector("Vector3_B9E3988F", transform.position + _globuleOffset);
     }
 
+    private void PaintToNoiseTarget(NoiseGenerator noise, RaycastHit hit)
+    {
+        dataController.sessionData.HitLocations.Add(new Hit(hit.textureCoord, _score, _temp, noise.wallID));
+        RenderTexture[] renders = noise.RetrieveRenderTextures();
 
+        for ( int i = 0; i< renders.Length; i++)
+        {
+            RenderTexture render = renders[i];
+            _drawMaterial.SetVector("_Coordinate", new Vector4(hit.textureCoord.x, hit.textureCoord.y, 0, 0));
+            
+            RenderTexture temp = RenderTexture.GetTemporary(render.width, render.height, 0, RenderTextureFormat.ARGBFloat);
+            Graphics.Blit(render, temp);
+            Graphics.Blit(temp, render, _drawMaterial);
+            RenderTexture.ReleaseTemporary(temp);
+        }
+
+    }
     public IEnumerator ResetGlobule(float lifetime)
     {
         Debug.LogWarning("Reseting Globule");
@@ -93,6 +108,7 @@ public class WaterGlobule : MonoBehaviour
     {
         _score = newScore;
         _temp = newTemp;
+
     }
 
 

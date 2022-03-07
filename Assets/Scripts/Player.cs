@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
     public AnimationCurve tempCurve;
 
     public Liquid _currentLiquid;
-    private float _currentTempLerp;
+    private float _currentTempLerp = 0.25f;
     private float _currentTemp;
 
 
@@ -48,17 +48,8 @@ public class Player : MonoBehaviour
         
     }
 
-    [ContextMenu("Normalise Pressure Curve")]
-    public void NormalizePressureCurve()
-    {
-        Keyframe[] keys = pressureCurve.keys;
-        for (int i = 0; i < keys.Length; i++)
-        {
-            Keyframe newKey = new Keyframe(Mathf.Clamp((keys[i].time * (maxPressure - minPressure)) + minPressure, minPressure, maxPressure) , keys[i].value);
-            pressureCurve.MoveKey(i, newKey);
-        }
-    }
-
+ 
+    
     private void Start()
     {
         CustomEvents.CustomEventsInstance.DroneVertical.AddListener(VerticalMovement);
@@ -80,6 +71,12 @@ public class Player : MonoBehaviour
 
         CustomEvents.CustomEventsInstance.ChangeLiquid.AddListener(ChangeLiquid);
         CustomEvents.CustomEventsInstance.AdjustTemp.AddListener(AdjustTemp);
+
+
+
+
+
+        _currentTemp = tempCurve.Evaluate(_currentTempLerp);
     }
 
     private void FixedUpdate()
@@ -172,7 +169,7 @@ public class Player : MonoBehaviour
     private void ShootWater(float input)
     {
         _pressure = Mathf.Lerp(minPressure, maxPressure, input);
-        Debug.Log("Receivied");
+        Debug.Log($"Receivied: {_currentTemp}");
         GameObject globule = GlobuleObjectPool.sharedInstance.GetPooledObject();
         if (globule != null)
         {
@@ -182,7 +179,7 @@ public class Player : MonoBehaviour
             globule.GetComponent<Rigidbody>().AddForce(waterSpout.forward * _pressure);
 
             waterGlobule.pressure = _pressure;
-            waterGlobule.SetVars(pressureCurve.Evaluate(_pressure), _currentTemp);
+            waterGlobule.SetVars(pressureCurve.Evaluate(input), _currentTemp);
 
             Debug.Log("Shooting Globule");
 
@@ -216,7 +213,7 @@ public class Player : MonoBehaviour
     private void AdjustTemp(float deltaT)
     {
         _currentTempLerp += deltaT;
-        _currentTemp = tempCurve.Evaluate(_currentTempLerp);
+        _currentTemp = tempCurve.Evaluate(_currentTempLerp/100f);
         Debug.Log(_currentTemp);
     }
     #endregion

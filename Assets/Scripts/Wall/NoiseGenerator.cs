@@ -22,7 +22,11 @@ public class NoiseGenerator : MonoBehaviour
     public float falloff;
 
 
-    public RenderTexture waterMask;
+    private RenderTexture waterMask;
+    private RenderTexture tempMask;
+    private RenderTexture pressMask;
+    private MaterialPropertyBlock _block;
+
     public int wallID;
 
     
@@ -33,16 +37,21 @@ public class NoiseGenerator : MonoBehaviour
     void Start()
     {
         _renderer = GetComponent<Renderer>();
-        waterMask = new RenderTexture(sourceTexture);
+        waterMask = new RenderTexture(sourceTexture.width, sourceTexture.height, sourceTexture.depth);
+        tempMask = new RenderTexture(sourceTexture.width, sourceTexture.height, sourceTexture.depth);
+        pressMask = new RenderTexture(sourceTexture.width, sourceTexture.height, sourceTexture.depth);
         globalMask = new RenderTexture(sourceTexture);
 
         UpdateTexture(globalMask);
         SaveRenderTexture(globalMask, "mask" + gameObject.name);
         Debug.Log($"Saving Mask to {CustomUtility.maskPath}");
 
-        _renderer.material.SetTexture("Texture2D_1C6CB6F8", waterMask);
+        _block = new MaterialPropertyBlock();
+        _renderer.GetPropertyBlock(_block);
+        _block.SetTexture("Texture2D_1C6CB6F8", waterMask);
+        //_renderer.material.SetTexture("Texture2D_1C6CB6F8", waterMask);
         _renderer.material.SetTexture("Texture2D_CA25BCB1", globalMask);
-        
+        _renderer.SetPropertyBlock(_block);
     }
 
     [ContextMenu("Update Texture")]
@@ -80,19 +89,7 @@ public class NoiseGenerator : MonoBehaviour
     [ContextMenu("Update All Render Textures")]
     void UpdateRenderTextures()
     {
-        /*
-        RandomiseValues();
-        UpdateTexture(no_First);
-        dataController.sessionData.Masks[1] = SaveRenderTexture(no_First, "No_First");
-
-        RandomiseValues();
-        UpdateTexture(second_Third);
-        dataController.sessionData.Masks[2] = SaveRenderTexture(second_Third, "Second_Third");
-
-        */
         UpdateTexture(globalMask);
-        //dataController.sessionData.Masks[3] = SaveRenderTexture(globalMask, "GlobalMask");
-
     }
 
     Texture2D GenerateTexture()
@@ -111,31 +108,6 @@ public class NoiseGenerator : MonoBehaviour
         texture.Apply();
         return texture;
 
-    }
-
-    Texture2D GenerateCheckerTexture()
-    {
-        Texture2D texture = new Texture2D(width, height);
-
-        for (int i = 0; i < width; i++)
-        {
-            for (int j = 0; j < height; j++)
-            {
-                Color colour = CalculateChecker(i, j);
-                texture.SetPixel(i, j, colour);
-            }
-
-        }
-        texture.Apply();
-        return texture;
-
-
-
-    }
-
-    Color CalculateChecker(int x, int y)
-    {
-        return new Color(0f, 0f, 0f);
     }
 
     Color CalculateColour(int x, int y)
@@ -202,9 +174,8 @@ public class NoiseGenerator : MonoBehaviour
     }
 
 
-    public void AddToUserMask(Hit uv, float radius)
+    public RenderTexture[] RetrieveRenderTextures()
     {
-
+        return new RenderTexture[] {waterMask, tempMask, pressMask };
     }
-
 }

@@ -28,6 +28,10 @@ public class CustomEvents : MonoBehaviour
     // Bool to determine if the player is moving up/down this frame 
     private bool _verticalMovement;
 
+    private bool _shooting;
+    private float _shootingValue;
+    private bool _canShoot = true;
+
     public UnityEvent StartSimulation = new UnityEvent();
 
     public UnityEventFloat Shoot = new UnityEventFloat();
@@ -42,16 +46,14 @@ public class CustomEvents : MonoBehaviour
 
     public UnityEventVector2 OrientDrone = new UnityEventVector2();
 
-
     public UnityEventString ChangeScene = new UnityEventString();
 
     public UnityEventInt ChangeLiquid = new UnityEventInt();
     public UnityEventFloat AdjustTemp = new UnityEventFloat();
 
-
-    private void Awake()
+    public UnityEventInt ChangeMode = new UnityEventInt();
+    private void OnEnable()
     {
-        _playerInput = new InputActions();
         _playerInput.Drone.Move.Enable();
         _playerInput.Drone.VerticalMoveUp.Enable();
         _playerInput.Drone.VerticalMoveDown.Enable();
@@ -59,6 +61,23 @@ public class CustomEvents : MonoBehaviour
         _playerInput.Drone.RotateCamera.Enable();
         _playerInput.Drone.Liquid.Enable();
         _playerInput.Drone.Temp.Enable();
+    }
+    private void OnDisable()
+    {
+        _playerInput.Drone.Move.Disable();
+        _playerInput.Drone.VerticalMoveUp.Disable();
+        _playerInput.Drone.VerticalMoveDown.Disable();
+        _playerInput.Drone.Shoot.Disable();
+        _playerInput.Drone.RotateCamera.Disable();
+        _playerInput.Drone.Liquid.Disable();
+        _playerInput.Drone.Temp.Disable();
+
+    }
+
+
+    private void Awake()
+    {
+        _playerInput = new InputActions();
 
         // Player Inputs
 
@@ -82,7 +101,8 @@ public class CustomEvents : MonoBehaviour
 
         _playerInput.Drone.Shoot.performed += ctx =>
         {
-            Shoot.Invoke(ctx.ReadValue<float>());
+            _shooting = true;
+            _shootingValue =ctx.ReadValue<float>();
         };
 
         _playerInput.Drone.RotateCamera.performed += ctx =>
@@ -115,13 +135,19 @@ public class CustomEvents : MonoBehaviour
             ResetDroneVertical.Invoke();
         };
 
-
         _playerInput.Drone.VerticalMoveDown.canceled += ctx =>
         {
             _verticalMovement = false;
             _verticalMove = 0f;
             ResetDroneVertical.Invoke();
         };
+
+        _playerInput.Drone.Shoot.canceled += ctx =>
+        {
+            _shooting = false;
+            _shootingValue = 0f;
+        };
+
     }
 
     private void Update()
@@ -132,6 +158,19 @@ public class CustomEvents : MonoBehaviour
         }
 
         if (_verticalMovement) DroneVertical.Invoke(_verticalMove);
+
+        if (_shooting && _canShoot)
+        {
+            Shoot.Invoke(_shootingValue);
+            StartCoroutine(ResetShot(0.1f));
+        }
+    }
+
+    private IEnumerator ResetShot(float rate)
+    {
+        _canShoot = false;
+        yield return new WaitForSeconds(rate);
+        _canShoot = true;
     }
 }
 
@@ -160,9 +199,25 @@ public enum Liquid
 
 public enum Mode
 {
-    None
+    None,
+    Traversal,
+    Diagnostic,
+    Treatment
 }
 
+public struct RenderSettings
+{
+    RenderTexture texture;
+    Color drawColour;
+    float drawSize;
+
+    public RenderSettings(RenderTexture render, Color color, float draw)
+    {
+        this.texture = render;
+        this.drawColour = color;
+        this.drawSize = draw;
+    }
+}
 public static class CustomUtility
 {
     public static string maskPath;
