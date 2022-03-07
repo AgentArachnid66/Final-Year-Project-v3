@@ -22,7 +22,7 @@ public class WaterGlobule : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawLine(transform.position + _rigidBody.velocity *-1, transform.position + _rigidBody.velocity * 500f);
+        Gizmos.DrawLine(transform.position + launchVelocity *-1, transform.position + launchVelocity * 500f);
     }
 
     private void OnEnable()
@@ -40,14 +40,13 @@ public class WaterGlobule : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
         Debug.LogError("Collided with " + other.name);
 
         Ray ray = new Ray(transform.position + _rigidBody.velocity * -1, transform.position + _rigidBody.velocity * 500f);
 
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, _mask))
+        if (Physics.Raycast(ray, out hit, 1000, _mask))
         {
             Debug.Log("Hit: " + hit.textureCoord.ToString());
             NoiseGenerator noise = hit.transform.GetComponent<NoiseGenerator>();
@@ -55,12 +54,16 @@ public class WaterGlobule : MonoBehaviour
             {
                 PaintToNoiseTarget(noise, hit);
                 Debug.LogError("Hit Wall");
-                // If the raycast hits, then apply the brush to the render target at the specific UV location
+                // If the raycast hits, then apply the brush to the render target at the specific UV locationlaunc
                 //dataController.sessionData.HitLocations.Add(new Hit(hit.textureCoord, _score, _temp ,noise.wallID));
 
                 //_wallMaterial = hit.transform.GetComponent<MeshRenderer>().material;
 
                 
+            }
+            else
+            {
+                Debug.Log("<color=#FF0000>The Noise Was Null</color>");
             }
         }
 
@@ -70,6 +73,7 @@ public class WaterGlobule : MonoBehaviour
     private void FixedUpdate()
     {
         _waterMaterial.SetVector("Vector3_B9E3988F", transform.position + _globuleOffset);
+        launchVelocity = _rigidBody.velocity.normalized;
     }
 
     private void PaintToNoiseTarget(NoiseGenerator noise, RaycastHit hit)

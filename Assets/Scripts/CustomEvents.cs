@@ -162,7 +162,7 @@ public class CustomEvents : MonoBehaviour
         if (_shooting && _canShoot)
         {
             Shoot.Invoke(_shootingValue);
-            StartCoroutine(ResetShot(0.1f));
+            StartCoroutine(ResetShot(0.01f));
         }
     }
 
