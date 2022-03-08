@@ -5,7 +5,9 @@
         _MainTex ("Texture", 2D) = "white" {}
 
 		_Coordinate("Coordinate", Vector) = (0,0,0,0)
-		_Colour("Draw Colour", Color) = (1,0,0,0)
+		_Colour("Base Colour", Color) = (1,0,0,0)
+		
+		_ColourMultiplier("Colour Multiplier", float) = 1
 		_DrawSize("Brush Size", float) = 50
     }
     SubShader
@@ -38,7 +40,8 @@
             sampler2D _MainTex;
             float4 _MainTex_ST;
 			fixed4 _Coordinate, _Colour;
-			float _DrawSize;
+			float _DrawSize, _ColourMultiplier;
+			
 			
 			v2f vert (appdata v)
             {
@@ -54,10 +57,9 @@
                 fixed4 col = tex2D(_MainTex, i.uv);
                 
 				float draw = pow(saturate(1 - (distance(i.uv, _Coordinate.xy))), _DrawSize);
-				fixed4 drawcol = _Colour * (draw * 1);
+				fixed4 drawcol = _Colour * _ColourMultiplier * (draw * 1);
 
-
-                return saturate(col+drawcol);
+                return saturate(col+(drawcol));
             }
             ENDCG
         }

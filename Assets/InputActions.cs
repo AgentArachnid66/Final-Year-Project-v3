@@ -89,7 +89,7 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""id"": ""38f130b4-cade-483d-a172-db81c0ee3ef7"",
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
-                    ""processors"": ""NormalizeVector2"",
+                    ""processors"": """",
                     ""groups"": ""Drone"",
                     ""action"": ""Move"",
                     ""isComposite"": false,

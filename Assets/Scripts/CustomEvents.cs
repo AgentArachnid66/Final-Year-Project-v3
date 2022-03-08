@@ -22,7 +22,7 @@ public class CustomEvents : MonoBehaviour
 
     private InputActions _playerInput;
     // Input from the left analog stick
-    private Vector2 _2dMove;
+    [SerializeField]private Vector2 _2dMove;
    
     private float _verticalMove;
     // Bool to determine if the player is moving up/down this frame 
@@ -245,4 +245,5 @@ public static class CustomUtility
         }
         return tex;
     }
+
 }

@@ -10,8 +10,7 @@ public class WaterGlobule : MonoBehaviour
 
     [SerializeField]private Rigidbody _rigidBody;
     public Shader _drawShader;
-    private RenderTexture _targetRender;
-    private Material _wallMaterial, _drawMaterial, _waterMaterial;
+    private Material  _drawMaterial, _waterMaterial;
     
 
     [SerializeField] private LayerMask _mask;
@@ -19,6 +18,7 @@ public class WaterGlobule : MonoBehaviour
     private bool _reseting;
     private float _score;
     private float _temp;
+    [SerializeField]private float[] offsets = new float[3];
 
     private void OnDrawGizmos()
     {
@@ -80,12 +80,13 @@ public class WaterGlobule : MonoBehaviour
     {
         dataController.sessionData.HitLocations.Add(new Hit(hit.textureCoord, _score, _temp, noise.wallID));
         RenderTexture[] renders = noise.RetrieveRenderTextures();
+        _drawMaterial.SetVector("_Coordinate", new Vector4(hit.textureCoord.x, hit.textureCoord.y, 0, 0));
 
         for ( int i = 0; i< renders.Length; i++)
         {
             RenderTexture render = renders[i];
-            _drawMaterial.SetVector("_Coordinate", new Vector4(hit.textureCoord.x, hit.textureCoord.y, 0, 0));
             
+            _drawMaterial.SetFloat("_ColourMultiplier", offsets[i]);
             RenderTexture temp = RenderTexture.GetTemporary(render.width, render.height, 0, RenderTextureFormat.ARGBFloat);
             Graphics.Blit(render, temp);
             Graphics.Blit(temp, render, _drawMaterial);
@@ -112,7 +113,9 @@ public class WaterGlobule : MonoBehaviour
     {
         _score = newScore;
         _temp = newTemp;
-
+        offsets[0] = 1f;
+        offsets[1] = _temp;
+        offsets[2] = _score;
     }
 
 

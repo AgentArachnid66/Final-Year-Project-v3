@@ -8,15 +8,14 @@ public class Player : MonoBehaviour
     private Rigidbody _rigidbody;
 
     private float _verticalForce;
-    private float _currentLerpVertical;
+    public AnimationCurve verticalCurve;
 
-    private float _horizontalForce;
-    private float _currentLerpHorizontal;
+    [SerializeField]private float _horizontalForce;
+    public AnimationCurve horizontalCurve;
 
-    private float _diagonalForce;
-    private float _currentLerpDiagonal;
+    [SerializeField]private float _diagonalForce;
+    public AnimationCurve diagonalCurve;
 
-    private float _yawDelta;
 
     private Vector3 _velocity= Vector3.zero;
     public float speed;
@@ -27,6 +26,7 @@ public class Player : MonoBehaviour
     private Vector3 _rotationVelocity;
     private Vector2 _orientation;
     public float orientSpeed;
+    public AnimationCurve orientCurve;
 
     public float minPressure = 0f;
     public float maxPressure = 1000f;
@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
     public AnimationCurve tempCurve;
 
     public Liquid _currentLiquid;
-    private float _currentTempLerp = 0.25f;
+    private float _currentTempLerp = 25f;
     private float _currentTemp;
 
 
@@ -98,6 +98,13 @@ public class Player : MonoBehaviour
 
     #region Movement
 
+    /// <summary>
+    /// This smoothly transitions from controller analog stick to movement in a given axis. [Deprecated]
+    /// </summary>
+    /// <param name="force"></param>
+    /// <param name="currentLerpValue"></param>
+    /// <param name="input"></param>
+    [Obsolete("Move using float lerp value is deprecated, please use Move with the Animation Curve instead.")]
     private void Move(ref float force, ref float currentLerpValue, float input)
     {
         currentLerpValue += Time.deltaTime;
@@ -105,23 +112,34 @@ public class Player : MonoBehaviour
         force = Mathf.SmoothStep(force, input, currentLerpValue);
     }
 
+    
+    /// <summary>
+    /// Uses a curve that is evaluated by the controller analog input to give smooth translation
+    /// </summary>
+    /// <param name="force"></param>
+    /// <param name="curve"></param>
+    /// <param name="input"></param>
+    private void Move(ref float force, AnimationCurve curve, float input)
+    {
+        force = curve.Evaluate(input);
+    }
 
     private void VerticalMovement(float input)
     {
-        Move(ref _verticalForce, ref _currentLerpVertical, input);
+        Move(ref _verticalForce, verticalCurve, input);
         AddRotation(input, ref _targetRotation.x);
     }
 
     private void HorizontalMovement(float input)
     {
-        Move(ref _horizontalForce, ref _currentLerpHorizontal, input);
+        Move(ref _horizontalForce, horizontalCurve, input);
         AddRotation(input, ref _targetRotation.z);
         
     }
 
     private void DiagonalMovement(float input)
     {
-        Move(ref _diagonalForce, ref _currentLerpDiagonal, input);
+        Move(ref _diagonalForce, diagonalCurve, input);
         AddRotation(input, ref _targetRotation.y);
     }
     #endregion
@@ -129,17 +147,14 @@ public class Player : MonoBehaviour
     #region Reset Forces
     private void ResetVertical()
     {
-        _currentLerpVertical = 0;
         _verticalForce = 0;
     }   
     private void ResetHorizontal()
     {   
-        _currentLerpHorizontal = 0;
         _horizontalForce = 0;
     }   
     private void ResetDiagonal()
     {   
-        _currentLerpDiagonal = 0;
         _diagonalForce = 0;
     }
     #endregion
@@ -153,14 +168,15 @@ public class Player : MonoBehaviour
 
     void ResetRotation()
     {
-        _currentRotation = Vector3.zero;
+        //_currentRotation = Vector3.zero;
         _targetRotation = Vector3.zero;
     }
 
 
     void ChangeOrientation(Vector2 newOrient)
     {
-        _orientation += newOrient * orientSpeed;
+        _orientation.x += orientCurve.Evaluate(newOrient.x) * orientSpeed;
+        _orientation.y += orientCurve.Evaluate(newOrient.y) * orientSpeed;
     }
     #endregion
 
