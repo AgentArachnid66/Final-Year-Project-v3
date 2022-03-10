@@ -23,6 +23,7 @@ public class CustomEvents : MonoBehaviour
     private InputActions _playerInput;
     // Input from the left analog stick
     [SerializeField]private Vector2 _2dMove;
+    [SerializeField]private Vector2 _2dOrientate;
    
     private float _verticalMove;
     // Bool to determine if the player is moving up/down this frame 
@@ -85,7 +86,8 @@ public class CustomEvents : MonoBehaviour
             _2dMove = ctx.ReadValue<Vector2>();
             DroneHorizontal.Invoke(_2dMove.x);
             DroneDiagonal.Invoke(_2dMove.y);
-            };
+            Debug.Log("Toggle Left Joy Stick Pressed");
+        };
 
         _playerInput.Drone.VerticalMoveUp.performed += ctx =>
         {
@@ -107,7 +109,9 @@ public class CustomEvents : MonoBehaviour
 
         _playerInput.Drone.RotateCamera.performed += ctx =>
         {
-            OrientDrone.Invoke(ctx.ReadValue<Vector2>());
+            _2dOrientate = ctx.ReadValue<Vector2>();
+            OrientDrone.Invoke(_2dOrientate);
+            Debug.Log("Toggle Right Joy Stick Pressed");
         };
 
         _playerInput.Drone.Liquid.performed += ctx =>
@@ -148,10 +152,19 @@ public class CustomEvents : MonoBehaviour
             _shootingValue = 0f;
         };
 
+        _playerInput.Drone.RotateCamera.canceled += ctx =>
+        {
+            Debug.Log("Toggle Right Joy Stick Released");
+            _2dOrientate = Vector2.zero;
+        };
+
     }
 
     private void Update()
     {
+        OrientDrone.Invoke(_2dOrientate);
+
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             StartSimulation.Invoke();

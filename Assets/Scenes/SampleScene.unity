@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0, g: 0.99999905, b: 0.99999905, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1120,7 +1120,7 @@ PrefabInstance:
     - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
         type: 3}
       propertyPath: orientSpeed
-      value: 1
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
         type: 3}
@@ -1130,7 +1130,7 @@ PrefabInstance:
     - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
         type: 3}
       propertyPath: orientCurve.m_Curve.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
         type: 3}
@@ -1185,6 +1185,11 @@ PrefabInstance:
     - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
         type: 3}
       propertyPath: orientCurve.m_Curve.Array.data[1].time
+      value: 0.0063934075
+      objectReference: {fileID: 0}
+    - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
+        type: 3}
+      propertyPath: orientCurve.m_Curve.Array.data[2].time
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
@@ -1195,6 +1200,11 @@ PrefabInstance:
     - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
         type: 3}
       propertyPath: orientCurve.m_Curve.Array.data[1].value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
+        type: 3}
+      propertyPath: orientCurve.m_Curve.Array.data[2].value
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
@@ -1269,6 +1279,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
         type: 3}
+      propertyPath: orientCurve.m_Curve.Array.data[0].inSlope
+      value: 2.9744515
+      objectReference: {fileID: 0}
+    - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
+        type: 3}
+      propertyPath: orientCurve.m_Curve.Array.data[1].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
+        type: 3}
+      propertyPath: orientCurve.m_Curve.Array.data[2].inSlope
+      value: 3.532035
+      objectReference: {fileID: 0}
+    - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
+        type: 3}
       propertyPath: pressureCurve.m_Curve.Array.data[0].value
       value: 0.5
       objectReference: {fileID: 0}
@@ -1324,6 +1349,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
         type: 3}
+      propertyPath: orientCurve.m_Curve.Array.data[0].outSlope
+      value: 2.9744515
+      objectReference: {fileID: 0}
+    - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
+        type: 3}
+      propertyPath: orientCurve.m_Curve.Array.data[1].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
+        type: 3}
+      propertyPath: orientCurve.m_Curve.Array.data[1].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
+        type: 3}
+      propertyPath: orientCurve.m_Curve.Array.data[2].inWeight
+      value: 0.27606305
+      objectReference: {fileID: 0}
+    - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
+        type: 3}
+      propertyPath: orientCurve.m_Curve.Array.data[2].outSlope
+      value: 3.532035
+      objectReference: {fileID: 0}
+    - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
+        type: 3}
       propertyPath: diagonalCurve.m_Curve.Array.data[0].inSlope
       value: 0
       objectReference: {fileID: 0}
@@ -1346,6 +1396,16 @@ PrefabInstance:
         type: 3}
       propertyPath: horizontalCurve.m_Curve.Array.data[2].value
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
+        type: 3}
+      propertyPath: orientCurve.m_Curve.Array.data[0].outWeight
+      value: 0.32893437
+      objectReference: {fileID: 0}
+    - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
+        type: 3}
+      propertyPath: orientCurve.m_Curve.Array.data[1].outWeight
+      value: 0.3221388
       objectReference: {fileID: 0}
     - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
         type: 3}
@@ -1481,6 +1541,21 @@ PrefabInstance:
         type: 3}
       propertyPath: horizontalCurve.m_Curve.Array.data[1].outSlope
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
+        type: 3}
+      propertyPath: orientCurve.m_Curve.Array.data[0].weightedMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
+        type: 3}
+      propertyPath: orientCurve.m_Curve.Array.data[1].weightedMode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
+        type: 3}
+      propertyPath: orientCurve.m_Curve.Array.data[2].weightedMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7357140587920306928, guid: a4ffe5ee4b8f8dd4680f6c4f425f488b,
         type: 3}
