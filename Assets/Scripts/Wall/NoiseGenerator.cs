@@ -51,7 +51,7 @@ public class NoiseGenerator : MonoBehaviour
         _block.SetTexture("Texture2D_1C6CB6F8", waterMask);
         _block.SetTexture("Texture2D_286EB2CF", tempMask);
         _block.SetTexture("Texture2D_28C91406", pressMask);
-        //_renderer.material.SetTexture("Texture2D_1C6CB6F8", waterMask);
+
         _renderer.material.SetTexture("Texture2D_CA25BCB1", globalMask);
         _renderer.SetPropertyBlock(_block);
     }

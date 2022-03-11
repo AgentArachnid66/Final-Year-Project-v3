@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -46,6 +47,7 @@ public class CustomEvents : MonoBehaviour
     public UnityEvent ResetDroneDiagonal= new UnityEvent();
 
     public UnityEventVector2 OrientDrone = new UnityEventVector2();
+    public UnityEventVector2 LeftAnalog = new UnityEventVector2();
 
     public UnityEventString ChangeScene = new UnityEventString();
 
@@ -53,6 +55,10 @@ public class CustomEvents : MonoBehaviour
     public UnityEventFloat AdjustTemp = new UnityEventFloat();
 
     public UnityEventInt ChangeMode = new UnityEventInt();
+
+    public UnityEventBool ToggleRadialMenu = new UnityEventBool();
+    public UnityEvent Select = new UnityEvent();
+
     private void OnEnable()
     {
         _playerInput.Drone.Move.Enable();
@@ -62,6 +68,10 @@ public class CustomEvents : MonoBehaviour
         _playerInput.Drone.RotateCamera.Enable();
         _playerInput.Drone.Liquid.Enable();
         _playerInput.Drone.Temp.Enable();
+
+
+        _playerInput.Drone.OpenModes.Enable();
+        _playerInput.Drone.Select.Enable();
     }
     private void OnDisable()
     {
@@ -72,6 +82,8 @@ public class CustomEvents : MonoBehaviour
         _playerInput.Drone.RotateCamera.Disable();
         _playerInput.Drone.Liquid.Disable();
         _playerInput.Drone.Temp.Disable();
+        _playerInput.Drone.OpenModes.Disable();
+        _playerInput.Drone.Select.Disable();
 
     }
 
@@ -86,7 +98,7 @@ public class CustomEvents : MonoBehaviour
             _2dMove = ctx.ReadValue<Vector2>();
             DroneHorizontal.Invoke(_2dMove.x);
             DroneDiagonal.Invoke(_2dMove.y);
-            Debug.Log("Toggle Left Joy Stick Pressed");
+            LeftAnalog.Invoke(_2dMove);
         };
 
         _playerInput.Drone.VerticalMoveUp.performed += ctx =>
@@ -111,7 +123,6 @@ public class CustomEvents : MonoBehaviour
         {
             _2dOrientate = ctx.ReadValue<Vector2>();
             OrientDrone.Invoke(_2dOrientate);
-            Debug.Log("Toggle Right Joy Stick Pressed");
         };
 
         _playerInput.Drone.Liquid.performed += ctx =>
@@ -123,6 +134,16 @@ public class CustomEvents : MonoBehaviour
             AdjustTemp.Invoke(ctx.ReadValue<float>());
         };
 
+        _playerInput.Drone.OpenModes.performed += ctx =>
+        {
+            ToggleRadialMenu.Invoke(true);
+        };
+
+        _playerInput.Drone.Select.performed += ctx =>
+        {
+            Select.Invoke();
+        };
+
         // When Player no longer inputs
 
         _playerInput.Drone.Move.canceled += ctx =>
@@ -130,6 +151,7 @@ public class CustomEvents : MonoBehaviour
             _2dMove = Vector2.zero;
             ResetDroneHorizontal.Invoke();
             ResetDroneDiagonal.Invoke();
+            LeftAnalog.Invoke(Vector2.zero);
         };
 
         _playerInput.Drone.VerticalMoveUp.canceled += ctx =>
@@ -154,8 +176,12 @@ public class CustomEvents : MonoBehaviour
 
         _playerInput.Drone.RotateCamera.canceled += ctx =>
         {
-            Debug.Log("Toggle Right Joy Stick Released");
             _2dOrientate = Vector2.zero;
+        };
+
+        _playerInput.Drone.OpenModes.canceled += ctx =>
+        {
+            ToggleRadialMenu.Invoke(false);
         };
 
     }
@@ -185,6 +211,12 @@ public class CustomEvents : MonoBehaviour
         yield return new WaitForSeconds(rate);
         _canShoot = true;
     }
+
+    public void UpdateMode(int index)
+    {
+        Debug.Log((Mode)index);
+        ChangeMode.Invoke(index);
+    }
 }
 
 public class UnityEventFloat : UnityEvent<float>
@@ -197,10 +229,14 @@ public class UnityEventString : UnityEvent<string>
 
 public class UnityEventVector2 : UnityEvent<Vector2>
 {
-
 }
 
 public class UnityEventInt : UnityEvent<int>{
+
+}
+
+public class UnityEventBool : UnityEvent<bool>
+{
 
 }
 

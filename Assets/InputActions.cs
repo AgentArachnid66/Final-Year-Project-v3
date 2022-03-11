@@ -81,6 +81,14 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""OpenModes"",
+                    ""type"": ""Button"",
+                    ""id"": ""98664405-4f95-4592-9b18-01675e293ad1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -215,6 +223,17 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""action"": ""Temp"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9aba5827-427a-478d-8f3a-cb0e39ab6c8a"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Drone"",
+                    ""action"": ""OpenModes"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -253,6 +272,7 @@ public class @InputActions : IInputActionCollection, IDisposable
         m_Drone_Shoot = m_Drone.FindAction("Shoot", throwIfNotFound: true);
         m_Drone_Liquid = m_Drone.FindAction("Liquid", throwIfNotFound: true);
         m_Drone_Temp = m_Drone.FindAction("Temp", throwIfNotFound: true);
+        m_Drone_OpenModes = m_Drone.FindAction("OpenModes", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -310,6 +330,7 @@ public class @InputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_Drone_Shoot;
     private readonly InputAction m_Drone_Liquid;
     private readonly InputAction m_Drone_Temp;
+    private readonly InputAction m_Drone_OpenModes;
     public struct DroneActions
     {
         private @InputActions m_Wrapper;
@@ -322,6 +343,7 @@ public class @InputActions : IInputActionCollection, IDisposable
         public InputAction @Shoot => m_Wrapper.m_Drone_Shoot;
         public InputAction @Liquid => m_Wrapper.m_Drone_Liquid;
         public InputAction @Temp => m_Wrapper.m_Drone_Temp;
+        public InputAction @OpenModes => m_Wrapper.m_Drone_OpenModes;
         public InputActionMap Get() { return m_Wrapper.m_Drone; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -355,6 +377,9 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @Temp.started -= m_Wrapper.m_DroneActionsCallbackInterface.OnTemp;
                 @Temp.performed -= m_Wrapper.m_DroneActionsCallbackInterface.OnTemp;
                 @Temp.canceled -= m_Wrapper.m_DroneActionsCallbackInterface.OnTemp;
+                @OpenModes.started -= m_Wrapper.m_DroneActionsCallbackInterface.OnOpenModes;
+                @OpenModes.performed -= m_Wrapper.m_DroneActionsCallbackInterface.OnOpenModes;
+                @OpenModes.canceled -= m_Wrapper.m_DroneActionsCallbackInterface.OnOpenModes;
             }
             m_Wrapper.m_DroneActionsCallbackInterface = instance;
             if (instance != null)
@@ -383,6 +408,9 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @Temp.started += instance.OnTemp;
                 @Temp.performed += instance.OnTemp;
                 @Temp.canceled += instance.OnTemp;
+                @OpenModes.started += instance.OnOpenModes;
+                @OpenModes.performed += instance.OnOpenModes;
+                @OpenModes.canceled += instance.OnOpenModes;
             }
         }
     }
@@ -406,5 +434,6 @@ public class @InputActions : IInputActionCollection, IDisposable
         void OnShoot(InputAction.CallbackContext context);
         void OnLiquid(InputAction.CallbackContext context);
         void OnTemp(InputAction.CallbackContext context);
+        void OnOpenModes(InputAction.CallbackContext context);
     }
 }

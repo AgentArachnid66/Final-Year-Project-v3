@@ -68,6 +68,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "OpenModes",
+                    "type": "Button",
+                    "id": "98664405-4f95-4592-9b18-01675e293ad1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -202,6 +210,17 @@
                     "action": "Temp",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "9aba5827-427a-478d-8f3a-cb0e39ab6c8a",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Drone",
+                    "action": "OpenModes",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
