@@ -33,12 +33,33 @@ public class DataController : MonoBehaviour
     [SerializeField]
     public ParticipantData participantData = new ParticipantData();
 
+
+    /// <summary>
+    /// Callback events, giving the success of the request and the error code if applicable
+    /// </summary>
+
+    [SerializeField]
+    public UnityEventBoolString LoginAttemptCallback = new UnityEventBoolString();
+
+    [SerializeField]
+    public UnityEventBoolString RegisterAttemptCallback = new UnityEventBoolString();
+
     // Start is called before the first frame update
     void Start()
     {
         //database = client.GetDatabase("GameData");
         //userCollection = database.GetCollection<BsonDocument>("Player Data");
         //sessionCollection = database.GetCollection<BsonDocument>("Session Data");
+    }
+
+    public void SetLoginID(int id)
+    {
+        participantData.ID = id;
+    }
+
+    public void SetLoginPIN(int pin)
+    {
+        participantData.PIN = pin;
     }
 
 
@@ -69,7 +90,7 @@ public class DataController : MonoBehaviour
 
 
 
-#region Coroutine Tests
+    #region Coroutine Tests
 
     [ContextMenu("Calculate Score")]
     public void GetScore()
@@ -174,12 +195,19 @@ public class DataController : MonoBehaviour
         if (saveSession.isNetworkError || saveSession.isHttpError)
         {
             Debug.Log("Error Occured: " + saveSession.error);
+            RegisterAttemptCallback.Invoke(false, saveSession.error);
         }
         else
         {
-            // Check if the participant creation was successful before moving forward
-
-            // Go to the login screen
+            Debug.Log(saveSession.downloadHandler.text);
+            LoginOutputData respond = JsonConvert.DeserializeObject<LoginOutputData>(saveSession.downloadHandler.text);
+            if (respond.success)
+            {
+                // If the response is successful, then the PlayerID is set to the 
+                // ObjectID of the participant
+                sessionData.PlayerID = participantData.ID;
+            }
+            RegisterAttemptCallback.Invoke(respond.success, "");
         }
     }
 
@@ -201,6 +229,7 @@ public class DataController : MonoBehaviour
         {
             Debug.Log("Error Occured: " + saveSession.error);
             // Login Failed
+            LoginAttemptCallback.Invoke(false, saveSession.error);
         }
         else
         {
@@ -213,6 +242,7 @@ public class DataController : MonoBehaviour
                 // ObjectID of the participant
                 sessionData.PlayerID = participantData.ID;
             }
+            LoginAttemptCallback.Invoke(respond.success, "");
         }
     }
 

@@ -56,7 +56,7 @@ public class CustomEvents : MonoBehaviour
 
     public UnityEventInt ChangeMode = new UnityEventInt();
 
-    public UnityEventBool ToggleRadialMenu = new UnityEventBool();
+    public UnityEventBoolFloat ToggleRadialMenu = new UnityEventBoolFloat();
     public UnityEvent Select = new UnityEvent();
 
     private void OnEnable()
@@ -136,7 +136,7 @@ public class CustomEvents : MonoBehaviour
 
         _playerInput.Drone.OpenModes.performed += ctx =>
         {
-            ToggleRadialMenu.Invoke(true);
+            ToggleRadialMenu.Invoke(true, ctx.ReadValue<float>());
         };
 
         _playerInput.Drone.Select.performed += ctx =>
@@ -181,7 +181,7 @@ public class CustomEvents : MonoBehaviour
 
         _playerInput.Drone.OpenModes.canceled += ctx =>
         {
-            ToggleRadialMenu.Invoke(false);
+            ToggleRadialMenu.Invoke(false, 0f);
         };
 
     }
@@ -231,15 +231,27 @@ public class UnityEventVector2 : UnityEvent<Vector2>
 {
 }
 
+[Serializable]
 public class UnityEventInt : UnityEvent<int>{
 
 }
 
+[Serializable]
 public class UnityEventBool : UnityEvent<bool>
 {
 
 }
 
+public class UnityEventBoolFloat : UnityEvent<bool, float>
+{
+
+}
+
+[Serializable]
+public class UnityEventBoolString : UnityEvent<bool, string>
+{
+
+}
 public enum Liquid
 {
     None,

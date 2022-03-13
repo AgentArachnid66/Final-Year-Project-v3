@@ -19,6 +19,8 @@ public class Player : MonoBehaviour
 
     private Vector3 _velocity= Vector3.zero;
     public float speed;
+    [SerializeField]private bool _canMove = true;
+    public AnimationCurve timeScaleCurve;
 
     private Vector3 _currentRotation;
     public Vector3 _targetRotation;
@@ -72,7 +74,7 @@ public class Player : MonoBehaviour
         CustomEvents.CustomEventsInstance.ChangeLiquid.AddListener(ChangeLiquid);
         CustomEvents.CustomEventsInstance.AdjustTemp.AddListener(AdjustTemp);
 
-
+        CustomEvents.CustomEventsInstance.ToggleRadialMenu.AddListener(AdjustTimeScale);
 
 
 
@@ -82,18 +84,19 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         // Movement
-        _rigidbody.MovePosition(Vector3.SmoothDamp(transform.position, transform.position + 
-            (transform.up * _verticalForce) + 
+        _rigidbody.MovePosition(Vector3.SmoothDamp(transform.position, transform.position +
+            (transform.up * _verticalForce) +
             (transform.right * _horizontalForce) +
-            (transform.forward * _diagonalForce), 
-            ref _velocity, speed*Time.deltaTime));
+            (transform.forward * _diagonalForce),
+            ref _velocity, speed * Time.deltaTime));
 
 
-        _currentRotation.x = Mathf.SmoothDamp(_currentRotation.x, _targetRotation.x + (-1f* _orientation.y), ref _rotationVelocity.x, banking);
+        _currentRotation.x = Mathf.SmoothDamp(_currentRotation.x, _targetRotation.x + (-1f * _orientation.y), ref _rotationVelocity.x, banking);
         _currentRotation.y = Mathf.SmoothDamp(_currentRotation.y, _targetRotation.y + _orientation.x, ref _rotationVelocity.y, banking);
         _currentRotation.z = Mathf.SmoothDamp(_currentRotation.z, _targetRotation.z, ref _rotationVelocity.z, banking);
 
         _rigidbody.MoveRotation(Quaternion.Euler(_currentRotation));
+
     }
 
     #region Movement
@@ -231,6 +234,12 @@ public class Player : MonoBehaviour
         _currentTempLerp += deltaT;
         _currentTemp = tempCurve.Evaluate(_currentTempLerp/100f);
         Debug.Log(_currentTemp);
+    }
+
+
+    private void AdjustTimeScale(bool toggle, float input)
+    {
+        Time.timeScale = timeScaleCurve.Evaluate(input);
     }
     #endregion
 

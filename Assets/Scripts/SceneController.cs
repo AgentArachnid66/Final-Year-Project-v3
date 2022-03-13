@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
+    private bool _canChange;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,13 +24,22 @@ public class SceneController : MonoBehaviour
 
     public void ChangeScene(string sceneName)
     {
-        Debug.Log("Loading: " + sceneName);
-        SceneManager.LoadSceneAsync(sceneName);
+        if (_canChange)
+        {
+            Debug.Log("Loading: " + sceneName);
+            SceneManager.LoadSceneAsync(sceneName);
+
+        }
     }
 
     public void TestButton(string testString)
     {
         Debug.Log(testString);
+    }
+
+    public void UpdateCanChange(bool can)
+    {
+        _canChange = can;
     }
 
 }

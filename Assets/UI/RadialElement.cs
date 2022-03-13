@@ -13,6 +13,13 @@ public class RadialElement : MonoBehaviour
     public Color normal;
     public Color highlight;
     public Color pressed;
+    public float fillAmount=1f;
+
+    // Based on the fill amount, the min and max angle will be calculated and store in order to optimise the menu
+    public float minAngle;
+    public float maxAngle;
+    public float offset;
+
 
     public UnityEvent OnPress = new UnityEvent();
 
