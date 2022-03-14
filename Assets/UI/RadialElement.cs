@@ -19,7 +19,9 @@ public class RadialElement : MonoBehaviour
     public float minAngle;
     public float maxAngle;
     public float offset;
-
+    // Total angle between min and max angles
+    public float arcLength;
+    public float localAngle;
 
     public UnityEvent OnPress = new UnityEvent();
 

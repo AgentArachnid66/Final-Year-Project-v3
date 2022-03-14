@@ -21,7 +21,6 @@ public class SceneController : MonoBehaviour
 
     // This class will be in charge of switching the scenes
 
-
     public void ChangeScene(string sceneName)
     {
         if (_canChange)

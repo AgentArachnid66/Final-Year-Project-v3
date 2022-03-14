@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
 
     private Vector3 _velocity= Vector3.zero;
     public float speed;
-    [SerializeField]private bool _canMove = true;
+
     public AnimationCurve timeScaleCurve;
 
     private Vector3 _currentRotation;
@@ -42,7 +42,7 @@ public class Player : MonoBehaviour
     public Liquid _currentLiquid;
     private float _currentTempLerp = 25f;
     private float _currentTemp;
-
+    [SerializeField]private Mode _currentMode = Mode.Water;
 
     private void Awake()
     {
@@ -73,6 +73,7 @@ public class Player : MonoBehaviour
 
         CustomEvents.CustomEventsInstance.ChangeLiquid.AddListener(ChangeLiquid);
         CustomEvents.CustomEventsInstance.AdjustTemp.AddListener(AdjustTemp);
+        CustomEvents.CustomEventsInstance.ChangeMode.AddListener(ChangeMode);
 
         CustomEvents.CustomEventsInstance.ToggleRadialMenu.AddListener(AdjustTimeScale);
 
@@ -228,6 +229,12 @@ public class Player : MonoBehaviour
             Debug.Log(_currentLiquid);
         }
     }
+
+    private void ChangeMode(int deltaM)
+    {
+        _currentMode = (Mode)deltaM;
+    }
+
 
     private void AdjustTemp(float deltaT)
     {

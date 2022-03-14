@@ -214,7 +214,7 @@ public class CustomEvents : MonoBehaviour
 
     public void UpdateMode(int index)
     {
-        Debug.Log((Mode)index);
+        Debug.Log(index);
         ChangeMode.Invoke(index);
     }
 }
@@ -242,6 +242,7 @@ public class UnityEventBool : UnityEvent<bool>
 
 }
 
+[Serializable]
 public class UnityEventBoolFloat : UnityEvent<bool, float>
 {
 
@@ -260,10 +261,8 @@ public enum Liquid
 
 public enum Mode
 {
-    None,
-    Traversal,
-    Diagnostic,
-    Treatment
+    Water,
+    Laser
 }
 
 public struct RenderSettings

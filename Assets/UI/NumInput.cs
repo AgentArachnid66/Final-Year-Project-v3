@@ -10,9 +10,8 @@ public class NumInput : MonoBehaviour
     public UnityEventInt SubmitInput = new UnityEventInt();
 
 
-    [SerializeField]private int _currentInput;
     public int _deltaInput;
-
+    private string _currentString= "";
 
 
     [ContextMenu("Test Appending")]
@@ -23,33 +22,39 @@ public class NumInput : MonoBehaviour
 
     private void UpdateDisplay()
     {
-        display.text = _currentInput.ToString();
+        display.text = _currentString;
     }
     public void AppendInput(int num)
     {
-        _currentInput *= 10;
-        _currentInput += num;
+        _currentString += num.ToString();
         UpdateDisplay();
     }
 
     [ContextMenu("Remove From Input")]
     public void RemoveFromInput()
     {
-        _currentInput -= _currentInput % 10;
-        _currentInput /= 10;
+        _currentString = _currentString.Substring(0, _currentString.Length - 1);
         UpdateDisplay();
     }
 
 
     public void EnterInput()
     {
-        Debug.Log("Entered the Input");
-        SubmitInput.Invoke(_currentInput);
+        int[] values = _currentString.ToIntArray();
+        int _currInput=0;
+
+        for(int i = 0; i < values.Length; i++)
+        {
+            _currInput *= 10;
+            _currInput += values[i];
+
+        }
+        Debug.Log($"Entered the Input {_currInput}");
+        SubmitInput.Invoke(_currInput);
     }
 
     public void ClearInput()
     {
-        _currentInput = 0;
         display.text = "";
     }
 }

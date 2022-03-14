@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
+
 public class RadialMenu : MonoBehaviour
 {
 
@@ -15,8 +16,8 @@ public class RadialMenu : MonoBehaviour
 
     private int _prevSelection;
     private bool _active;
-    private float _currMinAngle;
-    private float _currMaxAngle;
+
+
     void Start()
     {
         float sum = 0f;
@@ -29,20 +30,28 @@ public class RadialMenu : MonoBehaviour
 
         for (int i = 0; i < menuItems.Length; i++)
         {
-            menuItems[i].minAngle = (Mathf.Atan2(menuItems[i].transform.localPosition.y, menuItems[i].transform.localPosition.x) * Mathf.Rad2Deg) - ((menuItems[i].fillAmount / sum) * 360f) / 2f;
+            // Gets fill amount in terms of degrees
+            menuItems[i].arcLength = (menuItems[i].fillAmount / sum) * 360f;
 
+            // Gets the angle local to the parent, 
+            menuItems[i].localAngle = (Mathf.Atan2(menuItems[i].transform.localPosition.y, menuItems[i].transform.localPosition.x) * Mathf.Rad2Deg);
+
+
+            // Min angle = if first element then local angle - (arc length /2) otherwise it is the previous max angle
+            menuItems[i].minAngle = i == 0 ? menuItems[i].localAngle - (menuItems[i].arcLength/2f) : start;
             menuItems[i].minAngle += 360;
             menuItems[i].minAngle %= 360;
 
-            menuItems[i].maxAngle = (Mathf.Atan2(menuItems[i].transform.localPosition.y, menuItems[i].transform.localPosition.x) * Mathf.Rad2Deg) + ((menuItems[i].fillAmount / sum) * 360f) / 2f;
-
+            // Max angle = local angle + arc length /2
+            menuItems[i].maxAngle = menuItems[i].localAngle + (menuItems[i].arcLength / 2f);
             menuItems[i].maxAngle += 360;
             menuItems[i].maxAngle %= 360;
 
             menuItems[i].offset = menuItems[i].minAngle > menuItems[i].maxAngle ? 360f - menuItems[i].minAngle : 0f;
 
-            start = menuItems[i].maxAngle;
+            //
 
+            start = menuItems[i].maxAngle;
         }
         
 
@@ -91,6 +100,7 @@ public class RadialMenu : MonoBehaviour
         for (int i = 0; i < menuItems.Length; i++)
         {
             float min = menuItems[i].minAngle + menuItems[i].offset >= 360 ? 0 : menuItems[i].minAngle + menuItems[i].offset;
+
             if ((min < currentAngle + menuItems[i].offset) && (menuItems[i].maxAngle + menuItems[i].offset > currentAngle + menuItems[i].offset))
             {
                 index = i;
@@ -112,6 +122,12 @@ public class RadialMenu : MonoBehaviour
     }
 
     public void ToggleMenu(bool toggle, float input)
+    {
+        _active = toggle;
+        gameObject.SetActive(_active);
+    }
+
+    public void ToggleMenu(bool toggle)
     {
         _active = toggle;
         gameObject.SetActive(_active);
