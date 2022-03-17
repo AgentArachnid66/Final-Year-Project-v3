@@ -53,7 +53,6 @@ public class CustomEvents : MonoBehaviour
 
     public UnityEventInt ChangeLiquid = new UnityEventInt();
     public UnityEventFloat AdjustTemp = new UnityEventFloat();
-
     public UnityEventInt ChangeMode = new UnityEventInt();
 
     public UnityEventBoolFloat ToggleRadialMenu = new UnityEventBoolFloat();
@@ -200,8 +199,9 @@ public class CustomEvents : MonoBehaviour
 
         if (_shooting && _canShoot)
         {
+
             Shoot.Invoke(_shootingValue);
-            StartCoroutine(ResetShot(0.01f));
+            StartCoroutine(ResetShot(0.1f));
         }
     }
 
@@ -219,6 +219,7 @@ public class CustomEvents : MonoBehaviour
     }
 }
 
+[Serializable]
 public class UnityEventFloat : UnityEvent<float>
 {
 }
@@ -238,6 +239,12 @@ public class UnityEventInt : UnityEvent<int>{
 
 [Serializable]
 public class UnityEventBool : UnityEvent<bool>
+{
+
+}
+
+[Serializable]
+public class UnityEventColour : UnityEvent<Color>
 {
 
 }

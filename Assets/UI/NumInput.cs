@@ -33,22 +33,18 @@ public class NumInput : MonoBehaviour
     [ContextMenu("Remove From Input")]
     public void RemoveFromInput()
     {
-        _currentString = _currentString.Substring(0, _currentString.Length - 1);
-        UpdateDisplay();
+        if (_currentString.Length > 0)
+        {
+            _currentString = _currentString.Substring(0, _currentString.Length - 1);
+            UpdateDisplay();
+        }
     }
 
 
     public void EnterInput()
     {
-        int[] values = _currentString.ToIntArray();
-        int _currInput=0;
-
-        for(int i = 0; i < values.Length; i++)
-        {
-            _currInput *= 10;
-            _currInput += values[i];
-
-        }
+        int _currInput = 0;
+        int.TryParse(_currentString, out _currInput);
         Debug.Log($"Entered the Input {_currInput}");
         SubmitInput.Invoke(_currInput);
     }

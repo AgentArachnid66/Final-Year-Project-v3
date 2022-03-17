@@ -2,11 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
+    [Header("Movement")]
     private Rigidbody _rigidbody;
-
     private float _verticalForce;
     public AnimationCurve verticalCurve;
 
@@ -20,8 +21,7 @@ public class Player : MonoBehaviour
     private Vector3 _velocity= Vector3.zero;
     public float speed;
 
-    public AnimationCurve timeScaleCurve;
-
+    [Header("Rotation and Orientation")]
     private Vector3 _currentRotation;
     public Vector3 _targetRotation;
     public float banking;
@@ -30,12 +30,14 @@ public class Player : MonoBehaviour
     public float orientSpeed;
     public AnimationCurve orientCurve;
 
+    [Header("Shooting")]
     public float minPressure = 0f;
     public float maxPressure = 1000f;
     public bool on = false;
     private float _pressure;
     public Transform waterSpout;
 
+    [Header("Pressure and Temperature")]
     public AnimationCurve pressureCurve;
     public AnimationCurve tempCurve;
 
@@ -43,6 +45,14 @@ public class Player : MonoBehaviour
     private float _currentTempLerp = 25f;
     private float _currentTemp;
     [SerializeField]private Mode _currentMode = Mode.Water;
+    [SerializeField] private LayerMask _mask;
+
+    [Header("UI")]
+    public AnimationCurve timeScaleCurve;
+    public UnityEventFloat UpdateTemperatureValue = new UnityEventFloat();
+    public UnityEventFloat UpdateEvaluatedTemperatureValue = new UnityEventFloat();
+
+    public UnityEventFloat UpdatePressureValue = new UnityEventFloat();
 
     private void Awake()
     {
@@ -189,6 +199,7 @@ public class Player : MonoBehaviour
     private void ShootWater(float input)
     {
         _pressure = Mathf.Lerp(minPressure, maxPressure, input);
+        UpdatePressureValue.Invoke(Mathf.Round(100*_pressure/maxPressure));
         Debug.Log($"Receivied: {_currentTemp}");
         GameObject globule = GlobuleObjectPool.sharedInstance.GetPooledObject();
         if (globule != null)
@@ -205,6 +216,21 @@ public class Player : MonoBehaviour
 
             StartCoroutine(waterGlobule.ResetGlobule(2f));
         }
+    }
+
+    private void ShootLaser(float input)
+    {
+        // Shoot raycast in current forward vector, using the orientation input as directional input
+        RaycastHit hit;
+
+        if(Physics.Raycast(transform.position, transform.forward, out hit, 1000f, _mask))
+        {
+            Debug.Log($"Hit with damage output of: {input}");
+
+        }
+        // Damage the laser can afflict is proportional to input
+
+        // Player must be careful not to hit too much of the underlying tissue
     }
 
     private void ChangeLiquid(int deltaL)
@@ -241,6 +267,8 @@ public class Player : MonoBehaviour
         _currentTempLerp += deltaT;
         _currentTemp = tempCurve.Evaluate(_currentTempLerp/100f);
         Debug.Log(_currentTemp);
+        UpdateTemperatureValue.Invoke(Mathf.Round(Mathf.Lerp(-5, 50, _currentTempLerp / 100f)));
+        UpdateEvaluatedTemperatureValue.Invoke(_currentTempLerp/100f);
     }
 
 
@@ -248,6 +276,8 @@ public class Player : MonoBehaviour
     {
         Time.timeScale = timeScaleCurve.Evaluate(input);
     }
+    
+    
     #endregion
 
 

@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
-    private bool _canChange;
+    [SerializeField]private bool _canChange;
 
     // Start is called before the first frame update
     void Start()
