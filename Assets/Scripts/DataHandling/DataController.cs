@@ -10,7 +10,9 @@ using Newtonsoft.Json;
 
 public class DataController : MonoBehaviour
 {
-    
+    public static DataController sharedInstance;
+
+
     private string url = "http://localhost:5000/";
 
     private ScoreOutputData score;
@@ -44,12 +46,16 @@ public class DataController : MonoBehaviour
     [SerializeField]
     public UnityEventBoolString RegisterAttemptCallback = new UnityEventBoolString();
 
+    private void Awake()
+    {
+        sharedInstance = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        //database = client.GetDatabase("GameData");
-        //userCollection = database.GetCollection<BsonDocument>("Player Data");
-        //sessionCollection = database.GetCollection<BsonDocument>("Session Data");
+        int numOfWalls = GameObject.FindGameObjectsWithTag("Wall").Length;
+        sessionData.masks = new WallData[numOfWalls];
     }
 
     public void SetLoginID(int id)
@@ -62,40 +68,12 @@ public class DataController : MonoBehaviour
         participantData.PIN = pin;
     }
 
-
-    /*
-    [ContextMenu("Save Session")]
-    public async void SaveSessionDataToDatabase()
-    {
-        BsonDocument document = sessionData.ToBsonDocument<SessionData>();
-        await sessionCollection.InsertOneAsync(document);
-        
-    }
-
-    [ContextMenu ("Save User")]
-    public async void SaveUserDataToDatabase()
-    {
-        BsonDocument document = data.ToBsonDocument<UserData>();
-        await userCollection.InsertOneAsync(document);
-
-    }
-    /*
-    [ContextMenu ("Get Users")]
-    public async void GetUsers()
-    { 
-
-    } 
-    */
-
-
-
-
     #region Coroutine Tests
 
     [ContextMenu("Calculate Score")]
     public void GetScore()
     {
-        scoreInput.images.renderTarget = sessionData.mask;
+        scoreInput.images.renderTarget = sessionData.masks[0].waterMask;
         StartCoroutine(CalculateScore());
     }
 

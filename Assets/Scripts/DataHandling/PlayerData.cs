@@ -24,6 +24,25 @@ public class Texture
 }
 */
 
+
+[System.Serializable]
+public class SessionData
+{
+	public int PlayerID;
+	public int Score;
+	public float Length;
+
+	public string TimeStamp;
+
+	[SerializeField]
+	public List<Hit> HitLocations;
+
+    [SerializeField]
+    public WallData[] masks;
+
+}
+
+
 [System.Serializable]
 public class Hit
 {
@@ -44,20 +63,22 @@ public class Hit
 }
 
 [System.Serializable]
-public class SessionData
+public class WallData
 {
-	// PlayerID = AccountID + UserID
-	public int PlayerID;
-	public int Score;
-	public float Length;
+    public string globalMask;
+    public string waterMask;
+    public string pressureMask;
+    public string temperatureMask;
+    public int id;
 
-	public string TimeStamp;
-
-	[SerializeField]
-	public List<Hit> HitLocations;
-
-	[SerializeField]
-	public string mask;
+    public WallData(string global, string water, string pressure, string temp, int wallID)
+    {
+        this.globalMask = global;
+        this.waterMask = water;
+        this.pressureMask = pressure;
+        this.temperatureMask = temp;
+        this.id = wallID;
+    }
 }
 
 #region Participant Data
@@ -76,6 +97,7 @@ public class LoginOutputData
 }
 
 #endregion
+
 
 
 #region Account and User

@@ -37,24 +37,27 @@ public class NoiseGenerator : MonoBehaviour
     void Start()
     {
         _renderer = GetComponent<Renderer>();
-        waterMask = new RenderTexture(sourceTexture.width, sourceTexture.height, sourceTexture.depth);
-        tempMask = new RenderTexture(sourceTexture.width, sourceTexture.height, sourceTexture.depth);
-        pressMask = new RenderTexture(sourceTexture.width, sourceTexture.height, sourceTexture.depth);
+        waterMask = new RenderTexture(sourceTexture);
+        tempMask = new RenderTexture(sourceTexture);
+        pressMask = new RenderTexture(sourceTexture);
         globalMask = new RenderTexture(sourceTexture);
 
-        UpdateTexture(globalMask);
-        SaveRenderTexture(globalMask, "mask" + gameObject.name);
-        Debug.Log($"Saving Mask to {CustomUtility.maskPath}");
+        UpdateRenderTextures();
 
         _block = new MaterialPropertyBlock();
         _renderer.GetPropertyBlock(_block);
         _block.SetTexture("Texture2D_1C6CB6F8", waterMask);
-        _block.SetTexture("Texture2D_286EB2CF", tempMask);
+        _block.SetTexture("Texture2D_F6700227", tempMask);
         _block.SetTexture("Texture2D_28C91406", pressMask);
+        _block.SetTexture("Texture2D_CA25BCB1", globalMask);
 
-        _renderer.material.SetTexture("Texture2D_CA25BCB1", globalMask);
+        //_renderer.material.SetTexture("Texture2D_CA25BCB1", globalMask);
         _renderer.SetPropertyBlock(_block);
-    }
+
+
+        Application.quitting += SaveAllMasks;
+
+            }
 
     [ContextMenu("Update Texture")]
     void UpdateTexture(RenderTexture target) {
@@ -92,6 +95,7 @@ public class NoiseGenerator : MonoBehaviour
     void UpdateRenderTextures()
     {
         UpdateTexture(globalMask);
+        Graphics.Blit(sourceTexture, waterMask);
     }
 
     Texture2D GenerateTexture()
@@ -150,7 +154,7 @@ public class NoiseGenerator : MonoBehaviour
         // Applies those pixels to the texture
         tex.Apply();
 
-        string dir = Application.dataPath + "/../SavedImages/";
+        string dir = Application.dataPath + "/../SavedImages/Masks/";
 
         if (!Directory.Exists(dir))
         {
@@ -172,9 +176,31 @@ public class NoiseGenerator : MonoBehaviour
     [ContextMenu("Save User Mask")]
     public void SaveWaterMask()
     {
-        dataController.sessionData.mask = SaveRenderTexture(waterMask, "renderTarget_" +wallID.ToString());
+        dataController.sessionData.masks[wallID].waterMask = SaveRenderTexture(waterMask, "renderTarget_" +wallID.ToString());
     }
 
+    [ContextMenu("Save All Masks")]
+    public void SaveAllMasks()
+    {
+
+        DataController.sharedInstance.sessionData.masks[wallID] = new WallData(
+            SaveRenderTexture(globalMask, "global_" + wallID.ToString()),
+            SaveRenderTexture(waterMask, "water_" + wallID.ToString()),
+            SaveRenderTexture(pressMask, "pressure_" + wallID.ToString()),
+            SaveRenderTexture(tempMask, "temperature_" + wallID.ToString()),
+            wallID);
+
+        /*
+        SaveRenderTexture(globalMask, "global_" + wallID.ToString());
+        Debug.Log($"Saving Mask to {CustomUtility.maskPath}");
+
+
+        dataController.sessionData.masks[wallID].pressureMask = SaveRenderTexture(pressMask, "pressure_" + wallID.ToString());
+        dataController.sessionData.masks[wallID].temperatureMask = SaveRenderTexture(tempMask, "temperature_" + wallID.ToString());
+        
+        dataController.sessionData.masks[wallID].id = wallID;
+        */
+    }
 
     public RenderTexture[] RetrieveRenderTextures()
     {

@@ -2255,6 +2255,41 @@ PrefabInstance:
       propertyPath: _deltaInput
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6789819118593873014, guid: b2d4abfd92b379145b57ee0247391b2a,
+        type: 3}
+      propertyPath: SubmitInput.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6789819118593873014, guid: b2d4abfd92b379145b57ee0247391b2a,
+        type: 3}
+      propertyPath: SubmitInput.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6789819118593873014, guid: b2d4abfd92b379145b57ee0247391b2a,
+        type: 3}
+      propertyPath: SubmitInput.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1444108807}
+    - target: {fileID: 6789819118593873014, guid: b2d4abfd92b379145b57ee0247391b2a,
+        type: 3}
+      propertyPath: SubmitInput.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6789819118593873014, guid: b2d4abfd92b379145b57ee0247391b2a,
+        type: 3}
+      propertyPath: SubmitInput.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChangeScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 6789819118593873014, guid: b2d4abfd92b379145b57ee0247391b2a,
+        type: 3}
+      propertyPath: SubmitInput.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: SampleScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 6789819118593873014, guid: b2d4abfd92b379145b57ee0247391b2a,
+        type: 3}
+      propertyPath: SubmitInput.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 6789819118593873015, guid: b2d4abfd92b379145b57ee0247391b2a,
         type: 3}
       propertyPath: m_Pivot.x
@@ -2665,6 +2700,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6789819119471014692, guid: b2d4abfd92b379145b57ee0247391b2a,
+        type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6789819119646806140, guid: b2d4abfd92b379145b57ee0247391b2a,
         type: 3}
       propertyPath: m_Colors.m_SelectedColor.b
@@ -3017,7 +3057,7 @@ MonoBehaviour:
     Length: 0
     TimeStamp: 
     HitLocations: []
-    mask: 
+    masks: []
   participantData:
     ID: 0
     PIN: 0
@@ -3026,7 +3066,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1444108807}
         m_MethodName: UpdateCanChange
-        m_Mode: 0
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
