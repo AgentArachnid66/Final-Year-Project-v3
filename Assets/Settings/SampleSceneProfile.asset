@@ -15,16 +15,16 @@ MonoBehaviour:
   active: 1
   m_AdvancedMode: 0
   threshold:
-    m_OverrideState: 0
-    m_Value: 0.98
+    m_OverrideState: 1
+    m_Value: 0.37
     min: 0
   intensity:
-    m_OverrideState: 0
-    m_Value: 5.87
+    m_OverrideState: 1
+    m_Value: 3
     min: 0
   scatter:
-    m_OverrideState: 0
-    m_Value: 0.7
+    m_OverrideState: 1
+    m_Value: 0.65
     min: 0
     max: 1
   clamp:
@@ -33,7 +33,7 @@ MonoBehaviour:
     min: 0
   tint:
     m_OverrideState: 0
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
+    m_Value: {r: 0.990566, g: 0.990566, b: 0.990566, a: 1}
     hdr: 0
     showAlpha: 0
     showEyeDropper: 1
@@ -102,7 +102,7 @@ MonoBehaviour:
     m_Value: 1
   intensity:
     m_OverrideState: 1
-    m_Value: 0.184
+    m_Value: 0.403
     min: 0
     max: 1
   response:
@@ -132,7 +132,7 @@ MonoBehaviour:
     m_Value: 0
   contrast:
     m_OverrideState: 1
-    m_Value: 13.4
+    m_Value: 44.9
     min: -100
     max: 100
   colorFilter:
@@ -143,12 +143,12 @@ MonoBehaviour:
     showEyeDropper: 1
   hueShift:
     m_OverrideState: 1
-    m_Value: -33.2
+    m_Value: -66
     min: -180
     max: 180
   saturation:
     m_OverrideState: 1
-    m_Value: 13.4
+    m_Value: -15.3
     min: -100
     max: 100
 --- !u!114 &11400000
@@ -186,7 +186,7 @@ MonoBehaviour:
   active: 1
   m_AdvancedMode: 0
   mode:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
 --- !u!114 &3603728473872743301
 MonoBehaviour:
@@ -204,7 +204,7 @@ MonoBehaviour:
   m_AdvancedMode: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0.15
+    m_Value: 0.537
     min: 0
     max: 1
 --- !u!114 &8930884753561599662

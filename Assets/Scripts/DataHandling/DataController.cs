@@ -5,8 +5,8 @@ using System.Text;
 using UnityEngine;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-
-
+using UnityEngine.Events;
+using System;
 
 public class DataController : MonoBehaviour
 {
@@ -25,6 +25,7 @@ public class DataController : MonoBehaviour
     // measurement of the length of the session
     public float startTime = 0f;
 
+    public UnityAction SaveSessionAction;
 
     [SerializeField]
     public UserData data = new UserData();
@@ -34,7 +35,6 @@ public class DataController : MonoBehaviour
 
     [SerializeField]
     public ParticipantData participantData = new ParticipantData();
-
 
     /// <summary>
     /// Callback events, giving the success of the request and the error code if applicable
@@ -46,6 +46,8 @@ public class DataController : MonoBehaviour
     [SerializeField]
     public UnityEventBoolString RegisterAttemptCallback = new UnityEventBoolString();
 
+    private bool[] savedMasks;
+
     private void Awake()
     {
         sharedInstance = this;
@@ -56,6 +58,14 @@ public class DataController : MonoBehaviour
     {
         int numOfWalls = GameObject.FindGameObjectsWithTag("Wall").Length;
         sessionData.masks = new WallData[numOfWalls];
+        savedMasks = new bool[numOfWalls];
+
+        Application.quitting += Save;
+    }
+
+    public void UpdateMaskCheck(int index, bool input)
+    {
+        savedMasks[index] = input;
     }
 
     public void SetLoginID(int id)
@@ -80,6 +90,7 @@ public class DataController : MonoBehaviour
     [ContextMenu("Save Current Session")]
     public void Save()
     {
+        SaveSessionAction.Invoke();
         // Can now convert the timestamp from this format into a number that can be 
         // used to analyse dates and order by chronological order
         sessionData.TimeStamp = System.DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -138,6 +149,8 @@ public class DataController : MonoBehaviour
 
     IEnumerator SaveSession()
     {
+        yield return new WaitUntil(CheckMasks);
+        CustomUtility.SaveSessionToJSON(sessionData);
         string localURL = url + "Session";
         
         Debug.Log(JsonConvert.SerializeObject(sessionData));
@@ -154,6 +167,16 @@ public class DataController : MonoBehaviour
         {                                  
             Debug.Log("Error Occured: " + saveSession.error);
         }
+    }
+
+    private bool CheckMasks()
+    {
+        for (int i = 0; i < savedMasks.Length; i++)
+        {
+            if (!savedMasks[i]) return false;
+        }
+
+        return true;
     }
 
     IEnumerator CreateAccount()

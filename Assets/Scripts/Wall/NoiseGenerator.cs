@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using System.IO;
 
+
 public class NoiseGenerator : MonoBehaviour
 {
 
@@ -55,8 +56,7 @@ public class NoiseGenerator : MonoBehaviour
         _renderer.SetPropertyBlock(_block);
 
 
-        Application.quitting += SaveAllMasks;
-
+        dataController.SaveSessionAction += SaveAllMasks;
             }
 
     [ContextMenu("Update Texture")]
@@ -182,14 +182,16 @@ public class NoiseGenerator : MonoBehaviour
     [ContextMenu("Save All Masks")]
     public void SaveAllMasks()
     {
+        string id ="id_" +dataController.sessionData.PlayerID.ToString();
 
         DataController.sharedInstance.sessionData.masks[wallID] = new WallData(
-            SaveRenderTexture(globalMask, "global_" + wallID.ToString()),
-            SaveRenderTexture(waterMask, "water_" + wallID.ToString()),
-            SaveRenderTexture(pressMask, "pressure_" + wallID.ToString()),
-            SaveRenderTexture(tempMask, "temperature_" + wallID.ToString()),
+            SaveRenderTexture(globalMask, id + "_global_" + wallID.ToString()),
+            SaveRenderTexture(waterMask, id + "_water_" + wallID.ToString()),
+            SaveRenderTexture(pressMask, id + "_pressure_" + wallID.ToString()),
+            SaveRenderTexture(tempMask, id + "_temperature_" + wallID.ToString()),
             wallID);
 
+        DataController.sharedInstance.UpdateMaskCheck(wallID, true);
         /*
         SaveRenderTexture(globalMask, "global_" + wallID.ToString());
         Debug.Log($"Saving Mask to {CustomUtility.maskPath}");

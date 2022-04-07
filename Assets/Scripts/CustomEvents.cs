@@ -58,6 +58,8 @@ public class CustomEvents : MonoBehaviour
     public UnityEventBoolFloat ToggleRadialMenu = new UnityEventBoolFloat();
     public UnityEvent Select = new UnityEvent();
 
+    public UnityEventFloatFloat HitWallPressureTemp = new UnityEventFloatFloat();
+
     private void OnEnable()
     {
         _playerInput.Drone.Move.Enable();
@@ -260,6 +262,13 @@ public class UnityEventBoolString : UnityEvent<bool, string>
 {
 
 }
+
+[Serializable]
+public class UnityEventFloatFloat: UnityEvent<float, float>
+{
+
+}
+
 public enum Liquid
 {
     None,
@@ -313,4 +322,13 @@ public static class CustomUtility
         return tex;
     }
 
+    public static void SaveSessionToJSON(SessionData sessionData)
+    {
+        string data = JsonUtility.ToJson(sessionData);
+        string fileName ="/_id" + sessionData.PlayerID.ToString()+"_" +Time.time.ToString();
+        Debug.Log(Application.persistentDataPath + fileName);
+        System.IO.File.WriteAllText(Application.persistentDataPath +fileName +".json", data);
+    }
+
 }
+
