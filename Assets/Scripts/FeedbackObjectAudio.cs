@@ -16,7 +16,7 @@ public class FeedbackObjectAudio : FeedbackObject
     public override void AdjustFeedback(float pressure, float temp)
     {
         base.AdjustFeedback(pressure, temp);
-        Debug.Log($"Adjusted Audio Feedback: Pressure: {pressure} and Temperature: {temp}");
+        //Debug.Log($"Adjusted Audio Feedback: Pressure: {pressure} and Temperature: {temp}");
 
         audioSource.volume = Mathf.Clamp01(pressure + temp);
     }

@@ -252,6 +252,12 @@ public class UnityEventColour : UnityEvent<Color>
 }
 
 [Serializable]
+public class UnityEventAudio : UnityEvent<AudioClip>
+{
+
+}
+
+[Serializable]
 public class UnityEventBoolFloat : UnityEvent<bool, float>
 {
 

@@ -14,6 +14,7 @@ public class FeedbackObject_Lighting : FeedbackObject
 
     public override void AdjustFeedback(Color value)
     {
+        Debug.Log($" Adjusting the Lighting to: {value}");
         _light.color = value;
     }
 

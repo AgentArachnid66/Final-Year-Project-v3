@@ -10,9 +10,9 @@ public class FeedbackController : MonoBehaviour
     public AnimationCurve temperatureCurve;
 
     [SerializeField]
-    private float testPress;
+    protected float testPress;
     [SerializeField]
-    private float testTemp;
+    protected float testTemp;
 
     private void OnEnable()
     {

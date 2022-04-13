@@ -18,10 +18,6 @@ public class FeedbackObject : MonoBehaviour
 
     }
 
-    public virtual void AdjustFeedback(Vector3 value)
-    {
-
-    }
 
     public virtual void AdjustFeedback(Color value)
     {
