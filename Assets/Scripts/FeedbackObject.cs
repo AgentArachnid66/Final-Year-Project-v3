@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,4 +12,19 @@ public class FeedbackObject : MonoBehaviour
 
     }
 
+
+    public virtual void AdjustFeedback(float value)
+    {
+
+    }
+
+    public virtual void AdjustFeedback(Vector3 value)
+    {
+
+    }
+
+    public virtual void AdjustFeedback(Color value)
+    {
+        
+    }
 }

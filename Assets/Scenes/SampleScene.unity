@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -853,6 +853,34 @@ MonoBehaviour:
     m_RotationOrder: 4
   testPress: 0
   testTemp: 0
+--- !u!114 &1008082961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1008082959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6994aa1cc11ad2242a65de5d424cbd75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  feedbackObjects: []
+  pressureCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  temperatureCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  testPress: 0
+  testTemp: 0
+  colourLerping: {fileID: 0}
 --- !u!1 &1486095571 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5836868431283126681, guid: c837b5a7a278be840a20b14e62ebc3b0,
@@ -973,7 +1001,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Pressure
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
