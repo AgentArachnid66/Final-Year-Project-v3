@@ -65,19 +65,13 @@ public class Hit
 [System.Serializable]
 public class WallData
 {
-    public string globalMask;
-    public string waterMask;
-    public string pressureMask;
-    public string temperatureMask;
+	public string combinedMasks;
     public int id;
 
-    public WallData(string global, string water, string pressure, string temp, int wallID)
+    public WallData(string combined, int wallID)
     {
-        this.globalMask = global;
-        this.waterMask = water;
-        this.pressureMask = pressure;
-        this.temperatureMask = temp;
-        this.id = wallID;
+	    this.combinedMasks = combined;
+	    this.id = wallID;
     }
 }
 
@@ -129,29 +123,12 @@ public class UserData
 
 #region Image and Score
 
-[System.Serializable]
-public class ImagePathData
-{
-	public string renderTarget;
-	public string ntf;
-	public string stt;
-	public string mix;
-}
-
-[System.Serializable]
-public class ImageWeightData
-{
-	public float renderTarget;
-	public float ntf;
-	public float stt;
-	public float mix;
-}
 
 [System.Serializable]
 public class ScoreInputData
 {
-	public ImagePathData images;
-	public ImageWeightData weights;
+	public string[] paths;
+	public float[] weights;
 }
 
 [System.Serializable]

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
+using UnityEngine.XR.WSA.Input;
 
 
 public class NoiseGenerator : MonoBehaviour
@@ -26,9 +27,11 @@ public class NoiseGenerator : MonoBehaviour
     [SerializeField] private RenderTexture waterMask;
     [SerializeField] private RenderTexture tempMask;
     [SerializeField] private RenderTexture pressMask;
-    [SerializeField] private MaterialPropertyBlock _block;
+    private MaterialPropertyBlock _block;
 
     public int wallID;
+    
+    
 
     
 
@@ -57,6 +60,7 @@ public class NoiseGenerator : MonoBehaviour
 
 
         dataController.SaveSessionAction += SaveAllMasks;
+        dataController.SaveMasksAction += SaveAllMasks;
             }
 
     [ContextMenu("Update Texture")]
@@ -145,12 +149,13 @@ public class NoiseGenerator : MonoBehaviour
         RenderTexture oldRT = RenderTexture.active;
 
         // Sets up a Texture2D object the same dimensions as the input render texture
-        Texture2D tex = new Texture2D(renderTexture.width, renderTexture.height);
+        Texture2D tex = new Texture2D(renderTexture.width, renderTexture.height, TextureFormat.ARGB32, false);
         RenderTexture.active = renderTexture;
-
+        
         // Reads the pixels of the render texture into the local Texture2D variable
         tex.ReadPixels(new Rect(0,0,renderTexture.width, renderTexture.height), 0, 0);
         
+        tex.Resize(256, 256);
         // Applies those pixels to the texture
         tex.Apply();
 
@@ -172,12 +177,33 @@ public class NoiseGenerator : MonoBehaviour
 
         return fileSaveName;
     }
+    
 
-    [ContextMenu("Save User Mask")]
-    public void SaveWaterMask()
+    
+
+    public string CombineRenderTextures()
     {
-        dataController.sessionData.masks[wallID].waterMask = SaveRenderTexture(waterMask, "renderTarget_" +wallID.ToString());
+        
+        DataController.sharedInstance.combine.SetTexture(Shader.PropertyToID("_Global"), globalMask);
+        DataController.sharedInstance.combine.SetTexture(Shader.PropertyToID("_Temperature"), tempMask);
+        DataController.sharedInstance.combine.SetTexture(Shader.PropertyToID("_Pressure"), pressMask);
+        DataController.sharedInstance.combine.SetTexture(Shader.PropertyToID("_Water"), waterMask);
+
+        RenderTexture save = RenderTexture.GetTemporary(sourceTexture.width, sourceTexture.height, sourceTexture.depth, RenderTextureFormat.ARGB32);
+        RenderTexture temp = RenderTexture.GetTemporary(sourceTexture.width, sourceTexture.height, sourceTexture.depth, RenderTextureFormat.ARGB32);
+        Graphics.Blit(save, temp);
+        Graphics.Blit(temp, save, DataController.sharedInstance.combine);
+        
+        string path = SaveRenderTexture(save, "_CombinedMasks_" +wallID.ToString());
+        
+        RenderTexture.ReleaseTemporary(save);
+        RenderTexture.ReleaseTemporary(temp);
+
+        return path;
+        
     }
+    
+    
 
     [ContextMenu("Save All Masks")]
     public void SaveAllMasks()
@@ -185,10 +211,7 @@ public class NoiseGenerator : MonoBehaviour
         string id ="id_" +dataController.sessionData.PlayerID.ToString();
 
         DataController.sharedInstance.sessionData.masks[wallID] = new WallData(
-            SaveRenderTexture(globalMask, id + "_global_" + wallID.ToString()),
-            SaveRenderTexture(waterMask, id + "_water_" + wallID.ToString()),
-            SaveRenderTexture(pressMask, id + "_pressure_" + wallID.ToString()),
-            SaveRenderTexture(tempMask, id + "_temperature_" + wallID.ToString()),
+            CombineRenderTextures(),
             wallID);
 
         DataController.sharedInstance.UpdateMaskCheck(wallID, true);

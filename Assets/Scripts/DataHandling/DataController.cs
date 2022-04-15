@@ -19,13 +19,13 @@ public class DataController : MonoBehaviour
 
     public ScoreInputData scoreInput;
 
-    public NoiseGenerator noiseGenerator;
 
     // Set when the session starts to Time.time. This will give a more accurate
     // measurement of the length of the session
     public float startTime = 0f;
 
     public UnityAction SaveSessionAction;
+    public UnityAction SaveMasksAction;
 
     [SerializeField]
     public UserData data = new UserData();
@@ -48,6 +48,11 @@ public class DataController : MonoBehaviour
 
     private bool[] savedMasks;
 
+    public Shader Combine;
+    public Material combine;
+
+    public Texture2D testSave;
+
     private void Awake()
     {
         sharedInstance = this;
@@ -56,6 +61,8 @@ public class DataController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        combine = new Material(Combine);
+        
         int numOfWalls = GameObject.FindGameObjectsWithTag("Wall").Length;
         sessionData.masks = new WallData[numOfWalls];
         savedMasks = new bool[numOfWalls];
@@ -83,7 +90,7 @@ public class DataController : MonoBehaviour
     [ContextMenu("Calculate Score")]
     public void GetScore()
     {
-        scoreInput.images.renderTarget = sessionData.masks[0].waterMask;
+        SaveMasksAction.Invoke();
         StartCoroutine(CalculateScore());
     }
 
@@ -117,7 +124,17 @@ public class DataController : MonoBehaviour
 #region Coroutines
 
     IEnumerator CalculateScore()
-    {
+    {        
+        print(JsonUtility.ToJson(scoreInput));
+        yield return new WaitUntil(CheckMasks);
+        string[] paths = new string[sessionData.masks.Length];
+        for (int i = 0; i < sessionData.masks.Length; i++)
+        {
+            paths[i] = sessionData.masks[i].combinedMasks;
+        }
+        
+        scoreInput.paths = paths;
+        
         string localURL = url + "Image/Updated";
         UnityWebRequest scoreCal = new UnityWebRequest(localURL);
         scoreCal.method = UnityWebRequest.kHttpVerbPOST;

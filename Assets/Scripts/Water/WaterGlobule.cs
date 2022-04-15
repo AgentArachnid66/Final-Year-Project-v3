@@ -40,8 +40,6 @@ public class WaterGlobule : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.LogError("Collided with " + other.name);
-
         Ray ray = new Ray(transform.position + _rigidBody.velocity * -1, transform.position + _rigidBody.velocity * 500f);
 
         RaycastHit hit;
