@@ -1,0 +1,22 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+struct Input
+{
+    Texture2DArray<float4> textures;
+};
+
+SamplerState linearClampSampler;
+float4 weights;
+RWStructuredBuffer<Input> scoreInput;
+float output;
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    //float4 result_mult = scoreInput[id.z].textures.Sample(id.xy) * weights.xyzw;
+    //output = result_mult.r + result_mult.g + result_mult.b + result_mult.a;
+
+}

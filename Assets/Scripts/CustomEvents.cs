@@ -300,6 +300,8 @@ public struct RenderSettings
         this.drawSize = draw;
     }
 }
+
+
 public static class CustomUtility
 {
     public static string maskPath;

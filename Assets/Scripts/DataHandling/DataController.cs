@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine.Events;
 using System;
-
+using Proyecto26;
 public class DataController : MonoBehaviour
 {
     public static DataController sharedInstance;
 
 
-    private string url = "http://localhost:5000/";
+    private string url = "https://still-springs-04765.herokuapp.com/";
 
     private ScoreOutputData score;
 
@@ -50,9 +50,9 @@ public class DataController : MonoBehaviour
 
     public Shader Combine;
     public Material combine;
+    public RenderTexture source;
 
-    public Texture2D testSave;
-
+    
     private void Awake()
     {
         sharedInstance = this;
@@ -68,6 +68,12 @@ public class DataController : MonoBehaviour
         savedMasks = new bool[numOfWalls];
 
         Application.quitting += Save;
+        
+    }
+
+    private string UploadPhoto()
+    {
+        return "";
     }
 
     public void UpdateMaskCheck(int index, bool input)
@@ -125,16 +131,18 @@ public class DataController : MonoBehaviour
 
     IEnumerator CalculateScore()
     {        
-        print(JsonUtility.ToJson(scoreInput));
+       
         yield return new WaitUntil(CheckMasks);
-        string[] paths = new string[sessionData.masks.Length];
+        scoreInput.paths = new string[sessionData.masks.Length];
+        
         for (int i = 0; i < sessionData.masks.Length; i++)
         {
-            paths[i] = sessionData.masks[i].combinedMasks;
+            scoreInput.paths[i] = sessionData.masks[i].combinedMasks;
         }
         
-        scoreInput.paths = paths;
-        
+        Debug.Log(JsonUtility.ToJson(scoreInput));
+
+
         string localURL = url + "Image/Updated";
         UnityWebRequest scoreCal = new UnityWebRequest(localURL);
         scoreCal.method = UnityWebRequest.kHttpVerbPOST;
@@ -161,9 +169,11 @@ public class DataController : MonoBehaviour
             }
 
         }
-
+        
     }
 
+    
+    
     IEnumerator SaveSession()
     {
         yield return new WaitUntil(CheckMasks);

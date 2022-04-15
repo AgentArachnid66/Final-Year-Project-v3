@@ -155,7 +155,6 @@ public class NoiseGenerator : MonoBehaviour
         // Reads the pixels of the render texture into the local Texture2D variable
         tex.ReadPixels(new Rect(0,0,renderTexture.width, renderTexture.height), 0, 0);
         
-        tex.Resize(256, 256);
         // Applies those pixels to the texture
         tex.Apply();
 
@@ -215,16 +214,6 @@ public class NoiseGenerator : MonoBehaviour
             wallID);
 
         DataController.sharedInstance.UpdateMaskCheck(wallID, true);
-        /*
-        SaveRenderTexture(globalMask, "global_" + wallID.ToString());
-        Debug.Log($"Saving Mask to {CustomUtility.maskPath}");
-
-
-        dataController.sessionData.masks[wallID].pressureMask = SaveRenderTexture(pressMask, "pressure_" + wallID.ToString());
-        dataController.sessionData.masks[wallID].temperatureMask = SaveRenderTexture(tempMask, "temperature_" + wallID.ToString());
-        
-        dataController.sessionData.masks[wallID].id = wallID;
-        */
     }
 
     public RenderTexture[] RetrieveRenderTextures()
