@@ -35,14 +35,6 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Select"",
-                    ""type"": ""Button"",
-                    ""id"": ""59d1b0ed-5bb5-49e6-9344-bfcf729a7c23"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
                     ""name"": ""Vertical Move Up"",
                     ""type"": ""Button"",
                     ""id"": ""2fd8618a-cb98-42c3-b816-75a6799328b5"",
@@ -89,6 +81,14 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Select"",
+                    ""type"": ""Button"",
+                    ""id"": ""5a78ffc7-20ee-4f37-b383-0c5d23e0076b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -111,17 +111,6 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Drone"",
                     ""action"": ""RotateCamera"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a6368986-19fb-4ae6-a494-b2a7e2e31c10"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Drone"",
-                    ""action"": ""Select"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -234,6 +223,28 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""action"": ""OpenModes"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a68b653c-c7dc-4484-91e8-2893e4e1ad23"",
+                    ""path"": ""*/{Submit}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Drone"",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ddfe036e-b6b3-47c6-a680-0883d500d630"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Drone"",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -266,13 +277,13 @@ public class @InputActions : IInputActionCollection, IDisposable
         m_Drone = asset.FindActionMap("Drone", throwIfNotFound: true);
         m_Drone_Move = m_Drone.FindAction("Move", throwIfNotFound: true);
         m_Drone_RotateCamera = m_Drone.FindAction("RotateCamera", throwIfNotFound: true);
-        m_Drone_Select = m_Drone.FindAction("Select", throwIfNotFound: true);
         m_Drone_VerticalMoveUp = m_Drone.FindAction("Vertical Move Up", throwIfNotFound: true);
         m_Drone_VerticalMoveDown = m_Drone.FindAction("Vertical Move Down", throwIfNotFound: true);
         m_Drone_Shoot = m_Drone.FindAction("Shoot", throwIfNotFound: true);
         m_Drone_Liquid = m_Drone.FindAction("Liquid", throwIfNotFound: true);
         m_Drone_Temp = m_Drone.FindAction("Temp", throwIfNotFound: true);
         m_Drone_OpenModes = m_Drone.FindAction("OpenModes", throwIfNotFound: true);
+        m_Drone_Select = m_Drone.FindAction("Select", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -324,26 +335,26 @@ public class @InputActions : IInputActionCollection, IDisposable
     private IDroneActions m_DroneActionsCallbackInterface;
     private readonly InputAction m_Drone_Move;
     private readonly InputAction m_Drone_RotateCamera;
-    private readonly InputAction m_Drone_Select;
     private readonly InputAction m_Drone_VerticalMoveUp;
     private readonly InputAction m_Drone_VerticalMoveDown;
     private readonly InputAction m_Drone_Shoot;
     private readonly InputAction m_Drone_Liquid;
     private readonly InputAction m_Drone_Temp;
     private readonly InputAction m_Drone_OpenModes;
+    private readonly InputAction m_Drone_Select;
     public struct DroneActions
     {
         private @InputActions m_Wrapper;
         public DroneActions(@InputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Drone_Move;
         public InputAction @RotateCamera => m_Wrapper.m_Drone_RotateCamera;
-        public InputAction @Select => m_Wrapper.m_Drone_Select;
         public InputAction @VerticalMoveUp => m_Wrapper.m_Drone_VerticalMoveUp;
         public InputAction @VerticalMoveDown => m_Wrapper.m_Drone_VerticalMoveDown;
         public InputAction @Shoot => m_Wrapper.m_Drone_Shoot;
         public InputAction @Liquid => m_Wrapper.m_Drone_Liquid;
         public InputAction @Temp => m_Wrapper.m_Drone_Temp;
         public InputAction @OpenModes => m_Wrapper.m_Drone_OpenModes;
+        public InputAction @Select => m_Wrapper.m_Drone_Select;
         public InputActionMap Get() { return m_Wrapper.m_Drone; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -359,9 +370,6 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @RotateCamera.started -= m_Wrapper.m_DroneActionsCallbackInterface.OnRotateCamera;
                 @RotateCamera.performed -= m_Wrapper.m_DroneActionsCallbackInterface.OnRotateCamera;
                 @RotateCamera.canceled -= m_Wrapper.m_DroneActionsCallbackInterface.OnRotateCamera;
-                @Select.started -= m_Wrapper.m_DroneActionsCallbackInterface.OnSelect;
-                @Select.performed -= m_Wrapper.m_DroneActionsCallbackInterface.OnSelect;
-                @Select.canceled -= m_Wrapper.m_DroneActionsCallbackInterface.OnSelect;
                 @VerticalMoveUp.started -= m_Wrapper.m_DroneActionsCallbackInterface.OnVerticalMoveUp;
                 @VerticalMoveUp.performed -= m_Wrapper.m_DroneActionsCallbackInterface.OnVerticalMoveUp;
                 @VerticalMoveUp.canceled -= m_Wrapper.m_DroneActionsCallbackInterface.OnVerticalMoveUp;
@@ -380,6 +388,9 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @OpenModes.started -= m_Wrapper.m_DroneActionsCallbackInterface.OnOpenModes;
                 @OpenModes.performed -= m_Wrapper.m_DroneActionsCallbackInterface.OnOpenModes;
                 @OpenModes.canceled -= m_Wrapper.m_DroneActionsCallbackInterface.OnOpenModes;
+                @Select.started -= m_Wrapper.m_DroneActionsCallbackInterface.OnSelect;
+                @Select.performed -= m_Wrapper.m_DroneActionsCallbackInterface.OnSelect;
+                @Select.canceled -= m_Wrapper.m_DroneActionsCallbackInterface.OnSelect;
             }
             m_Wrapper.m_DroneActionsCallbackInterface = instance;
             if (instance != null)
@@ -390,9 +401,6 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @RotateCamera.started += instance.OnRotateCamera;
                 @RotateCamera.performed += instance.OnRotateCamera;
                 @RotateCamera.canceled += instance.OnRotateCamera;
-                @Select.started += instance.OnSelect;
-                @Select.performed += instance.OnSelect;
-                @Select.canceled += instance.OnSelect;
                 @VerticalMoveUp.started += instance.OnVerticalMoveUp;
                 @VerticalMoveUp.performed += instance.OnVerticalMoveUp;
                 @VerticalMoveUp.canceled += instance.OnVerticalMoveUp;
@@ -411,6 +419,9 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @OpenModes.started += instance.OnOpenModes;
                 @OpenModes.performed += instance.OnOpenModes;
                 @OpenModes.canceled += instance.OnOpenModes;
+                @Select.started += instance.OnSelect;
+                @Select.performed += instance.OnSelect;
+                @Select.canceled += instance.OnSelect;
             }
         }
     }
@@ -428,12 +439,12 @@ public class @InputActions : IInputActionCollection, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnRotateCamera(InputAction.CallbackContext context);
-        void OnSelect(InputAction.CallbackContext context);
         void OnVerticalMoveUp(InputAction.CallbackContext context);
         void OnVerticalMoveDown(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
         void OnLiquid(InputAction.CallbackContext context);
         void OnTemp(InputAction.CallbackContext context);
         void OnOpenModes(InputAction.CallbackContext context);
+        void OnSelect(InputAction.CallbackContext context);
     }
 }

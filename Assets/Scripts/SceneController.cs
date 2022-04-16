@@ -7,6 +7,11 @@ public class SceneController : MonoBehaviour
 {
     [SerializeField]private bool _canChange;
 
+    [SerializeField]
+    public UnityEventBool SceneCallback = new UnityEventBool();
+
+    public GameObject popup;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -39,6 +44,28 @@ public class SceneController : MonoBehaviour
     public void UpdateCanChange(bool can)
     {
         _canChange = can;
+    }
+
+    public void UpdateSceneFromCallback(bool can, string sceneName)
+    {
+        _canChange = can;
+
+        if (_canChange)
+        {
+            sceneName = sceneName == "" ? "SampleScene" : sceneName;
+            Debug.Log("Loading: " + sceneName);
+            SceneManager.LoadSceneAsync(sceneName);
+        }
+    }
+
+    public void UpdateRegister(bool success, string message)
+    {
+        popup.SetActive(true);
+        TMPro.TMP_Text text = popup.GetComponent<TMPro.TMP_Text>();
+
+        text.text = success ? "Registeration Successful. Please Log In" : "Error Occured: " + message;
+
+        Debug.Log(text.text);
     }
 
 }

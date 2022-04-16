@@ -8,6 +8,8 @@ public class NumInput : MonoBehaviour
 {
     public TMP_Text display;
     public UnityEventInt SubmitInput = new UnityEventInt();
+    public UnityEventInt AppendInputEvent = new UnityEventInt();
+    public UnityEventInt RemoveInputEvent = new UnityEventInt();
 
 
     public int _deltaInput;
@@ -18,6 +20,11 @@ public class NumInput : MonoBehaviour
     public void AppendTest()
     {
         AppendInput(_deltaInput);
+    }
+
+    public void testInput(string test)
+    {
+        Debug.Log($"The Select Return is {test}");
     }
 
     private void UpdateDisplay()

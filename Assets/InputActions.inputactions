@@ -22,14 +22,6 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Select",
-                    "type": "Button",
-                    "id": "59d1b0ed-5bb5-49e6-9344-bfcf729a7c23",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
                     "name": "Vertical Move Up",
                     "type": "Button",
                     "id": "2fd8618a-cb98-42c3-b816-75a6799328b5",
@@ -76,6 +68,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Select",
+                    "type": "Button",
+                    "id": "5a78ffc7-20ee-4f37-b383-0c5d23e0076b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -98,17 +98,6 @@
                     "processors": "",
                     "groups": "Drone",
                     "action": "RotateCamera",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a6368986-19fb-4ae6-a494-b2a7e2e31c10",
-                    "path": "<Gamepad>/buttonSouth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Drone",
-                    "action": "Select",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -219,6 +208,28 @@
                     "processors": "",
                     "groups": "Drone",
                     "action": "OpenModes",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a68b653c-c7dc-4484-91e8-2893e4e1ad23",
+                    "path": "*/{Submit}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Drone",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ddfe036e-b6b3-47c6-a680-0883d500d630",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Drone",
+                    "action": "Select",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

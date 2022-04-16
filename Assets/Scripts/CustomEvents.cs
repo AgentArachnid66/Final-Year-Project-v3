@@ -84,7 +84,7 @@ public class CustomEvents : MonoBehaviour
         _playerInput.Drone.Liquid.Disable();
         _playerInput.Drone.Temp.Disable();
         _playerInput.Drone.OpenModes.Disable();
-        _playerInput.Drone.Select.Disable();
+       _playerInput.Drone.Select.Disable();
 
     }
 

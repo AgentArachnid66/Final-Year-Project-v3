@@ -51,6 +51,7 @@ namespace Michsky.UI.Shift
 
             if (Input.GetButtonDown("Submit"))
             {
+                Debug.Log("Submit");
                 pointer.pressPosition = cursorPos;
                 pointer.clickTime = Time.unscaledTime;
                 pointer.pointerPressRaycast = raycastResult;
