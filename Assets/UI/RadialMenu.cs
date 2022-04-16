@@ -17,6 +17,10 @@ public class RadialMenu : MonoBehaviour
     private int _prevSelection;
     private bool _active;
 
+    [Space(10)]
+    [Header("Tooltip")]
+    public TMPro.TMP_Text title;
+    public TMPro.TMP_Text description;
 
     void Start()
     {
@@ -76,14 +80,13 @@ public class RadialMenu : MonoBehaviour
                 {
                     menuItems[_prevSelection].Deselect();
                     menuItems[selection].Select();
+                    title.text = menuItems[selection].title;
+                    description.text = menuItems[selection].description;
                 }
                 _prevSelection = selection;
             }
 
         });
-
-
-
 
 
         gameObject.SetActive(false);

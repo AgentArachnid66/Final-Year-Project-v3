@@ -32,6 +32,10 @@ public class RadialElement : MonoBehaviour
     public float arcLength;
     public float localAngle;
 
+    [Space(10)]
+    [Header("Element Information")]
+    public string title;
+    public string description;
 
 
     public UnityEvent OnPress = new UnityEvent();
@@ -49,7 +53,7 @@ public class RadialElement : MonoBehaviour
             pressed.a = alpha;
         }
 
-        icon = GetComponent<Image>();
+        
         icon.color = normal;
 
     }
