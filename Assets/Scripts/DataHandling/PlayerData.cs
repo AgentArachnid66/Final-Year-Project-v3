@@ -90,6 +90,11 @@ public class LoginOutputData
 	public string id;
 }
 
+public class ErrorOutputData
+{
+    public string msg;
+    public bool success;
+}
 #endregion
 
 
@@ -118,6 +123,9 @@ public class UserData
     public int PIN;
 
 }
+
+
+
 
 #endregion
 

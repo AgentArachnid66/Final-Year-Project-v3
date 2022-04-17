@@ -73,6 +73,7 @@ public class WidgetSwitcher : MonoBehaviour
             {
                 children[i].root.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(children[i].initialSelect);
+                Debug.Log($"Currently Selected Game Object is {EventSystem.current.currentSelectedGameObject.name}");
             }
         }
 

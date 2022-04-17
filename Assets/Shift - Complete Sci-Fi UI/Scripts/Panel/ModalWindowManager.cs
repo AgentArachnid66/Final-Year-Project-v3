@@ -33,7 +33,17 @@ namespace Michsky.UI.Shift
             gameObject.SetActive(false);
         }
 
-        [ContextMenu("Test")]
+        public void ModalWindowInOnBool(bool update)
+        {
+            if (update) ModalWindowIn();
+
+        }
+
+        public void ModalWindowInOnBoolString(bool update, string test)
+        {
+            ModalWindowInOnBool(!update);
+        }
+
         public void ModalWindowIn()
         {
             StopCoroutine("DisableWindow");

@@ -58,6 +58,7 @@ public class NumInput : MonoBehaviour
 
     public void ClearInput()
     {
+        _currentString = "";
         display.text = "";
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
-using UnityEngine.XR.WSA.Input;
 
 
 public class NoiseGenerator : MonoBehaviour
@@ -193,7 +192,7 @@ public class NoiseGenerator : MonoBehaviour
         Graphics.Blit(save, temp);
         Graphics.Blit(temp, save, DataController.sharedInstance.combine);
         
-        string path = SaveRenderTexture(save, "_CombinedMasks_" +wallID.ToString());
+        string path = SaveRenderTexture(save, DataController.sharedInstance.participantData.ID+"_CombinedMasks_" +wallID.ToString());
         
         RenderTexture.ReleaseTemporary(save);
         RenderTexture.ReleaseTemporary(temp);

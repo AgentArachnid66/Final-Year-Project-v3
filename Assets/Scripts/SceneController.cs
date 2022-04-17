@@ -10,7 +10,8 @@ public class SceneController : MonoBehaviour
     [SerializeField]
     public UnityEventBool SceneCallback = new UnityEventBool();
 
-    public GameObject popup;
+    public GameObject registerPopup;
+    public GameObject loginPopup;
 
     // Start is called before the first frame update
     void Start()
@@ -60,12 +61,29 @@ public class SceneController : MonoBehaviour
 
     public void UpdateRegister(bool success, string message)
     {
-        popup.SetActive(true);
-        TMPro.TMP_Text text = popup.GetComponent<TMPro.TMP_Text>();
+        registerPopup.SetActive(true);
+        TMPro.TMP_Text text = registerPopup.GetComponent<TMPro.TMP_Text>();
 
         text.text = success ? "Registeration Successful. Please Log In" : "Error Occured: " + message;
 
         Debug.Log(text.text);
+    }
+    public void UpdateLogin(bool success, string message)
+    {
+        if (!success)
+        {
+            loginPopup.SetActive(true);
+            TMPro.TMP_Text text = loginPopup.GetComponent<TMPro.TMP_Text>();
+
+            text.text = message;
+
+            Debug.Log(text.text);
+        }
+        else
+        {
+            Debug.Log("Load Scene");
+            UpdateSceneFromCallback(success, "SampleScene");
+        }
     }
 
 }

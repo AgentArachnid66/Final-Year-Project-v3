@@ -56,6 +56,7 @@ public class DataController : MonoBehaviour
     private void Awake()
     {
         sharedInstance = this;
+        DontDestroyOnLoad(this.gameObject);
     }
 
     // Start is called before the first frame update
@@ -222,8 +223,14 @@ public class DataController : MonoBehaviour
 
         if (saveSession.isNetworkError || saveSession.isHttpError)
         {
+
+            ErrorOutputData respond = JsonConvert.DeserializeObject<ErrorOutputData>(saveSession.downloadHandler.text);
             Debug.Log("Error Occured: " + saveSession.error);
-            RegisterAttemptCallback.Invoke(false, saveSession.error);
+            if (ReferenceEquals(respond, null)){
+                RegisterAttemptCallback.Invoke(false, saveSession.error);
+            }
+            else {
+                RegisterAttemptCallback.Invoke(false, respond.msg); }
         }
         else
         {
@@ -235,6 +242,7 @@ public class DataController : MonoBehaviour
                 // ObjectID of the participant
                 sessionData.PlayerID = participantData.ID;
             }
+
             RegisterAttemptCallback.Invoke(respond.success, "");
         }
     }
@@ -257,7 +265,9 @@ public class DataController : MonoBehaviour
         {
             Debug.Log("Error Occured: " + saveSession.error);
             // Login Failed
-            LoginAttemptCallback.Invoke(false, saveSession.error);
+            ErrorOutputData respond = JsonConvert.DeserializeObject<ErrorOutputData>(saveSession.downloadHandler.text);
+            Debug.Log("Server Responded with: " + respond.msg);
+            LoginAttemptCallback.Invoke(false, respond.msg);
         }
         else
         {
