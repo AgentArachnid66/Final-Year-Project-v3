@@ -8,7 +8,11 @@ using Newtonsoft.Json;
 using UnityEngine.Events;
 using System;
 using Proyecto26;
-public class DataController : MonoBehaviour
+using UnityEngine.Rendering;
+using UnityAction = UnityEngine.Events.UnityAction;
+
+
+public class DataController: MonoBehaviour
 {
     public static DataController sharedInstance;
 
@@ -52,11 +56,23 @@ public class DataController : MonoBehaviour
     public Material combine;
     public RenderTexture source;
 
-    
+
+    private int _numSessions;
+    public int numSessions
+    {
+        get { return _numSessions; }
+    }
+
     private void Awake()
     {
-        sharedInstance = this;
-        DontDestroyOnLoad(this.gameObject);
+        if (ReferenceEquals(sharedInstance, null))
+        {
+            sharedInstance = this;
+        }
+        else
+        {
+            Debug.Log("Multiple Data Controllers");
+        }
     }
 
     // Start is called before the first frame update
@@ -69,9 +85,22 @@ public class DataController : MonoBehaviour
         savedMasks = new bool[numOfWalls];
 
         Application.quitting += Save;
+        Application.quitting += LogOut;
+
+
+        if (PlayerPrefs.GetInt("prevLoggedIn") > 0) sessionData.PlayerID = PlayerPrefs.GetInt("playerID");
         
+        Debug.Log($"Player Identity is {sessionData.PlayerID}");
     }
 
+    private void LogOut()
+    {
+        PlayerPrefs.SetInt("playerID", -1);
+        PlayerPrefs.SetInt("prevLoggedIn", 0);
+        
+    }
+    
+    
     private string UploadPhoto()
     {
         return "";
@@ -92,18 +121,24 @@ public class DataController : MonoBehaviour
         participantData.PIN = pin;
     }
 
+    public void SetLoginPassword(string password)
+    {
+        participantData.Password = password;
+    }
+    
     #region Coroutine Tests
 
     [ContextMenu("Calculate Score")]
     public void GetScore()
     {
         SaveMasksAction.Invoke();
-        StartCoroutine(CalculateScore());
+        CoroutineManager.StartCoroutine(CalculateScore());
     }
 
     [ContextMenu("Save Current Session")]
     public void Save()
     {
+        Debug.Log($"SaveSessionAction is " +ReferenceEquals(SaveSessionAction, null).ToString());
         SaveSessionAction.Invoke();
         // Can now convert the timestamp from this format into a number that can be 
         // used to analyse dates and order by chronological order
@@ -112,18 +147,18 @@ public class DataController : MonoBehaviour
         // Can be used to analyse the length of the session;
         sessionData.Length = Time.time - startTime;
 
-        StartCoroutine(SaveSession());
+        CoroutineManager.StartCoroutine(SaveSession());
     }
     [ContextMenu("Create Participant Account")]
     public void AccountCreation()
     {
-        StartCoroutine(CreateAccount());
+        CoroutineManager.StartCoroutine(CreateAccount());
     }
 
     [ContextMenu("Login Participant Account")]
     public void AccountLogin()
     {
-        StartCoroutine(LoginAccount());
+        CoroutineManager.StartCoroutine(LoginAccount());
     }
 
 #endregion
@@ -196,6 +231,8 @@ public class DataController : MonoBehaviour
             Debug.Log("Error Occured: " + saveSession.error);
         }
     }
+    
+    
 
     private bool CheckMasks()
     {
@@ -279,8 +316,28 @@ public class DataController : MonoBehaviour
                 // If the response is successful, then the PlayerID is set to the 
                 // ObjectID of the participant
                 sessionData.PlayerID = participantData.ID;
+                PlayerPrefs.SetInt("playerID", sessionData.PlayerID);
+                PlayerPrefs.SetInt("PrevLoggedIn", 1);
             }
+
             LoginAttemptCallback.Invoke(respond.success, "");
+            
+            UnityWebRequest retrieveNumSessions = new UnityWebRequest(url + "/Session/Count");
+            retrieveNumSessions.downloadHandler = new DownloadHandlerBuffer();
+            retrieveNumSessions.SetRequestHeader("Content-Type", "application/json");
+            retrieveNumSessions.uploadHandler = (UploadHandler) new UploadHandlerRaw(bytes);
+
+            yield return retrieveNumSessions.SendWebRequest();
+            if (retrieveNumSessions.isNetworkError || retrieveNumSessions.isHttpError)
+            {
+                Debug.Log(retrieveNumSessions.error);
+            }
+
+            else
+            {
+                _numSessions = JsonConvert.DeserializeObject<int>(retrieveNumSessions.downloadHandler.text);
+                Debug.Log($"Number of Sessions played by this participant is {_numSessions}");
+            }
         }
     }
 

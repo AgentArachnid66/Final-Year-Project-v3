@@ -226,6 +226,7 @@ public class UnityEventFloat : UnityEvent<float>
 {
 }
 
+[Serializable]
 public class UnityEventString : UnityEvent<string>
 {
 }

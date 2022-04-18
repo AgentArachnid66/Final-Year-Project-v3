@@ -8,6 +8,7 @@ public class NumInput : MonoBehaviour
 {
     public TMP_Text display;
     public UnityEventInt SubmitInput = new UnityEventInt();
+    public UnityEventString SubmitInputString = new UnityEventString();
     public UnityEventInt AppendInputEvent = new UnityEventInt();
     public UnityEventInt RemoveInputEvent = new UnityEventInt();
 
@@ -53,6 +54,7 @@ public class NumInput : MonoBehaviour
         int _currInput = 0;
         int.TryParse(_currentString, out _currInput);
         Debug.Log($"Entered the Input {_currInput}");
+        SubmitInputString.Invoke(_currentString);
         SubmitInput.Invoke(_currInput);
     }
 

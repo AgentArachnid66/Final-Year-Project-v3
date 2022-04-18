@@ -82,6 +82,7 @@ public class ParticipantData
 {
 	public int ID;
 	public int PIN;
+	public string Password;
 }
 
 public class LoginOutputData

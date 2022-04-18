@@ -192,7 +192,9 @@ public class NoiseGenerator : MonoBehaviour
         Graphics.Blit(save, temp);
         Graphics.Blit(temp, save, DataController.sharedInstance.combine);
         
-        string path = SaveRenderTexture(save, DataController.sharedInstance.participantData.ID+"_CombinedMasks_" +wallID.ToString());
+        string path = SaveRenderTexture(save, DataController.sharedInstance.participantData.ID+ "_" +
+                                              DataController.sharedInstance.numSessions.ToString()+
+                                              "_CombinedMasks_" +wallID.ToString());
         
         RenderTexture.ReleaseTemporary(save);
         RenderTexture.ReleaseTemporary(temp);
