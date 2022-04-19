@@ -16,15 +16,15 @@ MonoBehaviour:
   m_AdvancedMode: 0
   threshold:
     m_OverrideState: 1
-    m_Value: 0.37
+    m_Value: 0
     min: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0.0001
+    m_Value: 0.05
     min: 0
   scatter:
-    m_OverrideState: 1
-    m_Value: 0.65
+    m_OverrideState: 0
+    m_Value: 1
     min: 0
     max: 1
   clamp:
@@ -32,8 +32,8 @@ MonoBehaviour:
     m_Value: 65472
     min: 0
   tint:
-    m_OverrideState: 0
-    m_Value: {r: 0.990566, g: 0.990566, b: 0.990566, a: 1}
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
     hdr: 0
     showAlpha: 0
     showEyeDropper: 1
@@ -42,10 +42,10 @@ MonoBehaviour:
     m_Value: 0
   dirtTexture:
     m_OverrideState: 0
-    m_Value: {fileID: 0}
+    m_Value: {fileID: 2800000, guid: 5183f83e80c19f94fa1f957bb9b06c59, type: 3}
   dirtIntensity:
     m_OverrideState: 0
-    m_Value: 0
+    m_Value: 0.91
     min: 0
 --- !u!114 &-7011558710299706105
 MonoBehaviour:
@@ -129,10 +129,10 @@ MonoBehaviour:
   m_AdvancedMode: 0
   postExposure:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.2
   contrast:
     m_OverrideState: 1
-    m_Value: 44.9
+    m_Value: 9.3
     min: -100
     max: 100
   colorFilter:
@@ -142,13 +142,13 @@ MonoBehaviour:
     showAlpha: 0
     showEyeDropper: 1
   hueShift:
-    m_OverrideState: 1
-    m_Value: -66
+    m_OverrideState: 0
+    m_Value: -79
     min: -180
     max: 180
   saturation:
-    m_OverrideState: 1
-    m_Value: -15.3
+    m_OverrideState: 0
+    m_Value: -45
     min: -100
     max: 100
 --- !u!114 &11400000
@@ -171,6 +171,7 @@ MonoBehaviour:
   - {fileID: 3603728473872743301}
   - {fileID: -5441654212770261438}
   - {fileID: -2448822969833116206}
+  - {fileID: 1281161176190516314}
 --- !u!114 &849379129802519247
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -188,6 +189,36 @@ MonoBehaviour:
   mode:
     m_OverrideState: 1
     m_Value: 0
+--- !u!114 &1281161176190516314
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccf1aba9553839d41ae37dd52e9ebcce, type: 3}
+  m_Name: MotionBlur
+  m_EditorClassIdentifier: 
+  active: 1
+  m_AdvancedMode: 0
+  mode:
+    m_OverrideState: 0
+    m_Value: 0
+  quality:
+    m_OverrideState: 1
+    m_Value: 2
+  intensity:
+    m_OverrideState: 1
+    m_Value: 0.85
+    min: 0
+    max: 1
+  clamp:
+    m_OverrideState: 0
+    m_Value: 0.05
+    min: 0
+    max: 0.2
 --- !u!114 &3603728473872743301
 MonoBehaviour:
   m_ObjectHideFlags: 3

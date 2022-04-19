@@ -11,4 +11,9 @@ public class PickupTime : Pickup
         Debug.Log("Activate");
         StartCoroutine(GlobalController.SharedInstance.StartCountDown(additionalTime));
     }
+
+    public override void Despawn()
+    {
+        gameObject.SetActive(false);
+    }
 }

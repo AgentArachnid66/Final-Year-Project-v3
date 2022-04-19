@@ -11,6 +11,10 @@ public class CoroutineManager : MonoBehaviour
     private void Start()
     {
         testAction += Test1;
+        DataController.sharedInstance.SaveSessionAction += Test1;
+        DataController.sharedInstance.SaveMasksAction += Test1;
+
+        testAction += DataController.sharedInstance.SaveSessionAction.Invoke;
     }
     
     [ContextMenu("Test Action")]
@@ -22,10 +26,5 @@ public class CoroutineManager : MonoBehaviour
     private void Test1()
     {
         Debug.Log("test Action Triggered");
-    }
-
-    public static void StartCoroutine(IEnumerator enumerator)
-    {
-        StartCoroutine(enumerator);
     }
 }

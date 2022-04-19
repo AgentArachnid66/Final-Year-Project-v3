@@ -1,15 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.Networking;
-using System.Text;
 using UnityEngine;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine.Events;
-using System;
-using Proyecto26;
-using UnityEngine.Rendering;
-using UnityAction = UnityEngine.Events.UnityAction;
 
 
 public class DataController: MonoBehaviour
@@ -97,7 +90,7 @@ public class DataController: MonoBehaviour
     {
         PlayerPrefs.SetInt("playerID", -1);
         PlayerPrefs.SetInt("prevLoggedIn", 0);
-        
+        Debug.Log("Player logged out");
     }
     
     
@@ -132,13 +125,12 @@ public class DataController: MonoBehaviour
     public void GetScore()
     {
         SaveMasksAction.Invoke();
-        CoroutineManager.StartCoroutine(CalculateScore());
+        StartCoroutine(CalculateScore());
     }
 
     [ContextMenu("Save Current Session")]
     public void Save()
     {
-        Debug.Log($"SaveSessionAction is " +ReferenceEquals(SaveSessionAction, null).ToString());
         SaveSessionAction.Invoke();
         // Can now convert the timestamp from this format into a number that can be 
         // used to analyse dates and order by chronological order
@@ -147,18 +139,20 @@ public class DataController: MonoBehaviour
         // Can be used to analyse the length of the session;
         sessionData.Length = Time.time - startTime;
 
-        CoroutineManager.StartCoroutine(SaveSession());
+        StartCoroutine(SaveSession());
     }
+
+
     [ContextMenu("Create Participant Account")]
     public void AccountCreation()
     {
-        CoroutineManager.StartCoroutine(CreateAccount());
+        StartCoroutine(CreateAccount());
     }
 
     [ContextMenu("Login Participant Account")]
     public void AccountLogin()
     {
-        CoroutineManager.StartCoroutine(LoginAccount());
+        StartCoroutine(LoginAccount());
     }
 
 #endregion

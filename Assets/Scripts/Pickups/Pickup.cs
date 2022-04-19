@@ -15,9 +15,12 @@ public abstract class Pickup : MonoBehaviour
         {
             Debug.Log($"Collided with {other.name}");
             Activate();
+            Despawn();
         }
     }
 
     public abstract void Activate();
+
+    public abstract void Despawn();
 }
 

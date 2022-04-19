@@ -129,6 +129,22 @@ MonoBehaviour:
   testPress: 0
   testTemp: 0
   colourLerping: {fileID: 11400000, guid: 2fb806e95d68a1746bf193e7a093672f, type: 2}
+  radius: Infinity
+--- !u!114 &1474219601069611514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2821130166242784868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 571cd385cb7272347b58f22e45d12dc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TempColour:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &3310477374346567619
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -310,7 +326,7 @@ PrefabInstance:
     - target: {fileID: 781241845269080487, guid: 4920043a6ed436945973b591de3c320a,
         type: 3}
       propertyPath: m_Name
-      value: EventSystemComplete
+      value: EventSystemComplete Variant
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4920043a6ed436945973b591de3c320a, type: 3}

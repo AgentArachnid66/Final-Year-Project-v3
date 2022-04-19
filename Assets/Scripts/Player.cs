@@ -51,8 +51,10 @@ public class Player : MonoBehaviour
     public AnimationCurve timeScaleCurve;
     public UnityEventFloat UpdateTemperatureValue = new UnityEventFloat();
     public UnityEventFloat UpdateEvaluatedTemperatureValue = new UnityEventFloat();
+    public UnityEventFloat UpdateTemperatureLerpValue = new UnityEventFloat();
 
     public UnityEventFloat UpdatePressureValue = new UnityEventFloat();
+    public UnityEventFloat UpdatePressureLerpValue = new UnityEventFloat();
 
     private void Awake()
     {
@@ -198,6 +200,7 @@ public class Player : MonoBehaviour
 
     private void ShootWater(float input)
     {
+
         _pressure = Mathf.Lerp(minPressure, maxPressure, input);
         UpdatePressureValue.Invoke(Mathf.Round(100*_pressure/maxPressure));
         Debug.Log($"Receivied: {_currentTemp}");
@@ -215,6 +218,8 @@ public class Player : MonoBehaviour
             Debug.Log("Shooting Globule");
 
             StartCoroutine(waterGlobule.ResetGlobule(2f));
+
+            AdjustTemp(.25f);
         }
     }
 

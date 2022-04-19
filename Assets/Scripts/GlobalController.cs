@@ -2,21 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
-
+using UnityEngine.Events;
 
 public class GlobalController : MonoBehaviour
 {
 
     public static GlobalController SharedInstance;
 
-    public Renderer wallMat;
-    public float startingRadius;
-    public float endRadius;
-    public float totalTime;
+    public UnityEventFloat UpdateTimeLeft = new UnityEventFloat();
+    public UnityEvent CountdownComplete = new UnityEvent();
 
-    private bool activate = false;
-    private int direction = -1;
-    private float elapsedTime;
+
+    public float totalTime;
 
     private float timeLeft = 0f;
 
@@ -24,8 +21,6 @@ public class GlobalController : MonoBehaviour
     
     private void Awake()
     {
-        CustomEvents.CustomEventsInstance.StartSimulation.AddListener(ActivateSimulation);
-
         if (ReferenceEquals(SharedInstance, null))
         {
             SharedInstance = this;
@@ -36,34 +31,14 @@ public class GlobalController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-    }
-
-    [ContextMenu("Test Countdown")]
-    public void TestCountdown()
-    {
-        StartCoroutine(StartCountDown(countdown_Test));
+        StartCoroutine(StartCountDown(totalTime));
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (activate)
-        {
-            wallMat.material.SetFloat(Shader.PropertyToID("_Radius"), Mathf.SmoothStep(startingRadius, endRadius, Mathf.Clamp01(elapsedTime / totalTime)));
-            elapsedTime += Time.deltaTime * direction;
-            elapsedTime = Mathf.Clamp(elapsedTime, 0.0f, totalTime);
-        }
 
 
-    }
-
-    [ContextMenu("Activate Simulation")]
-    public void ActivateSimulation()
-    {
-        Debug.Log("Activate");
-        Debug.Log(Shader.PropertyToID("Radius"));
-        activate = true;
-        direction *= -1;
     }
 
     public IEnumerator StartCountDown(float countdown)
@@ -72,12 +47,14 @@ public class GlobalController : MonoBehaviour
         timeLeft += countdown;
         yield return new WaitWhile(CheckTime);
         Debug.LogError($"Time over");
+        CountdownComplete.Invoke();
     }
 
     private bool CheckTime()
     {
-        timeLeft -= Time.deltaTime;
-        Debug.Log($"The Time left in simulation is {timeLeft}");
+        timeLeft -= Time.deltaTime * Time.timeScale;
+        //Debug.Log($"The Time left in simulation is {timeLeft}");
+        UpdateTimeLeft.Invoke(timeLeft);
         return timeLeft > 0;
     }
 }

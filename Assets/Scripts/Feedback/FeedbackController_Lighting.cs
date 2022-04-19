@@ -6,14 +6,33 @@ public class FeedbackController_Lighting : FeedbackController
 {
     public ColourLerping colourLerping;
 
+    public float radius = Mathf.Infinity;
+
 
     void Start() {
+
+        FeedbackObject_Lighting[] arrayFeedback = FindObjectsOfType<FeedbackObject_Lighting>();
+        List<FeedbackObject_Lighting> value = new List<FeedbackObject_Lighting>();
+
+        foreach (FeedbackObject_Lighting item in arrayFeedback)
+        {
+            if(Vector3.Distance(item.transform.position, this.transform.position) < radius)
+            {
+                value.Add(item);
+            }
+        }
+
+        feedbackObjects = value.ToArray();
+
         colourLerping.UpdateColour.AddListener(ctx =>
             {
                 Debug.Log($"Recieved Event to Update the Colour to: {ctx}");
 
                 for (int i = 0; i < feedbackObjects.Length; i++) {
-                    feedbackObjects[i].AdjustFeedback(ctx);
+                    if (!ReferenceEquals(feedbackObjects[i], null))
+                    {
+                        feedbackObjects[i].AdjustFeedback(ctx);
+                    }
                     }
             });
 
