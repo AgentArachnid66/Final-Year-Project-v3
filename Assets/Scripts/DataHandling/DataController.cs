@@ -3,7 +3,7 @@ using UnityEngine.Networking;
 using UnityEngine;
 using Newtonsoft.Json;
 using UnityEngine.Events;
-
+using System.Collections.Generic;
 
 public class DataController: MonoBehaviour
 {
@@ -16,6 +16,7 @@ public class DataController: MonoBehaviour
 
     public ScoreInputData scoreInput;
 
+    public float scoreBackup;
 
     // Set when the session starts to Time.time. This will give a more accurate
     // measurement of the length of the session
@@ -43,12 +44,15 @@ public class DataController: MonoBehaviour
     [SerializeField]
     public UnityEventBoolString RegisterAttemptCallback = new UnityEventBoolString();
 
+    public Dictionary<int, Texture2D> wallMasks = new Dictionary<int, Texture2D>();
+    
     private bool[] savedMasks;
 
     public Shader Combine;
     public Material combine;
     public RenderTexture source;
 
+    public UnityEvent GotScore = new UnityEvent();
 
     private int _numSessions;
     public int numSessions
@@ -66,6 +70,8 @@ public class DataController: MonoBehaviour
         {
             Debug.Log("Multiple Data Controllers");
         }
+        
+        DontDestroyOnLoad(this.gameObject);
     }
 
     // Start is called before the first frame update
@@ -80,7 +86,6 @@ public class DataController: MonoBehaviour
         Application.quitting += Save;
         Application.quitting += LogOut;
 
-
         if (PlayerPrefs.GetInt("prevLoggedIn") > 0) sessionData.PlayerID = PlayerPrefs.GetInt("playerID");
         
         Debug.Log($"Player Identity is {sessionData.PlayerID}");
@@ -90,7 +95,9 @@ public class DataController: MonoBehaviour
     {
         PlayerPrefs.SetInt("playerID", -1);
         PlayerPrefs.SetInt("prevLoggedIn", 0);
+        PlayerPrefs.SetFloat("score", 0);
         Debug.Log("Player logged out");
+
     }
     
     
@@ -127,6 +134,7 @@ public class DataController: MonoBehaviour
         SaveMasksAction.Invoke();
         StartCoroutine(CalculateScore());
     }
+
 
     [ContextMenu("Save Current Session")]
     public void Save()
@@ -187,6 +195,7 @@ public class DataController: MonoBehaviour
         if(scoreCal.isNetworkError || scoreCal.isHttpError)
         {
             Debug.Log("Error Occured: " + scoreCal.error);
+            sessionData.Score = Mathf.RoundToInt(scoreBackup);
         }
         else
         { 
@@ -199,7 +208,10 @@ public class DataController: MonoBehaviour
             }
 
         }
-        
+
+
+        PlayerPrefs.SetFloat("score", sessionData.Score);
+        GotScore.Invoke();
     }
 
     

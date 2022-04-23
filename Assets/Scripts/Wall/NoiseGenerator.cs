@@ -28,9 +28,16 @@ public class NoiseGenerator : MonoBehaviour
     [SerializeField] private RenderTexture pressMask;
     private MaterialPropertyBlock _block;
 
+    public int materialIndex;
+
     public int wallID;
-    
-    
+
+    private Texture2D _genNoise;
+
+    public Texture2D generatedNoiseTexture
+    {
+        get => _genNoise;
+    }
 
     
 
@@ -48,18 +55,25 @@ public class NoiseGenerator : MonoBehaviour
         UpdateRenderTextures();
 
         _block = new MaterialPropertyBlock();
-        _renderer.GetPropertyBlock(_block);
+
+        _renderer.GetPropertyBlock(_block, materialIndex);
         _block.SetTexture("Texture2D_1C6CB6F8", waterMask);
         _block.SetTexture("Texture2D_F6700227", tempMask);
         _block.SetTexture("Texture2D_28C91406", pressMask);
         _block.SetTexture("Texture2D_CA25BCB1", globalMask);
 
         //_renderer.material.SetTexture("Texture2D_CA25BCB1", globalMask);
-        _renderer.SetPropertyBlock(_block);
+        _renderer.SetPropertyBlock(_block, materialIndex);
 
+        Debug.LogError(_renderer.materials[materialIndex].name);
+        DataController.sharedInstance.SaveSessionAction += SaveAllMasks;
+        DataController.sharedInstance.SaveMasksAction += SaveAllMasks;
 
-        dataController.SaveSessionAction += SaveAllMasks;
-        dataController.SaveMasksAction += SaveAllMasks;
+        _genNoise = RenderTextureToTexture2D(globalMask);
+
+        DataController.sharedInstance.wallMasks.Add(wallID, generatedNoiseTexture);
+
+        dataController = DataController.sharedInstance;
             }
 
     [ContextMenu("Update Texture")]
@@ -82,8 +96,9 @@ public class NoiseGenerator : MonoBehaviour
         RenderTexture.active = waterMask;
         GL.Clear(true, true, Color.clear);
         RenderTexture.active = rt;
-
     }
+
+
 
     [ContextMenu("Randomise Texture")]
     void RandomiseValues()
@@ -91,7 +106,6 @@ public class NoiseGenerator : MonoBehaviour
         scale = UnityEngine.Random.Range(5, 10);
         offset_X = UnityEngine.Random.Range(-999f, 999f); // transform.position.x;
         offset_Y = transform.position.y;
-
     }
 
     [ContextMenu("Update All Render Textures")]
@@ -175,9 +189,6 @@ public class NoiseGenerator : MonoBehaviour
 
         return fileSaveName;
     }
-    
-
-    
 
     public string CombineRenderTextures()
     {
@@ -203,12 +214,25 @@ public class NoiseGenerator : MonoBehaviour
         
     }
     
-    
+    Texture2D RenderTextureToTexture2D(RenderTexture rt)
+    {
+        Texture2D tex = new Texture2D(rt.width, rt.height, TextureFormat.R16, false);
+        var old_rt = RenderTexture.active;
+        RenderTexture.active = rt;
+
+        tex.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
+        tex.Apply();
+
+        RenderTexture.active = old_rt;
+        return tex;
+
+        // https://stackoverflow.com/questions/44264468/convert-rendertexture-to-texture2d
+    }
 
     [ContextMenu("Save All Masks")]
     public void SaveAllMasks()
     {
-        string id ="id_" +dataController.sessionData.PlayerID.ToString();
+        string id ="id_" +DataController.sharedInstance.sessionData.PlayerID.ToString();
 
         DataController.sharedInstance.sessionData.masks[wallID] = new WallData(
             CombineRenderTextures(),

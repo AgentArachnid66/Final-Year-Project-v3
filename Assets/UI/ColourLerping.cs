@@ -38,11 +38,21 @@ public class ColourLerping : ScriptableObject
         UpdateColour.Invoke(GetCurrentColour());
     }
 
-    public void SetLerpValue(float absolute)
+    public Color SetLerpValue(float absolute, bool invoke=false)
     {
-        Debug.Log($"New Current Lerp Value is {_currLerpValue}");
+        Debug.Log($"New Current Lerp Value is {absolute}");
+        _currLerpValue = absolute;
+        if(invoke) UpdateColour.Invoke(GetCurrentColour());
+
+        return GetCurrentColour();
+    }
+
+    public void SetLerpValue_NoReturn(float absolute)
+    {
+        Debug.Log($"New Current Lerp Value is {absolute}");
         _currLerpValue = absolute;
         UpdateColour.Invoke(GetCurrentColour());
+
     }
 
     private Color GetCurrentColour()

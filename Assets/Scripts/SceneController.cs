@@ -36,7 +36,10 @@ public class SceneController : MonoBehaviour
             SceneManager.LoadSceneAsync(sceneName);
 
         }
+
+        
     }
+
 
     public void TestButton(string testString)
     {
@@ -85,6 +88,13 @@ public class SceneController : MonoBehaviour
             Debug.Log("Load Scene");
             UpdateSceneFromCallback(success, "SampleScene");
         }
+    }
+
+    
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 
 }

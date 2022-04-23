@@ -38,7 +38,7 @@ public class FeedbackController : MonoBehaviour
     {
         for (int i = 0; i < feedbackObjects.Length; i++)
         {
-            feedbackObjects[i].AdjustFeedback(pressureCurve.Evaluate(testPress), temperatureCurve.Evaluate(testTemp));
+            feedbackObjects[i].AdjustFeedback(testPress, testTemp);
         }
     }
 

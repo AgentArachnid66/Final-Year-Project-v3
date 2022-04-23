@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5836868431283126686}
   - component: {fileID: 5836868431283126674}
   - component: {fileID: 5836868431283126675}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: Water Globule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110,10 +110,15 @@ MonoBehaviour:
   dataController: {fileID: 0}
   pressure: 0
   launchVelocity: {x: 0, y: 0, z: 0}
+  _rigidBody: {fileID: 5836868431283126675}
   _drawShader: {fileID: 4800000, guid: d3d13afcf2853704b94d3e870a8d44ca, type: 3}
   _mask:
     serializedVersion: 2
     m_Bits: 256
+  offsets:
+  - 0
+  - 0
+  - 0
 --- !u!54 &5836868431283126675
 Rigidbody:
   m_ObjectHideFlags: 0

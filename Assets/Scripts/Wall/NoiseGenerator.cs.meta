@@ -3,7 +3,13 @@ guid: e6738a339c755b14c9f318de1c5e8592
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - sourceTexture: {fileID: 8400000, guid: 88d0f77b17b962b449ec6cbc77397680, type: 2}
+  - globalMask: {instanceID: 0}
+  - dataController: {instanceID: 0}
+  - waterMask: {instanceID: 0}
+  - tempMask: {instanceID: 0}
+  - pressMask: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

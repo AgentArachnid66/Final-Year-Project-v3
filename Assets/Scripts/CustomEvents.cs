@@ -34,6 +34,10 @@ public class CustomEvents : MonoBehaviour
     private float _shootingValue;
     private bool _canShoot = true;
 
+    private bool _adjustingTemp;
+    private float _tempAdjustValue;
+    private bool _canAdjustTemp = true;
+
     public UnityEvent StartSimulation = new UnityEvent();
 
     public UnityEventFloat Shoot = new UnityEventFloat();
@@ -132,7 +136,8 @@ public class CustomEvents : MonoBehaviour
         };
 
         _playerInput.Drone.Temp.performed += ctx =>{
-            AdjustTemp.Invoke(ctx.ReadValue<float>());
+            _adjustingTemp = true;
+            _tempAdjustValue = ctx.ReadValue<float>();
         };
 
         _playerInput.Drone.OpenModes.performed += ctx =>
@@ -185,6 +190,11 @@ public class CustomEvents : MonoBehaviour
             ToggleRadialMenu.Invoke(false, 0f);
         };
 
+        _playerInput.Drone.Temp.canceled += ctx =>
+        {
+            _adjustingTemp = false;
+        };
+
     }
 
     private void Update()
@@ -205,6 +215,12 @@ public class CustomEvents : MonoBehaviour
             Shoot.Invoke(_shootingValue);
             StartCoroutine(ResetShot(0.1f));
         }
+
+        if(_adjustingTemp && _canAdjustTemp)
+        {
+            AdjustTemp.Invoke(_tempAdjustValue);
+            StartCoroutine(ResetTemp(0.1f));
+        }
     }
 
     private IEnumerator ResetShot(float rate)
@@ -213,6 +229,14 @@ public class CustomEvents : MonoBehaviour
         yield return new WaitForSeconds(rate);
         _canShoot = true;
     }
+
+    private IEnumerator ResetTemp(float rate)
+    {
+        _canAdjustTemp = false;
+        yield return new WaitForSeconds(rate);
+        _canAdjustTemp = true;
+    }
+
 
     public void UpdateMode(int index)
     {

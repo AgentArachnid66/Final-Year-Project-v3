@@ -13,6 +13,9 @@ public class FeedbackObject_Lighting : FeedbackObject
     private Material _lightMaterial;
     private int _materialIndex;
 
+    public int numBranches;
+
+    private Color resultantColour;
     void Start()
     {
         _light = GetComponent<Light>();
@@ -36,13 +39,13 @@ public class FeedbackObject_Lighting : FeedbackObject
 
     public override void AdjustFeedback(Color value)
     {
-        Debug.Log($" Adjusting the Lighting to: {value}");
-        _light.color = value;
+        //Debug.Log($" Adjusting the Lighting to: {(value/numBranches) + resultantColour}");
+        _light.color = (value / numBranches) + resultantColour;
         if (!ReferenceEquals(_renderer, null))
         {
             _renderer.GetPropertyBlock(_propertyBlock, _materialIndex);
 
-            _propertyBlock.SetColor("_EmissionColor", value * intensity);
+            _propertyBlock.SetColor("_EmissionColor", ((value / numBranches) + resultantColour) * intensity);
 
             _renderer.SetPropertyBlock(_propertyBlock, _materialIndex);
         }

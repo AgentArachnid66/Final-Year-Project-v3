@@ -1,13 +1,33 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+
+[System.Serializable]
+public struct FeedbackStruct
+{
+    public FeedbackObject_Lighting feedBackObject;
+    public float weighting;
+
+    public FeedbackStruct(FeedbackObject_Lighting object_Lighting, float weight)
+    {
+        this.feedBackObject = object_Lighting;
+        this.weighting = weight;
+    }
+}
+
 
 public class FeedbackController_Lighting : FeedbackController
 {
     public ColourLerping colourLerping;
 
     public float radius = Mathf.Infinity;
+    UnityAction<Color> UpdateColour;
 
+
+    [SerializeField]
+    private List<FeedbackStruct> nodes = new List<FeedbackStruct>();
+    public Vector3 offset;
 
     void Start() {
 
@@ -19,19 +39,21 @@ public class FeedbackController_Lighting : FeedbackController
             if(Vector3.Distance(item.transform.position, this.transform.position) < radius)
             {
                 value.Add(item);
+                nodes.Add(new FeedbackStruct(item, Vector3.Distance(item.transform.position, this.transform.position)/radius));
+                item.numBranches++;
             }
         }
 
         feedbackObjects = value.ToArray();
 
-        colourLerping.UpdateColour.AddListener(ctx =>
+        UpdateColour += (ctx =>
             {
                 Debug.Log($"Recieved Event to Update the Colour to: {ctx}");
 
-                for (int i = 0; i < feedbackObjects.Length; i++) {
-                    if (!ReferenceEquals(feedbackObjects[i], null))
+                for (int i = 0; i < nodes.Count; i++) {
+                    if (!ReferenceEquals(nodes[i], null))
                     {
-                        feedbackObjects[i].AdjustFeedback(ctx);
+                        nodes[i].feedBackObject.AdjustFeedback(ctx*nodes[i].weighting);
                     }
                     }
             });
@@ -43,11 +65,17 @@ public class FeedbackController_Lighting : FeedbackController
 
     private void Update()
     {
-        colourLerping.SetLerpValue(Mathf.InverseLerp(0, 2,(testPress + testTemp)));
+        UpdateColour.Invoke( colourLerping.SetLerpValue(Mathf.InverseLerp(0, 2,(testPress + testTemp))));
     }
 
     void GetCurrentColour(float temp, float press)
     {
-        colourLerping.SetLerpValue((temp + press) / 2);
+        UpdateColour.Invoke(colourLerping.SetLerpValue((temp + press) / 2));
+    }
+
+    private void OnDrawGizmos()
+    {
+
+        Gizmos.DrawSphere(transform.position+ offset, radius);
     }
 }

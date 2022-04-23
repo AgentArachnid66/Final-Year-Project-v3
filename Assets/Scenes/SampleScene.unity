@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -646,6 +646,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ab66bc91d5351f4b98fd7619c3b8508, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  intensity: 0
+  numBranches: 0
 --- !u!108 &538724131
 Light:
   m_ObjectHideFlags: 0
@@ -774,6 +776,7 @@ MonoBehaviour:
   preString: 'Temperature: '
   proString: 
   textToUpdate: {fileID: 547321772}
+  imageToUpdate: {fileID: 0}
 --- !u!114 &547321772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1533,12 +1536,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1304217676}
   m_CullTransparentMesh: 0
---- !u!1 &1486095571 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5836868431283126681, guid: c837b5a7a278be840a20b14e62ebc3b0,
-    type: 3}
-  m_PrefabInstance: {fileID: 5836868430619641162}
-  m_PrefabAsset: {fileID: 0}
 --- !u!54 &1486095572 stripped
 Rigidbody:
   m_CorrespondingSourceObject: {fileID: 5836868431283126675, guid: c837b5a7a278be840a20b14e62ebc3b0,
@@ -1820,6 +1817,7 @@ MonoBehaviour:
   preString: 'Pressure: '
   proString: '%'
   textToUpdate: {fileID: 1715885152}
+  imageToUpdate: {fileID: 0}
 --- !u!114 &1736048477 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2821130166242784869, guid: 516b1ff17db489b4ab1d2137a746ed8e,
@@ -2014,7 +2012,8 @@ PrefabInstance:
         type: 3}
       propertyPath: objectToPool
       value: 
-      objectReference: {fileID: 1486095571}
+      objectReference: {fileID: 5836868431283126681, guid: c837b5a7a278be840a20b14e62ebc3b0,
+        type: 3}
     - target: {fileID: 2821130166242784868, guid: 516b1ff17db489b4ab1d2137a746ed8e,
         type: 3}
       propertyPath: m_Name
@@ -2128,6 +2127,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5836868431283126681, guid: c837b5a7a278be840a20b14e62ebc3b0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5836868431283126685, guid: c837b5a7a278be840a20b14e62ebc3b0,
         type: 3}
@@ -2277,6 +2281,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Plane (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6259148650348937151, guid: e34867abc3b719543817ee8f87f5d961,
+        type: 3}
+      propertyPath: m_CookingOptions
+      value: -1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e34867abc3b719543817ee8f87f5d961, type: 3}
