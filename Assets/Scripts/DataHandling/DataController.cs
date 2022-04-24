@@ -71,7 +71,6 @@ public class DataController: MonoBehaviour
             Debug.Log("Multiple Data Controllers");
         }
         
-        DontDestroyOnLoad(this.gameObject);
     }
 
     // Start is called before the first frame update

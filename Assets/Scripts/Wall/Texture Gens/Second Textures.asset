@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aba25a430350c8343b92004f91ace484, type: 3}
+  m_Name: Second Textures
+  m_EditorClassIdentifier: 
+  ordinaryTextures:
+  - {fileID: 2800000, guid: e56a9e40b77bcb641a368fd9fcce3f43, type: 3}
+  - {fileID: 2800000, guid: 4942ed66efc438a4eafb80bf55cd573e, type: 3}
+  - {fileID: 2800000, guid: 29618f22d90918c4895b3123697b4d21, type: 3}
+  material: {fileID: 2100000, guid: 4a0d074a095cd954cac4c472287f3da8, type: 2}
+  property: Texture2DArray_D2E079FC
