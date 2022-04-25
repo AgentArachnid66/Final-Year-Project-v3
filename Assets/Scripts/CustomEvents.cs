@@ -283,6 +283,12 @@ public class UnityEventAudio : UnityEvent<AudioClip>
 }
 
 [Serializable]
+public class UnityEventStringText2DArray : UnityEvent<String, Texture2DArray>
+{
+    
+}
+
+[Serializable]
 public class UnityEventBoolFloat : UnityEvent<bool, float>
 {
 

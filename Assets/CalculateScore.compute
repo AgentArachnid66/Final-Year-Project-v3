@@ -10,7 +10,7 @@ struct Input
 
 SamplerState linearClampSampler;
 float4 weights;
-RWStructuredBuffer<Input> scoreInput;
+//RWStructuredBuffer<Input> scoreInput;
 float output;
 
 [numthreads(8,8,1)]

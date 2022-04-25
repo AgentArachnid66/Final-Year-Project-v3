@@ -19,6 +19,9 @@ public class GlobalController : MonoBehaviour
 
     public float countdown_Test;
     
+    [SerializeField] private UnityEvent GetTextureArray = new UnityEvent();
+    [SerializeField] public UnityEventStringText2DArray PropagateTextureArray = new UnityEventStringText2DArray();
+
     private void Awake()
     {
         if (ReferenceEquals(SharedInstance, null))
@@ -32,6 +35,7 @@ public class GlobalController : MonoBehaviour
     void Start()
     {
         StartCoroutine(StartCountDown(totalTime));
+        GetTextureArray.Invoke();
     }
 
     // Update is called once per frame
@@ -50,6 +54,8 @@ public class GlobalController : MonoBehaviour
         CountdownComplete.Invoke();
     }
 
+
+
     private bool CheckTime()
     {
         timeLeft -= Time.deltaTime * Time.timeScale;
@@ -57,4 +63,6 @@ public class GlobalController : MonoBehaviour
         UpdateTimeLeft.Invoke(timeLeft);
         return timeLeft > 0;
     }
+
+
 }

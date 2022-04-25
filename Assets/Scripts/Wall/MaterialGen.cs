@@ -7,14 +7,11 @@ using UnityEngine;
 public class MaterialGen : ScriptableObject
 {
     public Texture2D[] ordinaryTextures;
-    public Material material;
     public string property;
-
-    private void OnEnable()
-    {
-        CreateTextureArray();
-    }
-
+    public Renderer renderer;
+    public int materialIndex;
+    
+    
     [ContextMenu("Create Array")]
     public void CreateTextureArray()
     {
@@ -35,7 +32,8 @@ public class MaterialGen : ScriptableObject
         }
         // Apply our changes
         texture2DArray.Apply();
-        // Set the texture to a material
-        material.SetTexture(property, texture2DArray);
+        
+        GlobalController.SharedInstance.PropagateTextureArray.Invoke(property, texture2DArray);
+        
     }
 }

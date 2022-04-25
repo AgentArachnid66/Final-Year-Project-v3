@@ -50,12 +50,13 @@ public class FeedbackController_Lighting : FeedbackController
             {
                 Debug.Log($"Recieved Event to Update the Colour to: {ctx}");
 
-                for (int i = 0; i < nodes.Count; i++) {
-                    if (!ReferenceEquals(nodes[i], null))
+                for (int i = 0; i < nodes.Count; i++)
+                {
+                    if (nodes[i].feedBackObject != null)
                     {
-                        nodes[i].feedBackObject.AdjustFeedback(ctx*nodes[i].weighting);
+                        nodes[i].feedBackObject.AdjustFeedback(ctx * nodes[i].weighting);
                     }
-                    }
+                }
             });
 
         CustomEvents.CustomEventsInstance.HitWallPressureTemp.AddListener(GetCurrentColour);

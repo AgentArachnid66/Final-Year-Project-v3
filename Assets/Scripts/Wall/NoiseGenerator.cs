@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
+using UnityEngine.Events;
+
 
 
 public class NoiseGenerator : MonoBehaviour
@@ -39,13 +41,17 @@ public class NoiseGenerator : MonoBehaviour
         get => _genNoise;
     }
 
-    
 
+    private void Awake()
+    {
+        
+    }
 
     private Renderer _renderer;
     // Start is called before the first frame update
     void Start()
     {
+        GlobalController.SharedInstance.PropagateTextureArray.AddListener(SetMaterialTextureArray);
         _renderer = GetComponent<Renderer>();
         waterMask = new RenderTexture(sourceTexture);
         tempMask = new RenderTexture(sourceTexture);
@@ -98,7 +104,11 @@ public class NoiseGenerator : MonoBehaviour
         RenderTexture.active = rt;
     }
 
-
+    public void SetMaterialTextureArray(string propertyName, Texture2DArray textArray)
+    {
+        _renderer.materials[materialIndex].SetTexture(propertyName, textArray);
+        Debug.Log("Material Set");
+    }
 
     [ContextMenu("Randomise Texture")]
     void RandomiseValues()
