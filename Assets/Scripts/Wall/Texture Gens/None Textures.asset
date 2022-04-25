@@ -16,7 +16,4 @@ MonoBehaviour:
   - {fileID: 2800000, guid: f7fed48a2f7371745a0ab22be7bf33db, type: 3}
   - {fileID: 2800000, guid: 024ca5e70d79ca14bb89ae12021d13de, type: 3}
   - {fileID: 2800000, guid: ca903c604d1a47f429e74b91776469d9, type: 3}
-  property: Texture2DArray_CC7A66D7
-  renderer: {fileID: 8881815124649607146, guid: 95e0f3b6de7cb6740b7ed7299781f393,
-    type: 3}
-  materialIndex: 1
+  name: None

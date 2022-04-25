@@ -15,13 +15,8 @@ public class NumInput : MonoBehaviour
 
     public int _deltaInput;
     private string _currentString= "";
+    public string _deltaInputStr;
 
-
-    [ContextMenu("Test Appending")]
-    public void AppendTest()
-    {
-        AppendInput(_deltaInput);
-    }
 
     public void testInput(string test)
     {
@@ -35,6 +30,12 @@ public class NumInput : MonoBehaviour
     public void AppendInput(int num)
     {
         _currentString += num.ToString();
+        UpdateDisplay();
+    }
+
+    public void AppendInput(string str)
+    {
+        _currentString += str;
         UpdateDisplay();
     }
 

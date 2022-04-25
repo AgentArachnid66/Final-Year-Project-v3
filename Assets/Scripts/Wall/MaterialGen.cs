@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 
@@ -7,9 +8,6 @@ using UnityEngine;
 public class MaterialGen : ScriptableObject
 {
     public Texture2D[] ordinaryTextures;
-    public string property;
-    public Renderer renderer;
-    public int materialIndex;
     
     
     [ContextMenu("Create Array")]
@@ -32,8 +30,7 @@ public class MaterialGen : ScriptableObject
         }
         // Apply our changes
         texture2DArray.Apply();
-        
-        GlobalController.SharedInstance.PropagateTextureArray.Invoke(property, texture2DArray);
-        
+
+
     }
 }

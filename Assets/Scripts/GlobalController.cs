@@ -35,7 +35,7 @@ public class GlobalController : MonoBehaviour
     void Start()
     {
         StartCoroutine(StartCountDown(totalTime));
-        GetTextureArray.Invoke();
+        
     }
 
     // Update is called once per frame
@@ -54,6 +54,12 @@ public class GlobalController : MonoBehaviour
         CountdownComplete.Invoke();
     }
 
+    public IEnumerator InvokeAfterDuration(UnityEvent Event, float duration)
+    {
+        yield return new WaitForSeconds(duration);
+
+        Event.Invoke();
+    }
 
 
     private bool CheckTime()

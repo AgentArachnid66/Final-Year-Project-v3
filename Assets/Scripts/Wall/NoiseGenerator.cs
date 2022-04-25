@@ -23,7 +23,7 @@ public class NoiseGenerator : MonoBehaviour
     public float offset_Y;
     public float numOfBands;
     public float falloff;
-
+    public float initialFloat;
 
     [SerializeField] private RenderTexture waterMask;
     [SerializeField] private RenderTexture tempMask;
@@ -51,7 +51,8 @@ public class NoiseGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GlobalController.SharedInstance.PropagateTextureArray.AddListener(SetMaterialTextureArray);
+
+
         _renderer = GetComponent<Renderer>();
         waterMask = new RenderTexture(sourceTexture);
         tempMask = new RenderTexture(sourceTexture);
@@ -106,7 +107,12 @@ public class NoiseGenerator : MonoBehaviour
 
     public void SetMaterialTextureArray(string propertyName, Texture2DArray textArray)
     {
-        _renderer.materials[materialIndex].SetTexture(propertyName, textArray);
+        _block = new MaterialPropertyBlock();
+
+        _renderer.GetPropertyBlock(_block, materialIndex);
+        _block.SetTexture(propertyName, textArray);
+        _renderer.SetPropertyBlock(_block, materialIndex);
+       
         Debug.Log("Material Set");
     }
 
@@ -148,8 +154,10 @@ public class NoiseGenerator : MonoBehaviour
         float xCoord = (float)x / width * scale + offset_X;
         float yCoord = (float)y / height * scale + offset_X;
 
-        float sample = Step(Mathf.PerlinNoise(xCoord, yCoord));
+        float sample = (float)(UnityEngine.Random.Range(0, 12)%4)/ 4f;
         
+        // Step(Mathf.PerlinNoise(xCoord, yCoord) + initialFloat);
+        initialFloat = sample;
 
         return new Color(sample, 0f, 0f);
     }

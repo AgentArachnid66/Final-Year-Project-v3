@@ -38,6 +38,8 @@ public class CustomEvents : MonoBehaviour
     private float _tempAdjustValue;
     private bool _canAdjustTemp = true;
 
+    private bool _radialMenuOpen=false;
+
     public UnityEvent StartSimulation = new UnityEvent();
 
     public UnityEventFloat Shoot = new UnityEventFloat();
@@ -101,20 +103,24 @@ public class CustomEvents : MonoBehaviour
 
         _playerInput.Drone.Move.performed += ctx => {
             _2dMove = ctx.ReadValue<Vector2>();
-            DroneHorizontal.Invoke(_2dMove.x);
-            DroneDiagonal.Invoke(_2dMove.y);
+            if (!_radialMenuOpen)
+            {
+                DroneHorizontal.Invoke(_2dMove.x);
+                DroneDiagonal.Invoke(_2dMove.y);
+                
+            }
             LeftAnalog.Invoke(_2dMove);
         };
 
         _playerInput.Drone.VerticalMoveUp.performed += ctx =>
         {
-            _verticalMovement = true;
+            _verticalMovement = true && !_radialMenuOpen;
             _verticalMove = ctx.ReadValue<float>();
         };
 
         _playerInput.Drone.VerticalMoveDown.performed += ctx =>
         {
-            _verticalMovement = true;
+            _verticalMovement = true && !_radialMenuOpen;
             _verticalMove = ctx.ReadValue<float>() * -1f;
         };
 
@@ -142,6 +148,7 @@ public class CustomEvents : MonoBehaviour
 
         _playerInput.Drone.OpenModes.performed += ctx =>
         {
+            _radialMenuOpen = true;
             ToggleRadialMenu.Invoke(true, ctx.ReadValue<float>());
         };
 
@@ -187,6 +194,7 @@ public class CustomEvents : MonoBehaviour
 
         _playerInput.Drone.OpenModes.canceled += ctx =>
         {
+            _radialMenuOpen = false;
             ToggleRadialMenu.Invoke(false, 0f);
         };
 
