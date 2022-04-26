@@ -22,7 +22,8 @@ public struct FeedbackStruct
 public class FeedbackController_Lighting : FeedbackController
 {
     public ColourLerping colourLerping;
-    void Start()
+
+    private void Start()
     {
         base.Start();
 
@@ -38,14 +39,14 @@ public class FeedbackController_Lighting : FeedbackController
 
     private void Update()
     {
-        AdjustFeedback(temperatureCurve.Evaluate(testTemp),pressureCurve.Evaluate(testPress));
+       // AdjustFeedback(temperatureCurve.Evaluate(testTemp),pressureCurve.Evaluate(testPress));
 
         //UpdateColour.Invoke(colourLerping.SetLerpValue(Mathf.InverseLerp(0, 2,(testPress + testTemp))));
     }
 
     public override void AdjustFeedback(float temp, float press)
     {
-        Debug.LogWarning($"Lerping with value {(temp + press) / 2}");
+        Debug.LogWarning($"Controller Lerping with value");
         float ctx = (temp + press) / 2;
         foreach (FeedbackStruct feedback in nodes)
         {

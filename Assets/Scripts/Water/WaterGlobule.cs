@@ -51,13 +51,7 @@ public class WaterGlobule : MonoBehaviour
             if (noise != null)
             {
                 PaintToNoiseTarget(noise, hit);
-                Debug.LogError("Hit Wall");
-                // If the raycast hits, then apply the brush to the render target at the specific UV locationlaunc
-                //dataController.sessionData.HitLocations.Add(new Hit(hit.textureCoord, _score, _temp ,noise.wallID));
 
-                //_wallMaterial = hit.transform.GetComponent<MeshRenderer>().material;
-
-                
             }
             else
             {
@@ -77,28 +71,34 @@ public class WaterGlobule : MonoBehaviour
     private void PaintToNoiseTarget(NoiseGenerator noise, RaycastHit hit)
     {
         DataController.sharedInstance.sessionData.HitLocations.Add(new Hit(hit.textureCoord, _score, _temp, noise.wallID));
-        RenderTexture[] renders = noise.RetrieveRenderTextures();
+        RenderTexture render = noise.RetrieveRenderTextures();
         _drawMaterial.SetVector("_Coordinate", new Vector4(hit.textureCoord.x, hit.textureCoord.y, 0, 0));
+
+
+        Debug.LogError($"Hit Wall at UV: " +hit.textureCoord);
 
         DataController.sharedInstance.scoreBackup += 
             (noise.generatedNoiseTexture.GetPixelBilinear(hit.textureCoord.x, hit.textureCoord.y).r * DataController.sharedInstance.scoreInput.weights[1]) +
             _score * DataController.sharedInstance.scoreInput.weights[2] + _temp * DataController.sharedInstance.scoreInput.weights[3];
 
         FeedbackController feedback = noise.GetComponent<FeedbackController>();
+        Color[] colours = new Color[] { new Color(0, 0, 0, 1), new Color(0,1,0,0), new Color(0,0,1,0)};
 
         if (!ReferenceEquals(null, feedback))
         {
             noise.GetComponent<FeedbackController_Lighting>().AdjustFeedback(_score, _temp);
         }
-        for ( int i = 0; i< renders.Length; i++)
+        for ( int i = 0; i< colours.Length; i++)
         {
-            RenderTexture render = renders[i];
             _drawMaterial.SetFloat("_ColourMultiplier", offsets[i]);
+            _drawMaterial.SetColor("_Colour", colours[i]);
             RenderTexture temp = RenderTexture.GetTemporary(render.width, render.height, 0, RenderTextureFormat.ARGBFloat);
             Graphics.Blit(render, temp);
             Graphics.Blit(temp, render, _drawMaterial);
             RenderTexture.ReleaseTemporary(temp);
         }
+
+        noise.WallHitPressTemp.Invoke(_score, _temp);
 
     }
     public IEnumerator ResetGlobule(float lifetime)

@@ -128,6 +128,12 @@ public class Drone : MonoBehaviour
 
     #region Shooting
 
+    [ContextMenu("Test Event")]
+    private void EventTest()
+    {
+        CustomEvents.CustomEventsInstance.HitWallPressureTemp.Invoke(0.5f, 0.25f);
+    }
+
     public void ToggleActive(bool active)
     {
         on = active;

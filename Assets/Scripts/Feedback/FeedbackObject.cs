@@ -7,7 +7,7 @@ public class FeedbackObject : MonoBehaviour
 {
     public float totalWeighting;
     public List<float> evaluatedControllers = new List<float>();
-
+    public float lerpValue;
     
     public virtual void AdjustFeedback(float pressure, float temp)
     {

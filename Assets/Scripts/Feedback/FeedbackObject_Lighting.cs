@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 [RequireComponent(typeof(Light))]
 public class FeedbackObject_Lighting : FeedbackObject
 {
@@ -49,6 +50,8 @@ public class FeedbackObject_Lighting : FeedbackObject
         {
             sum += evaluatedControllers[i];
         }
+
+        lerpValue = sum;
 
         DetermineFeedback(colourLerping.SetLerpValue(sum));
     }

@@ -198,6 +198,11 @@ public class Player : MonoBehaviour
 
     #region Shooting
 
+    [ContextMenu("Test")]
+    public void Test()
+    {
+        CustomEvents.CustomEventsInstance.HitWallPressureTemp.Invoke(0.5f, 0.5f);
+    }
     private void ShootWater(float input)
     {
 

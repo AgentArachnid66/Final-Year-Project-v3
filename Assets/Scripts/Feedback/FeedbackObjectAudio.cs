@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(AudioSource))]
+
 public class FeedbackObjectAudio : FeedbackObject
 {
     public AudioSource pos_audioSource;
@@ -22,7 +22,9 @@ public class FeedbackObjectAudio : FeedbackObject
             sum += evaluatedControllers[i];
         }
 
-        DetermineFeedback(audioLerping.SetLerpValue(sum));
+        lerpValue = sum;
+
+        DetermineFeedback(audioLerping.GetVolume(sum));
     }
 
     void DetermineFeedback(float volume)

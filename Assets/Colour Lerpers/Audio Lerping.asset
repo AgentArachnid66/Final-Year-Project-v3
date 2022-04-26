@@ -9,9 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 1887271f4d512294495fbc374701c4e2, type: 3}
   m_Name: Audio Lerping
-  m_EditorClassIdentifier: Assembly-CSharp::AudioLerping
+  m_EditorClassIdentifier: 
+  values:
+  - targetClip: {fileID: 0}
+    targetValue: 0
+  - targetClip: {fileID: 0}
+    targetValue: 1
   UpdateAudio:
     m_PersistentCalls:
       m_Calls: []

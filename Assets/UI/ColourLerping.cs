@@ -9,11 +9,6 @@ public struct ColourLerp
     public float targetValue;
 }
 
-public struct AudioLerp
-{
-    public AudioClip targetClip;
-    public float targetValue;
-}
 
 [CreateAssetMenu(fileName = "Colour Lerping", menuName = "ScriptableObjects/Colour Lerper", order = 1)]
 public class ColourLerping : ScriptableObject
@@ -77,25 +72,3 @@ public class ColourLerping : ScriptableObject
 }
 
 
-[CreateAssetMenu(fileName =" Audio Lerping", menuName = "ScriptableObjects/Audio Lerper", order =1)]
-public class AudioLerping: ScriptableObject
-{
-    public List<AudioLerp> values = new List<AudioLerp>();
-    private float _currLerpValue = 0f;
-
-    public UnityEventAudio UpdateAudio = new UnityEventAudio();
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        Debug.Log("Sorting values");
-        values.Sort((s1, s2) => s1.targetValue.CompareTo(s2.targetValue));
-    }
-
-    public float SetLerpValue(float abs)
-    {
-        return 0f;
-    }
-
-}

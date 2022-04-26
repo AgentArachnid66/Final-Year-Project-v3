@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 public enum FeedbackType
 {
     Lighting,
     Audio
 }
 
+[RequireComponent(typeof(NoiseGenerator))]
 public class FeedbackController : MonoBehaviour
 {
     public FeedbackObject[] feedbackObjects;
@@ -25,17 +26,21 @@ public class FeedbackController : MonoBehaviour
     public Vector3 offset;
     public float radius = Mathf.Infinity;
 
+    protected NoiseGenerator noiseGenerator;
 
     public FeedbackType feedbackType;
     private void OnEnable()
     {
-        CustomEvents.CustomEventsInstance.HitWallPressureTemp.AddListener(AdjustFeedback);
         
     }
 
     public virtual  void Start()
     {
+        noiseGenerator = GetComponent<NoiseGenerator>();
+
         FeedbackObject[] arrayFeedback;
+
+
 
         switch (feedbackType)
         {
@@ -51,7 +56,7 @@ public class FeedbackController : MonoBehaviour
         }
 
 
-        List<FeedbackObject> value = new List<FeedbackObject>();
+        List< FeedbackObject> value = new List<FeedbackObject>();
 
         foreach (FeedbackObject item in arrayFeedback)
         {
@@ -75,13 +80,14 @@ public class FeedbackController : MonoBehaviour
 
         feedbackObjects = value.ToArray();
 
-        CustomEvents.CustomEventsInstance.HitWallPressureTemp.AddListener(AdjustFeedback);
-
+        if (noiseGenerator != null)
+        {
+            noiseGenerator.WallHitPressTemp.AddListener(AdjustFeedback);
+        }
         Debug.LogWarning("Base Start has been called");
     }
     private void Update()
     {
-        TestAdjustment();
     }
 
     public virtual void AdjustFeedback(float pressure, float temperature)
