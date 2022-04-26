@@ -6,20 +6,22 @@ using UnityEngine;
 public class FeedbackObject_Lighting : FeedbackObject
 {
     private Light _light;
-
     public float intensity;
     private Renderer _renderer;
     private MaterialPropertyBlock _propertyBlock ;
     private Material _lightMaterial;
     private int _materialIndex;
-
-    public int numBranches;
-
     private Color resultantColour;
+    public ColourLerping colourLerping;
+
+
+    
     void Start()
     {
         _light = GetComponent<Light>();
         _renderer = GetComponentInParent<Renderer>();
+
+        intensity = _light.intensity;
 
         _propertyBlock = new MaterialPropertyBlock();
 
@@ -37,18 +39,34 @@ public class FeedbackObject_Lighting : FeedbackObject
         }
     }
 
-    public override void AdjustFeedback(Color value)
+    public override void AdjustFeedback(float value, int index)
     {
-        //Debug.Log($" Adjusting the Lighting to: {(value/numBranches) + resultantColour}");
-        _light.color = (value / numBranches) + resultantColour;
+        
+        evaluatedControllers[index] = value;
+
+        float sum = 0f;
+        for (int i = 0; i < evaluatedControllers.Count; i++)
+        {
+            sum += evaluatedControllers[i];
+        }
+
+        DetermineFeedback(colourLerping.SetLerpValue(sum));
+    }
+
+    
+    public void DetermineFeedback(Color value)
+    {
+        resultantColour = value;
+        Debug.Log($" Adjusting the Lighting to: {resultantColour}");
+        _light.color = resultantColour * intensity;
         if (!ReferenceEquals(_renderer, null))
         {
             _renderer.GetPropertyBlock(_propertyBlock, _materialIndex);
 
-            _propertyBlock.SetColor("_EmissionColor", ((value / numBranches) + resultantColour) * intensity);
+            _propertyBlock.SetColor("_EmissionColor", resultantColour * intensity);
 
             _renderer.SetPropertyBlock(_propertyBlock, _materialIndex);
         }
     }
-
+    
 }

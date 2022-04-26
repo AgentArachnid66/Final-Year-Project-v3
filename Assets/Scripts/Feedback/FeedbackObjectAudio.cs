@@ -5,20 +5,30 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class FeedbackObjectAudio : FeedbackObject
 {
-    private AudioSource audioSource;
-
+    public AudioSource pos_audioSource;
+    public AudioSource neg_audioSource;
+    public AudioLerping audioLerping;
     private void Start()
     {
-        audioSource = GetComponent<AudioSource>();
     }
 
-
-    public override void AdjustFeedback(float pressure, float temp)
+    public override void AdjustFeedback(float value, int index)
     {
-        base.AdjustFeedback(pressure, temp);
-        //Debug.Log($"Adjusted Audio Feedback: Pressure: {pressure} and Temperature: {temp}");
+        evaluatedControllers[index] = value;
 
-        audioSource.volume = Mathf.Clamp01(pressure + temp);
+        float sum = 0f;
+        for (int i = 0; i < evaluatedControllers.Count; i++)
+        {
+            sum += evaluatedControllers[i];
+        }
+
+        DetermineFeedback(audioLerping.SetLerpValue(sum));
+    }
+
+    void DetermineFeedback(float volume)
+    {
+        pos_audioSource.volume = volume;
+        neg_audioSource.volume = 1f - volume;
     }
 }
 

@@ -73,6 +73,7 @@ public class ColourLerping : ScriptableObject
 
         return values[0].targetColour;
     }
+
 }
 
 
@@ -90,6 +91,11 @@ public class AudioLerping: ScriptableObject
     {
         Debug.Log("Sorting values");
         values.Sort((s1, s2) => s1.targetValue.CompareTo(s2.targetValue));
+    }
+
+    public float SetLerpValue(float abs)
+    {
+        return 0f;
     }
 
 }

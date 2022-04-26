@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class FeedbackObject : MonoBehaviour
 {
+    public float totalWeighting;
+    public List<float> evaluatedControllers = new List<float>();
 
-
+    
     public virtual void AdjustFeedback(float pressure, float temp)
     {
 
@@ -18,9 +20,13 @@ public class FeedbackObject : MonoBehaviour
 
     }
 
+    public virtual void AdjustFeedback(float value, int index)
+    {
 
+    }
     public virtual void AdjustFeedback(Color value)
     {
         
     }
+
 }
