@@ -11,6 +11,11 @@ using UnityEngine;
 public class AudioLerping : ScriptableObject
 {
     public AnimationCurve volumeCurve;
+    public AnimationCurve clipCurve;
+    public AnimationCurve freqCurve;
+
+    public AudioClip clip1;
+    public AudioClip clip2;
 
 
 
@@ -18,7 +23,18 @@ public class AudioLerping : ScriptableObject
     public float GetVolume(float abs)
     {
         return volumeCurve.Evaluate(abs);
+    }
 
+    public AudioClip GetClip(float x)
+    {
+        float y = clipCurve.Evaluate(x);
+
+        return y >= 0.5f ? clip1 : clip2;        
+    }
+
+    public float GetFrequency(float x)
+    {
+        return freqCurve.Evaluate(x);
     }
 
 }

@@ -40,6 +40,12 @@ public class SessionData
     [SerializeField]
     public WallData[] masks;
 
+    [SerializeField]
+    public List<SpatialData> spatialData;
+
+    [SerializeField]
+    public List<PickupData> pickupData;
+
 }
 
 
@@ -72,6 +78,38 @@ public class WallData
     {
 	    this.combinedMasks = combined;
 	    this.id = wallID;
+    }
+}
+
+[System.Serializable]
+public class PickupData
+{
+    public int id;
+    public string effected;
+    public float effect;
+    public string pickupTimestamp;
+
+    public PickupData(int id, string effected, float effect, string stamp)
+    {
+        this.id = id;
+        this.effected = effected;
+        this.effect = effect;
+        this.pickupTimestamp = stamp;
+    }
+}
+
+[System.Serializable]
+public class SpatialData
+{
+    public Vector3 position;
+    public Vector3 velocity;
+    public string time;
+
+    public SpatialData(Vector3 pos, Vector3 vel, string time)
+    {
+        this.position = pos;
+        this.velocity = vel;
+        this.time = time;
     }
 }
 

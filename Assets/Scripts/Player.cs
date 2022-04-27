@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     [SerializeField]private float _diagonalForce;
     public AnimationCurve diagonalCurve;
 
-
+    private bool _shouldAddSpatialData = false;
     private Vector3 _velocity= Vector3.zero;
     public float speed;
 
@@ -104,6 +104,8 @@ public class Player : MonoBehaviour
             ref _velocity, speed * Time.deltaTime));
 
 
+        if(_shouldAddSpatialData) DataController.sharedInstance.sessionData.spatialData.Add(new SpatialData(_rigidbody.position, _rigidbody.velocity, System.DateTime.Now.ToString("yyyyMMddHHmmss")));
+
         _currentRotation.x = Mathf.SmoothDamp(_currentRotation.x, _targetRotation.x + (-1f * _orientation.y), ref _rotationVelocity.x, banking);
         _currentRotation.y = Mathf.SmoothDamp(_currentRotation.y, _targetRotation.y + _orientation.x, ref _rotationVelocity.y, banking);
         _currentRotation.z = Mathf.SmoothDamp(_currentRotation.z, _targetRotation.z, ref _rotationVelocity.z, banking);
@@ -138,6 +140,7 @@ public class Player : MonoBehaviour
     private void Move(ref float force, AnimationCurve curve, float input)
     {
         force = curve.Evaluate(input);
+        _shouldAddSpatialData = true;
     }
 
     private void VerticalMovement(float input)
@@ -164,14 +167,17 @@ public class Player : MonoBehaviour
     private void ResetVertical()
     {
         _verticalForce = 0;
+        _shouldAddSpatialData = false;
     }   
     private void ResetHorizontal()
     {   
         _horizontalForce = 0;
+        _shouldAddSpatialData = false;
     }   
     private void ResetDiagonal()
     {   
         _diagonalForce = 0;
+        _shouldAddSpatialData = false;
     }
     #endregion
 
@@ -275,6 +281,8 @@ public class Player : MonoBehaviour
     private void AdjustTemp(float deltaT)
     {
         _currentTempLerp += deltaT;
+        _currentTempLerp = Mathf.Clamp(_currentTempLerp, 0f, 100f);
+
         _currentTemp = tempCurve.Evaluate(_currentTempLerp/100f);
         Debug.Log(_currentTemp);
         UpdateTemperatureValue.Invoke(Mathf.Round(Mathf.Lerp(-5, 50, _currentTempLerp / 100f)));

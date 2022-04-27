@@ -7,7 +7,8 @@ using UnityEngine;
 public abstract class Pickup : MonoBehaviour
 {
     protected Player playerRef;
-    
+    public int id;
+
     private void OnTriggerEnter(Collider other)
     {
         playerRef = other.GetComponent<Player>();

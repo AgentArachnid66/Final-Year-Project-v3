@@ -326,6 +326,8 @@ public enum Mode
     Laser
 }
 
+
+
 public struct RenderSettings
 {
     RenderTexture texture;

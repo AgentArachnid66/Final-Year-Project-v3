@@ -21,6 +21,7 @@ public class RadialMenu : MonoBehaviour
     [Header("Tooltip")]
     public TMPro.TMP_Text title;
     public TMPro.TMP_Text description;
+    public TMPro.TMP_Text locked;
 
     void Start()
     {
@@ -82,6 +83,7 @@ public class RadialMenu : MonoBehaviour
                     menuItems[selection].Select();
                     title.text = menuItems[selection].title;
                     description.text = menuItems[selection].description;
+                    locked.text = menuItems[selection].lockedDescription;
                 }
                 _prevSelection = selection;
             }

@@ -23,18 +23,17 @@ public class FeedbackController_Lighting : FeedbackController
 {
     public ColourLerping colourLerping;
 
-    private void Start()
+    public override void Start()
     {
         base.Start();
 
+        Debug.LogWarning("Lighting Controller Started");
 
         foreach (FeedbackObject_Lighting item in feedbackObjects)
         {
+            Debug.Log($"Lighting {item.name}  Colour Lerp Set: {item.GetType().ToString()}");
             item.colourLerping = colourLerping;
         }
-
-
-
     }
 
     private void Update()

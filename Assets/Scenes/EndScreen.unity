@@ -1425,8 +1425,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af601910f8b6bb8459c89984e8c3b61e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  preString: 'SCORE: '
-  proString: 
+  preString: 
+  proString: ' XP Earned'
   textToUpdate: {fileID: 1932417496}
   imageToUpdate: {fileID: 0}
 --- !u!114 &468328906

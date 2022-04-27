@@ -34,7 +34,7 @@ public class FeedbackController : MonoBehaviour
         
     }
 
-    public virtual  void Start()
+    public virtual void Start()
     {
         noiseGenerator = GetComponent<NoiseGenerator>();
 
@@ -56,7 +56,7 @@ public class FeedbackController : MonoBehaviour
         }
 
 
-        List< FeedbackObject> value = new List<FeedbackObject>();
+        List<FeedbackObject> value = new List<FeedbackObject>();
 
         foreach (FeedbackObject item in arrayFeedback)
         {
@@ -85,6 +85,7 @@ public class FeedbackController : MonoBehaviour
             noiseGenerator.WallHitPressTemp.AddListener(AdjustFeedback);
         }
         Debug.LogWarning("Base Start has been called");
+
     }
     private void Update()
     {

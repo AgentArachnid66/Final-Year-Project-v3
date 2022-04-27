@@ -36,7 +36,7 @@ public class RadialElement : MonoBehaviour
     [Header("Element Information")]
     public string title;
     public string description;
-
+    public string lockedDescription;
 
     public UnityEvent OnPress = new UnityEvent();
 

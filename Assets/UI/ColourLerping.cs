@@ -21,21 +21,21 @@ public class ColourLerping : ScriptableObject
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Sorting values");
+      //  Debug.Log("Sorting values");
         values.Sort((s1, s2) => s1.targetValue.CompareTo(s2.targetValue));
     }
 
 
     public void AdjustLerpValue(float delta)
     {
-        Debug.Log($"New Current Lerp Value is {_currLerpValue}");
+      //  Debug.Log($"New Current Lerp Value is {_currLerpValue}");
         _currLerpValue += delta;
         UpdateColour.Invoke(GetCurrentColour());
     }
 
     public Color SetLerpValue(float absolute, bool invoke=false)
     {
-        Debug.Log($"New Current Lerp Value is {absolute}");
+      //  Debug.Log($"New Current Lerp Value is {absolute}");
         _currLerpValue = absolute;
         if(invoke) UpdateColour.Invoke(GetCurrentColour());
 
@@ -44,7 +44,7 @@ public class ColourLerping : ScriptableObject
 
     public void SetLerpValue_NoReturn(float absolute)
     {
-        Debug.Log($"New Current Lerp Value is {absolute}");
+        //Debug.Log($"New Current Lerp Value is {absolute}");
         _currLerpValue = absolute;
         UpdateColour.Invoke(GetCurrentColour());
 

@@ -12,11 +12,77 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1887271f4d512294495fbc374701c4e2, type: 3}
   m_Name: Audio Lerping
   m_EditorClassIdentifier: 
-  values:
-  - targetClip: {fileID: 0}
-    targetValue: 0
-  - targetClip: {fileID: 0}
-    targetValue: 1
-  UpdateAudio:
-    m_PersistentCalls:
-      m_Calls: []
+  volumeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  clipCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  freqCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.000980638
+      value: -0.007805437
+      inSlope: 1.2558209
+      outSlope: 1.2558209
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.34033203
+      value: 0.42082214
+      inSlope: 1.2558209
+      outSlope: 1.2558209
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  clip1: {fileID: 8300000, guid: 0afb3ce78860e8049b7a824e50ea793f, type: 3}
+  clip2: {fileID: 8300000, guid: 684736218d2d55d4bbde3919a1e4b2ec, type: 3}
