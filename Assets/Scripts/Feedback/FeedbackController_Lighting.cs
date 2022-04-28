@@ -4,19 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System;
 
-[System.Serializable]
-public struct FeedbackStruct
-{
-    public FeedbackObject feedBackObject;
-    public float weighting;
-    public int cont_id;
-    public FeedbackStruct(FeedbackObject object_Lighting, float weight, int id)
-    {
-        this.feedBackObject = object_Lighting;
-        this.weighting = weight;
-        this.cont_id = id;
-    }
-}
+
 
 
 public class FeedbackController_Lighting : FeedbackController

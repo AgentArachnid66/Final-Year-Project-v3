@@ -8,6 +8,20 @@ public enum FeedbackType
     Audio
 }
 
+[System.Serializable]
+public struct FeedbackStruct
+{
+    public FeedbackObject feedBackObject;
+    public float weighting;
+    public int cont_id;
+    public FeedbackStruct(FeedbackObject object_Lighting, float weight, int id)
+    {
+        this.feedBackObject = object_Lighting;
+        this.weighting = weight;
+        this.cont_id = id;
+    }
+}
+
 [RequireComponent(typeof(NoiseGenerator))]
 public class FeedbackController : MonoBehaviour
 {
@@ -27,7 +41,7 @@ public class FeedbackController : MonoBehaviour
     public float radius = Mathf.Infinity;
 
     protected NoiseGenerator noiseGenerator;
-
+    public float sourceStrength = 1f;
     public FeedbackType feedbackType;
     private void OnEnable()
     {
@@ -64,12 +78,12 @@ public class FeedbackController : MonoBehaviour
             {
                 value.Add(item);
                 // 1 - (distance to origin/radius) so that the closer the object to origin, the more weighting it has
-                nodes.Add(new FeedbackStruct(item, 1f - (Vector3.Distance(item.transform.position, this.transform.position) / radius), item.evaluatedControllers.Count));
+                nodes.Add(new FeedbackStruct(item, CalculateInverseSquareWeight(item.transform.position), item.evaluatedControllers.Count));
 
                 Debug.LogWarning(item.evaluatedControllers.Count);
 
                 // Useful for finding the proportional weight for each branch connected to this controller
-                item.totalWeighting += 1f - (Vector3.Distance(item.transform.position, this.transform.position) / radius);
+                item.totalWeighting += CalculateInverseSquareWeight(item.transform.position);
 
 
 
@@ -89,6 +103,13 @@ public class FeedbackController : MonoBehaviour
     }
     private void Update()
     {
+    }
+
+    private float CalculateInverseSquareWeight(Vector3 position)
+    {
+        float rad = Vector3.Distance(position, this.transform.position) / radius;
+        return 1f / (4f * Mathf.PI * rad * rad);
+
     }
 
     public virtual void AdjustFeedback(float pressure, float temperature)

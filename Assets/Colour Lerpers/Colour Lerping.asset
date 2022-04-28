@@ -16,8 +16,6 @@ MonoBehaviour:
   - targetColour: {r: 1, g: 0.11372549, b: 0.11372549, a: 1}
     targetValue: 0
   - targetColour: {r: 0, g: 1, b: 0.22478127, a: 0}
-    targetValue: 0.5
-  - targetColour: {r: 0, g: 0.5265317, b: 1, a: 0}
     targetValue: 1
   UpdateColour:
     m_PersistentCalls:
