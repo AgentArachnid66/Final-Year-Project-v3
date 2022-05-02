@@ -48,7 +48,6 @@ public class FeedbackController_Lighting : FeedbackController
     }
     private void OnDrawGizmos()
     {
-
         Gizmos.DrawSphere(transform.position+ offset, radius);
     }
 }

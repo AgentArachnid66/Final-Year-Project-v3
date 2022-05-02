@@ -88,13 +88,23 @@ public class PickupData
     public string effected;
     public float effect;
     public string pickupTimestamp;
-
-    public PickupData(int id, string effected, float effect, string stamp)
+    public InteractionType InteractionType;
+    public PickupData(int id, string effected, float effect, string stamp, InteractionType type)
     {
         this.id = id;
         this.effected = effected;
         this.effect = effect;
         this.pickupTimestamp = stamp;
+        this.InteractionType = type;
+    }
+
+    public PickupData(int id, string effected, string stamp, InteractionType type)
+    {
+        this.id = id;
+        this.effected = effected;
+        this.effect = 0f;
+        this.pickupTimestamp = stamp;
+        this.InteractionType = type;
     }
 }
 

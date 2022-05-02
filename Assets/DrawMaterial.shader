@@ -8,7 +8,7 @@
 		_Colour("Base Colour", Color) = (1,0,0,0)
 		
 		_ColourMultiplier("Colour Multiplier", float) = 1
-		_DrawSize("Brush Size", float) = 50
+		_DrawSize("Brush Size", float) = 25
     }
     SubShader
     {

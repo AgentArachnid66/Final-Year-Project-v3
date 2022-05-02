@@ -8,10 +8,8 @@ public class PickupTime : Pickup
     
     public override void Activate()
     {
-        Debug.Log("Activate");
-        StartCoroutine(GlobalController.SharedInstance.StartCountDown(additionalTime));
-
-        DataController.sharedInstance.sessionData.pickupData.Add(new PickupData(id, "TimeLeft", additionalTime, System.DateTime.Now.ToString("yyyyMMddHHmmss")));
+        DataController.sharedInstance.sessionData.pickupData.Add(new PickupData(id, "TimeLeft", additionalTime, System.DateTime.Now.ToString("yyyyMMddHHmmss"), InteractionType.PickedUp));
+        UIController.SharedInstance.pickups[id] = this;
     }
 
     public override void Despawn()

@@ -14,7 +14,7 @@ public class UIController : MonoBehaviour
     public ColourLerping PressLerp;
 
     public static UIController SharedInstance;
-
+    public Pickup[] pickups = new Pickup[2];
     private void Start()
     {
         GetPlayerScore();
@@ -57,5 +57,23 @@ public class UIController : MonoBehaviour
     public void GetPlayerScore()
     {
         PlayerScore.Invoke(PlayerPrefs.GetFloat("score", 150f));
+    }
+
+    public void UseTimePickup()
+    {
+        int id = -1;
+        for (int i = 0; i < pickups.Length; i++)
+        {
+            if (pickups[i] != null)
+            {
+                id = i;
+            }
+        }
+        if (id >= 0)
+        {
+            StartCoroutine(GlobalController.SharedInstance.StartCountDown(30f));
+            DataController.sharedInstance.sessionData.pickupData.Add(new PickupData(id, "TimeLeft", System.DateTime.Now.ToString("yyyyMMddHHmmss"), InteractionType.Used));
+            pickups[id] = null;
+        }
     }
 }
