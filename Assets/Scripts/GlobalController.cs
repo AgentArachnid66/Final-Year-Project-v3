@@ -70,5 +70,14 @@ public class GlobalController : MonoBehaviour
         return timeLeft > 0;
     }
 
+    public void Test()
+    {
+        Debug.LogError($"Test Function Called");
+    }
 
+    public void Quit()
+    {
+        Application.Quit();
+        Debug.LogError($"Quit Game");
+    }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine.Networking;
 using UnityEngine;
@@ -22,8 +23,8 @@ public class DataController: MonoBehaviour
     // measurement of the length of the session
     public float startTime = 0f;
 
-    public UnityAction SaveSessionAction;
-    public UnityAction SaveMasksAction;
+    public UnityEvent SaveSessionAction;
+    public UnityEvent SaveMasksAction;
 
     [SerializeField]
     public UserData data = new UserData();
@@ -52,9 +53,13 @@ public class DataController: MonoBehaviour
     public Material combine;
     public RenderTexture source;
 
-    public UnityEvent GotScore = new UnityEvent();
-
-    private int _numSessions;
+    public UnityEventFloat GotScore = new UnityEventFloat();
+    public UnityEventBool SaveComplete = new UnityEventBool();
+    public UnityEvent SaveAndQuit = new UnityEvent();
+    
+    private bool _saved;
+    [SerializeField]private int _numSessions;
+    
     public int numSessions
     {
         get { return _numSessions; }
@@ -82,8 +87,8 @@ public class DataController: MonoBehaviour
         sessionData.masks = new WallData[numOfWalls];
         savedMasks = new bool[numOfWalls];
 
-        Application.quitting += Save;
         Application.quitting += LogOut;
+        
 
         if (PlayerPrefs.GetInt("prevLoggedIn") > 0) sessionData.PlayerID = PlayerPrefs.GetInt("playerID");
         
@@ -114,11 +119,7 @@ public class DataController: MonoBehaviour
     {
         participantData.ID = id;
     }
-
-    public void SetLoginPIN(int pin)
-    {
-        participantData.PIN = pin;
-    }
+    
 
     public void SetLoginPassword(string password)
     {
@@ -138,7 +139,12 @@ public class DataController: MonoBehaviour
     [ContextMenu("Save Current Session")]
     public void Save()
     {
-        SaveSessionAction.Invoke();
+        Debug.Log("Called Save Session");
+        if (SaveSessionAction != null)
+        {
+            SaveSessionAction.Invoke();
+        }
+
         // Can now convert the timestamp from this format into a number that can be 
         // used to analyse dates and order by chronological order
         sessionData.TimeStamp = System.DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -210,10 +216,8 @@ public class DataController: MonoBehaviour
 
 
         PlayerPrefs.SetFloat("score", sessionData.Score);
-        GotScore.Invoke();
+        GotScore.Invoke(sessionData.Score);
     }
-
-    
     
     IEnumerator SaveSession()
     {
@@ -235,9 +239,10 @@ public class DataController: MonoBehaviour
         {                                  
             Debug.Log("Error Occured: " + saveSession.error);
         }
+        
+        SaveComplete.Invoke(true);
+        SaveAndQuit.Invoke();
     }
-    
-    
 
     private bool CheckMasks()
     {
@@ -326,8 +331,8 @@ public class DataController: MonoBehaviour
             }
 
             LoginAttemptCallback.Invoke(respond.success, "");
-            
-            UnityWebRequest retrieveNumSessions = new UnityWebRequest(url + "/Session/Count");
+            Debug.Log(url + "Session/Count");
+            UnityWebRequest retrieveNumSessions = new UnityWebRequest(url + "Session/Count");
             retrieveNumSessions.downloadHandler = new DownloadHandlerBuffer();
             retrieveNumSessions.SetRequestHeader("Content-Type", "application/json");
             retrieveNumSessions.uploadHandler = (UploadHandler) new UploadHandlerRaw(bytes);
@@ -336,15 +341,19 @@ public class DataController: MonoBehaviour
             if (retrieveNumSessions.isNetworkError || retrieveNumSessions.isHttpError)
             {
                 Debug.Log(retrieveNumSessions.error);
+                _numSessions = (int)System.DateTimeOffset.Now.ToUnixTimeSeconds();
             }
 
             else
             {
                 _numSessions = JsonConvert.DeserializeObject<int>(retrieveNumSessions.downloadHandler.text);
                 Debug.Log($"Number of Sessions played by this participant is {_numSessions}");
+                _numSessions += 1;
             }
         }
     }
+    
+    
 
 #endregion
 

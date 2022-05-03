@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering.UI;
 
 public class Player : MonoBehaviour
 {
@@ -280,6 +281,7 @@ public class Player : MonoBehaviour
 
     private void AdjustTemp(float deltaT)
     {
+        Debug.LogWarning($"Delta Temperature is: {deltaT} with a current lerp {_currentTempLerp + deltaT}");
         _currentTempLerp += deltaT;
         _currentTempLerp = Mathf.Clamp(_currentTempLerp, 0f, 100f);
 

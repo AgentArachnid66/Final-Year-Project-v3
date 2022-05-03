@@ -11,8 +11,8 @@ public class CoroutineManager : MonoBehaviour
     private void Start()
     {
         testAction += Test1;
-        DataController.sharedInstance.SaveSessionAction += Test1;
-        DataController.sharedInstance.SaveMasksAction += Test1;
+        DataController.sharedInstance.SaveSessionAction.AddListener(Test1);
+        DataController.sharedInstance.SaveMasksAction.AddListener(Test1);
 
         testAction += DataController.sharedInstance.SaveSessionAction.Invoke;
     }

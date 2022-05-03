@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -21,6 +22,7 @@ public class CustomEvents : MonoBehaviour
     }
 
 
+    private bool controlsActive = true;
     private InputActions _playerInput;
     // Input from the left analog stick
     [SerializeField]private Vector2 _2dMove;
@@ -39,6 +41,10 @@ public class CustomEvents : MonoBehaviour
     private bool _canAdjustTemp = true;
 
     private bool _radialMenuOpen=false;
+    private bool _radialMenuMouse=false;
+    private bool _radialMenuMouseSet = false;
+
+    public AnimationCurve mouseRotateCamera;
 
     public UnityEvent StartSimulation = new UnityEvent();
 
@@ -54,6 +60,8 @@ public class CustomEvents : MonoBehaviour
 
     public UnityEventVector2 OrientDrone = new UnityEventVector2();
     public UnityEventVector2 LeftAnalog = new UnityEventVector2();
+    public UnityEventVector2 NavigateMenu = new UnityEventVector2();
+    public UnityEventFloat AdjustAngle = new UnityEventFloat();
 
     public UnityEventString ChangeScene = new UnityEventString();
 
@@ -65,24 +73,26 @@ public class CustomEvents : MonoBehaviour
     public UnityEvent Select = new UnityEvent();
 
     public UnityEventFloatFloat HitWallPressureTemp = new UnityEventFloatFloat();
-
+    public UnityEventBool SetControlsActive = new UnityEventBool();
+    
     private void OnEnable()
     {
-        _playerInput.Drone.Move.Enable();
+        _playerInput.Drone.MoveDrone.Enable();
         _playerInput.Drone.VerticalMoveUp.Enable();
         _playerInput.Drone.VerticalMoveDown.Enable();
         _playerInput.Drone.Shoot.Enable();
         _playerInput.Drone.RotateCamera.Enable();
         _playerInput.Drone.Liquid.Enable();
         _playerInput.Drone.Temp.Enable();
-
+       //_playerInput.
 
         _playerInput.Drone.OpenModes.Enable();
         _playerInput.Drone.Select.Enable();
+        _playerInput.Drone.Navigate.Enable();
     }
     private void OnDisable()
     {
-        _playerInput.Drone.Move.Disable();
+        _playerInput.Drone.MoveDrone.Disable();
         _playerInput.Drone.VerticalMoveUp.Disable();
         _playerInput.Drone.VerticalMoveDown.Disable();
         _playerInput.Drone.Shoot.Disable();
@@ -91,27 +101,69 @@ public class CustomEvents : MonoBehaviour
         _playerInput.Drone.Temp.Disable();
         _playerInput.Drone.OpenModes.Disable();
        _playerInput.Drone.Select.Disable();
-
+       _playerInput.Drone.Navigate.Disable();
     }
 
+    public void SetControlsActiveFunc(bool active)
+    {
+        if (active)
+        {
+            _playerInput.Drone.MoveDrone.Enable();
+            _playerInput.Drone.VerticalMoveUp.Enable();
+            _playerInput.Drone.VerticalMoveDown.Enable();
+            _playerInput.Drone.Shoot.Enable();
+            _playerInput.Drone.RotateCamera.Enable();
+            _playerInput.Drone.Liquid.Enable();
+            _playerInput.Drone.Temp.Enable();
+            //_playerInput.
+
+            _playerInput.Drone.OpenModes.Enable();
+            _playerInput.Drone.Navigate.Enable();
+        }
+        else
+        {
+            _playerInput.Drone.VerticalMoveUp.Disable();
+            _playerInput.Drone.VerticalMoveDown.Disable();
+            _playerInput.Drone.Shoot.Disable();
+            _playerInput.Drone.RotateCamera.Disable();
+            _playerInput.Drone.Liquid.Disable();
+            _playerInput.Drone.Temp.Disable();
+            _playerInput.Drone.OpenModes.Disable();
+            _playerInput.Drone.Navigate.Disable();
+        }
+    }
 
     private void Awake()
     {
         _playerInput = new InputActions();
-
-        // Player Inputs
-
-        _playerInput.Drone.Move.performed += ctx => {
+        
+    
+        _playerInput.Drone.MoveDrone.performed += ctx =>
+        {
             _2dMove = ctx.ReadValue<Vector2>();
             if (!_radialMenuOpen)
             {
                 DroneHorizontal.Invoke(_2dMove.x);
                 DroneDiagonal.Invoke(_2dMove.y);
-                
+                LeftAnalog.Invoke(_2dMove);
             }
-            LeftAnalog.Invoke(_2dMove);
+
         };
 
+        _playerInput.Drone.Navigate.performed += ctx =>
+        {
+            if (_radialMenuOpen)
+            {
+                Vector2 directionVector = ctx.ReadValue<Vector2>();
+                float angle = (directionVector.x > 0) ? 
+                    Vector3.Angle(Vector3.up, Vector3.Normalize(directionVector)) : 
+                    360.0f - Vector3.Angle(Vector3.up, Vector3.Normalize(directionVector));
+
+                AdjustAngle.Invoke(angle);
+            }
+        };
+        
+        
         _playerInput.Drone.VerticalMoveUp.performed += ctx =>
         {
             _verticalMovement = true && !_radialMenuOpen;
@@ -132,8 +184,16 @@ public class CustomEvents : MonoBehaviour
 
         _playerInput.Drone.RotateCamera.performed += ctx =>
         {
-            _2dOrientate = ctx.ReadValue<Vector2>();
-            OrientDrone.Invoke(_2dOrientate);
+            if (!_radialMenuOpen)
+            {
+                _2dOrientate = ctx.control == Pointer.current.delta
+                    ? new Vector2(mouseRotateCamera.Evaluate(_2dOrientate.x),
+                        mouseRotateCamera.Evaluate(_2dOrientate.y))
+                    : _2dOrientate;
+                _2dOrientate = ctx.ReadValue<Vector2>().normalized;
+
+                OrientDrone.Invoke(_2dOrientate);
+            }
         };
 
         _playerInput.Drone.Liquid.performed += ctx =>
@@ -148,18 +208,20 @@ public class CustomEvents : MonoBehaviour
 
         _playerInput.Drone.OpenModes.performed += ctx =>
         {
+            _radialMenuMouse = ctx.control == Mouse.current.rightButton;
             _radialMenuOpen = true;
             ToggleRadialMenu.Invoke(true, ctx.ReadValue<float>());
         };
 
         _playerInput.Drone.Select.performed += ctx =>
         {
+            Debug.LogError("Selected");
             Select.Invoke();
         };
 
         // When Player no longer inputs
 
-        _playerInput.Drone.Move.canceled += ctx =>
+        _playerInput.Drone.MoveDrone.canceled += ctx =>
         {
             _2dMove = Vector2.zero;
             ResetDroneHorizontal.Invoke();
@@ -209,7 +271,11 @@ public class CustomEvents : MonoBehaviour
     {
         OrientDrone.Invoke(_2dOrientate);
 
-
+        if (Input.GetKey(KeyCode.W))
+        {
+            Debug.LogError("W Key is being pressed");
+        }
+        
         if (Input.GetKeyDown(KeyCode.E))
         {
             StartSimulation.Invoke();
@@ -226,8 +292,41 @@ public class CustomEvents : MonoBehaviour
 
         if(_adjustingTemp && _canAdjustTemp)
         {
+            Debug.Log(_tempAdjustValue);
             AdjustTemp.Invoke(_tempAdjustValue);
             StartCoroutine(ResetTemp(0.1f));
+        }
+
+        if (_radialMenuOpen && _radialMenuMouse)
+        {
+            if (!_radialMenuMouseSet)
+            {
+                _radialMenuMouseSet = true;
+                
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.visible = true;
+            }
+            
+            //CAN BE MADE A CACHED AT THE TOP
+            Camera droneCamera = FindObjectOfType<Camera>();
+
+
+            Vector3 viewportPoint = droneCamera.ScreenToViewportPoint(Input.mousePosition);
+            Vector3 directionVector = viewportPoint - new Vector3(0.5f, 0.5f, 0.0f);
+
+            float angle = (directionVector.x > 0) ? 
+                Vector3.Angle(Vector3.up, Vector3.Normalize(directionVector)) : 
+                360.0f - Vector3.Angle(Vector3.up, Vector3.Normalize(directionVector));
+
+            AdjustAngle.Invoke(angle);
+          
+        }
+        else if (_radialMenuMouseSet)
+        {
+            _radialMenuMouseSet = false;
+                
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
     }
 
@@ -378,6 +477,45 @@ public static class CustomUtility
         Debug.Log(Application.persistentDataPath + fileName);
         System.IO.File.WriteAllText(Application.persistentDataPath +fileName +".json", data);
     }
-
+    
+    public static int CompareByAngleValue(RadialElement x, RadialElement y)
+    {
+        if (x == null)
+        {
+            if (y == null)
+            {
+                return 0;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        else
+        {
+            if (y == null)
+            {
+                return 1;
+            }
+            else
+            {
+                float xAngle = x.localAngle;
+                float yAngle = y.localAngle;
+                
+                if (Mathf.Approximately(xAngle,yAngle))
+                {
+                    return 0;
+                }
+                else if (xAngle > yAngle)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+        }
+    }
 }
 

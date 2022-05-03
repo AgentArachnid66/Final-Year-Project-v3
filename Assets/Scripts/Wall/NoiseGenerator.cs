@@ -39,6 +39,8 @@ public class NoiseGenerator : MonoBehaviour
     public UnityEventFloatFloat WallHitPressTemp = new UnityEventFloatFloat();
     private Texture2D _genNoise;
 
+
+    
     public Texture2D generatedNoiseTexture
     {
         get => _genNoise;
@@ -82,12 +84,19 @@ public class NoiseGenerator : MonoBehaviour
         _renderer.SetPropertyBlock(_block, materialIndex);
 
         Debug.LogError(_renderer.materials[materialIndex].name);
-        DataController.sharedInstance.SaveSessionAction += SaveAllMasks;
-        DataController.sharedInstance.SaveMasksAction += SaveAllMasks;
+        DataController.sharedInstance.SaveSessionAction.AddListener(SaveAllMasks);
+        DataController.sharedInstance.SaveMasksAction.AddListener(SaveAllMasks);
 
         _genNoise = RenderTextureToTexture2D(masterMask);
 
-        DataController.sharedInstance.wallMasks.Add(wallID, generatedNoiseTexture);
+        if(DataController.sharedInstance.wallMasks.ContainsKey(wallID))
+        {
+            DataController.sharedInstance.wallMasks[wallID] = generatedNoiseTexture;
+        }
+        else
+        {
+            DataController.sharedInstance.wallMasks.Add(wallID, generatedNoiseTexture);
+        }
 
         dataController = DataController.sharedInstance;
     }

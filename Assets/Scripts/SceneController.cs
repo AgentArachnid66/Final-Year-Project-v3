@@ -34,12 +34,15 @@ public class SceneController : MonoBehaviour
         {
             Debug.Log("Loading: " + sceneName);
             SceneManager.LoadSceneAsync(sceneName);
-
         }
-
-        
     }
 
+    public void RefreshScene()
+    {
+        Scene active = SceneManager.GetActiveScene();
+        SceneManager.UnloadSceneAsync(active.buildIndex);
+        SceneManager.LoadSceneAsync(active.buildIndex);
+    }
 
     public void TestButton(string testString)
     {
@@ -57,7 +60,7 @@ public class SceneController : MonoBehaviour
 
         if (_canChange)
         {
-            sceneName = sceneName == "" ? "SampleScene" : sceneName;
+            sceneName = sceneName == "" ? "MainLevel" : sceneName;
             Debug.Log("Loading: " + sceneName);
             SceneManager.LoadSceneAsync(sceneName);
         }
@@ -86,7 +89,7 @@ public class SceneController : MonoBehaviour
         else
         {
             Debug.Log("Load Scene");
-            UpdateSceneFromCallback(success, "SampleScene");
+            UpdateSceneFromCallback(success, "MainLevel");
         }
     }
 
