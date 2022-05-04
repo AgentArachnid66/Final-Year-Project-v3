@@ -15,9 +15,39 @@ public class UIController : MonoBehaviour
 
     public static UIController SharedInstance;
     public Pickup[] pickups = new Pickup[2];
+
+    private InputActions _playerInput;
+    public UnityEvent AlteredSubmit = new UnityEvent();
+    public UnityEvent Delete = new UnityEvent();
+
+    
+
     private void Start()
     {
         GetPlayerScore();
+
+
+        _playerInput = new InputActions();
+        _playerInput.UI.Submit_Altered.Enable();
+        _playerInput.UI.Delete.Enable();
+        _playerInput.UI.Navigate.Enable();
+
+        _playerInput.UI.Submit_Altered.performed += ctx =>
+        {
+            //Delete.Invoke();
+            //AlteredSubmit.Invoke();
+        };
+
+        _playerInput.UI.Delete.performed += ctx =>
+        {
+            Delete.Invoke();
+        };
+
+        _playerInput.UI.Navigate.performed += ctx =>
+        {
+           // Debug.LogError("Navigation Event");
+        };
+
     }
 
     private void Awake()
@@ -25,12 +55,12 @@ public class UIController : MonoBehaviour
         if (ReferenceEquals(SharedInstance, null))
         {
             SharedInstance = this;
-            Debug.LogError($"The name of the object with UI Controller: {this.gameObject.name}");
+            //Debug.LogError($"The name of the object with UI Controller: {this.gameObject.name}");
         }
         else
         {
-            Debug.LogError("Additional UI Controllers in Scene");
-            Debug.LogError($"The name of the object with UI Controller: {this.gameObject.name}");
+            //Debug.LogError("Additional UI Controllers in Scene");
+            //Debug.LogError($"The name of the object with UI Controller: {this.gameObject.name}");
         }
         if (!ReferenceEquals(null, TempLerp))
         {
@@ -40,23 +70,25 @@ public class UIController : MonoBehaviour
         {
             PressLerp.UpdateColour.AddListener(GetPressColour);
         }
+
+        
     }
 
     public void GetTempColour(Color colour)
     {
-        Debug.LogWarning($"Temperature image colour is: {colour}");
+        //Debug.LogWarning($"Temperature image colour is: {colour}");
         TempColour.Invoke(colour);
     }
 
     public void GetPressColour(Color colour)
     {
-        Debug.LogWarning($"Pressure Image Colour is: {colour}");
+       // Debug.LogWarning($"Pressure Image Colour is: {colour}");
         PressColour.Invoke(colour);
     }
 
     public void GetPlayerScore()
     {
-        PlayerScore.Invoke(PlayerPrefs.GetFloat("score", 150f));
+        PlayerScore.Invoke(PlayerPrefs.GetFloat("score", 0f));
     }
 
     public void UseTimePickup()

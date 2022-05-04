@@ -35,10 +35,12 @@ public class CustomEvents : MonoBehaviour
     private bool _shooting;
     private float _shootingValue;
     private bool _canShoot = true;
+    [SerializeField] private float _mousePressure = 0f;
 
     private bool _adjustingTemp;
     private float _tempAdjustValue;
     private bool _canAdjustTemp = true;
+    private bool _switchedToTemp = true;
 
     private bool _radialMenuOpen=false;
     private bool _radialMenuMouse=false;
@@ -77,31 +79,12 @@ public class CustomEvents : MonoBehaviour
     
     private void OnEnable()
     {
-        _playerInput.Drone.MoveDrone.Enable();
-        _playerInput.Drone.VerticalMoveUp.Enable();
-        _playerInput.Drone.VerticalMoveDown.Enable();
-        _playerInput.Drone.Shoot.Enable();
-        _playerInput.Drone.RotateCamera.Enable();
-        _playerInput.Drone.Liquid.Enable();
-        _playerInput.Drone.Temp.Enable();
-       //_playerInput.
-
-        _playerInput.Drone.OpenModes.Enable();
-        _playerInput.Drone.Select.Enable();
-        _playerInput.Drone.Navigate.Enable();
+        SetControlsActiveFunc(true);
     }
     private void OnDisable()
     {
-        _playerInput.Drone.MoveDrone.Disable();
-        _playerInput.Drone.VerticalMoveUp.Disable();
-        _playerInput.Drone.VerticalMoveDown.Disable();
-        _playerInput.Drone.Shoot.Disable();
-        _playerInput.Drone.RotateCamera.Disable();
-        _playerInput.Drone.Liquid.Disable();
-        _playerInput.Drone.Temp.Disable();
-        _playerInput.Drone.OpenModes.Disable();
-       _playerInput.Drone.Select.Disable();
-       _playerInput.Drone.Navigate.Disable();
+        SetControlsActiveFunc(false);
+
     }
 
     public void SetControlsActiveFunc(bool active)
@@ -119,6 +102,7 @@ public class CustomEvents : MonoBehaviour
 
             _playerInput.Drone.OpenModes.Enable();
             _playerInput.Drone.Navigate.Enable();
+            _playerInput.Drone.Switch.Enable();
         }
         else
         {
@@ -130,6 +114,7 @@ public class CustomEvents : MonoBehaviour
             _playerInput.Drone.Temp.Disable();
             _playerInput.Drone.OpenModes.Disable();
             _playerInput.Drone.Navigate.Disable();
+            _playerInput.Drone.Switch.Disable();
         }
     }
 
@@ -162,7 +147,11 @@ public class CustomEvents : MonoBehaviour
                 AdjustAngle.Invoke(angle);
             }
         };
-        
+
+        _playerInput.Drone.Switch.performed += ctx =>
+        {
+            _switchedToTemp = !_switchedToTemp;
+        };
         
         _playerInput.Drone.VerticalMoveUp.performed += ctx =>
         {
@@ -180,6 +169,7 @@ public class CustomEvents : MonoBehaviour
         {
             _shooting = true;
             _shootingValue =ctx.ReadValue<float>();
+            
         };
 
         _playerInput.Drone.RotateCamera.performed += ctx =>
@@ -204,6 +194,7 @@ public class CustomEvents : MonoBehaviour
         _playerInput.Drone.Temp.performed += ctx =>{
             _adjustingTemp = true;
             _tempAdjustValue = ctx.ReadValue<float>();
+            _mousePressure += ctx.ReadValue<float>();
         };
 
         _playerInput.Drone.OpenModes.performed += ctx =>
@@ -283,18 +274,26 @@ public class CustomEvents : MonoBehaviour
 
         if (_verticalMovement) DroneVertical.Invoke(_verticalMove);
 
-        if (_shooting && _canShoot)
-        {
 
-            Shoot.Invoke(_shootingValue);
-            StartCoroutine(ResetShot(0.1f));
+        if (_switchedToTemp)
+        {
+            if (_adjustingTemp && _canAdjustTemp)
+            {
+                Debug.Log(_tempAdjustValue);
+                AdjustTemp.Invoke(_tempAdjustValue);
+
+                StartCoroutine(ResetTemp(0.1f));
+            }
         }
-
-        if(_adjustingTemp && _canAdjustTemp)
+        else
         {
-            Debug.Log(_tempAdjustValue);
-            AdjustTemp.Invoke(_tempAdjustValue);
-            StartCoroutine(ResetTemp(0.1f));
+            if (_shooting && _canShoot)
+            {
+
+                Shoot.Invoke(_mousePressure);
+                StartCoroutine(ResetShot(0.1f));
+            }
+
         }
 
         if (_radialMenuOpen && _radialMenuMouse)

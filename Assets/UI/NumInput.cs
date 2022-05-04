@@ -64,4 +64,22 @@ public class NumInput : MonoBehaviour
         _currentString = "";
         display.text = "";
     }
+
+    public void CheckThenSubmit()
+    {
+        Debug.Log($"This is {gameObject.name} and we are {(gameObject.activeInHierarchy ? "Active" : "Inactive")}");
+        if (gameObject.activeInHierarchy)
+        {
+            EnterInput();
+        }
+
+    }
+
+    public void CheckThenDelete()
+    {
+        if (gameObject.activeInHierarchy)
+        {
+            RemoveFromInput();
+        }
+    }
 }

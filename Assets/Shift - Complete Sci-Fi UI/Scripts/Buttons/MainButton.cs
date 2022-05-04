@@ -24,18 +24,5 @@ namespace Michsky.UI.Shift
                 if (pressedText != null) { pressedText.text = buttonText; }
             }
         }
-
-        void OnValidate()
-        {
-            if (useCustomText == false)
-            {
-                if (normalText != null) { normalText.text = buttonText; }
-                if (highlightedText != null) { highlightedText.text = buttonText; }
-                if (pressedText != null) { pressedText.text = buttonText; }
-
-                
-            }
-        }
     }
-
 }

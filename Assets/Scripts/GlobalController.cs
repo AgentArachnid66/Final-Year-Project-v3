@@ -35,7 +35,6 @@ public class GlobalController : MonoBehaviour
     void Start()
     {
         StartCoroutine(StartCountDown(totalTime));
-        
     }
 
     // Update is called once per frame
@@ -67,17 +66,22 @@ public class GlobalController : MonoBehaviour
         timeLeft -= Time.deltaTime * Time.timeScale;
         //Debug.Log($"The Time left in simulation is {timeLeft}");
         UpdateTimeLeft.Invoke(timeLeft);
+        countdown_Test = timeLeft;
         return timeLeft > 0;
+    }
+
+    public void CancelCountDown()
+    {
+        StopAllCoroutines();
     }
 
     public void Test()
     {
-        Debug.LogError($"Test Function Called");
     }
 
     public void Quit()
     {
         Application.Quit();
-        Debug.LogError($"Quit Game");
+        //Debug.LogError($"Quit Game");
     }
 }

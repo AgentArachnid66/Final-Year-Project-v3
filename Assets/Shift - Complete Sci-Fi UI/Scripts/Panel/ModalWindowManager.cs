@@ -17,12 +17,12 @@ namespace Michsky.UI.Shift
         public string titleText = "Title";
         [TextArea] public string descriptionText = "Description here";
 
-        Animator mWindowAnimator;
+        public Animator mWindowAnimator;
         bool isOn = false;
 
         void Start()
         {
-            mWindowAnimator = gameObject.GetComponent<Animator>();
+          //  mWindowAnimator = gameObject.GetComponent<Animator>();
 
             if (useCustomTexts == false)
             {
@@ -33,20 +33,12 @@ namespace Michsky.UI.Shift
             gameObject.SetActive(false);
         }
 
-        public void ModalWindowInOnBool(bool update)
-        {
-            if (update) ModalWindowIn();
-
-        }
-
-        public void ModalWindowInOnBoolString(bool update, string test)
-        {
-            ModalWindowInOnBool(!update);
-        }
-
+        [ContextMenu("Fade In")]
         public void ModalWindowIn()
         {
+            Debug.Log($"Fading In Window {gameObject.name}");
             StopCoroutine("DisableWindow");
+
             gameObject.SetActive(true);
 
             if (isOn == false)
@@ -62,6 +54,8 @@ namespace Michsky.UI.Shift
 
         public void ModalWindowOut()
         {
+            Debug.Log($"Fading Out Window {gameObject.name}");
+
             if (isOn == true)
             {
                 if (sharpAnimations == false)

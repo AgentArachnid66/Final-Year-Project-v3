@@ -33,7 +33,7 @@ public class SceneController : MonoBehaviour
         if (_canChange)
         {
             Debug.Log("Loading: " + sceneName);
-            SceneManager.LoadSceneAsync(sceneName);
+            SceneManager.LoadScene(sceneName);
         }
     }
 
@@ -73,7 +73,7 @@ public class SceneController : MonoBehaviour
 
         text.text = success ? "Registeration Successful. Please Log In" : "Error Occured: " + message;
 
-        Debug.Log(text.text);
+        Debug.LogError(text.text);
     }
     public void UpdateLogin(bool success, string message)
     {

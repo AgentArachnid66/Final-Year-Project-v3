@@ -80,7 +80,7 @@ public class FeedbackController : MonoBehaviour
                 // 1 - (distance to origin/radius) so that the closer the object to origin, the more weighting it has
                 nodes.Add(new FeedbackStruct(item, CalculateInverseSquareWeight(item.transform.position), item.evaluatedControllers.Count));
 
-                Debug.LogWarning(item.evaluatedControllers.Count);
+                //Debug.LogWarning(item.evaluatedControllers.Count);
 
                 // Useful for finding the proportional weight for each branch connected to this controller
                 item.totalWeighting += CalculateInverseSquareWeight(item.transform.position);
@@ -88,7 +88,7 @@ public class FeedbackController : MonoBehaviour
 
 
                 item.evaluatedControllers.Add(0f);
-                Debug.LogWarning(item.evaluatedControllers.Count);
+                //Debug.LogWarning(item.evaluatedControllers.Count);
             }
         }
 
@@ -98,7 +98,7 @@ public class FeedbackController : MonoBehaviour
         {
             noiseGenerator.WallHitPressTemp.AddListener(AdjustFeedback);
         }
-        Debug.LogWarning("Base Start has been called");
+       // Debug.LogWarning("Base Start has been called");
 
     }
     private void Update()

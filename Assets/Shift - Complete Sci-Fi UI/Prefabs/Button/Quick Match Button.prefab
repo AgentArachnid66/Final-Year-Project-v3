@@ -1012,7 +1012,6 @@ MonoBehaviour:
   audioObject: {fileID: 0}
   enableHoverSound: 1
   enableClickSound: 1
-  checkForInteraction: 1
 --- !u!95 &95582761661926802
 Animator:
   serializedVersion: 3
