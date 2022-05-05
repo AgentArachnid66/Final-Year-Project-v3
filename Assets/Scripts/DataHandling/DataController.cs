@@ -11,7 +11,7 @@ using JetBrains.Annotations;
 public class DataController: MonoBehaviour
 {
     public static DataController sharedInstance;
-
+    [SerializeField]private static int? playerID;
 
     private string url = "https://still-springs-04765.herokuapp.com/";
 
@@ -92,7 +92,16 @@ public class DataController: MonoBehaviour
                 sharedInstance = this;
             }
         }
-        
+        if(playerID == null)
+        {
+            playerID = 0;
+        }
+        else
+        {
+            participantData.ID = (int)playerID;
+            sessionData.PlayerID = (int)playerID;
+            spatialData.playerID = (int)playerID;
+        }
     }
 
     // Start is called before the first frame update
@@ -118,6 +127,7 @@ public class DataController: MonoBehaviour
         PlayerPrefs.SetInt("prevLoggedIn", 0);
         PlayerPrefs.SetFloat("score", 0);
         Debug.Log("Player logged out");
+        playerID = null;
 
     }
     
@@ -363,6 +373,7 @@ public class DataController: MonoBehaviour
                 // If the response is successful, then the PlayerID is set to the 
                 // ObjectID of the participant
                 sessionData.PlayerID = participantData.ID;
+                playerID = participantData.ID;
                 PlayerPrefs.SetInt("playerID", sessionData.PlayerID);
                 PlayerPrefs.SetInt("PrevLoggedIn", 1);
             }
