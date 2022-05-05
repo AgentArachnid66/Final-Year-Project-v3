@@ -73,7 +73,19 @@ public class DataController: MonoBehaviour
         }
         else
         {
-            Debug.Log("Multiple Data Controllers");
+            if (GameObject.FindObjectsOfType<DataController>().Length > 1)
+            {
+                Debug.Log("Multiple Data Controllers");
+                foreach (var item in GameObject.FindObjectsOfType<DataController>())
+                {
+                    Debug.LogWarning(item.gameObject.name);
+                }
+            }
+            else
+            {
+                Debug.Log("Reference is pointing to previous scene");
+                sharedInstance = this;
+            }
         }
         
     }
@@ -144,6 +156,10 @@ public class DataController: MonoBehaviour
         {
             SaveSessionAction.Invoke();
         }
+        else
+        {
+            Debug.Log("SaveSessionAction is Null");
+        }
 
         // Can now convert the timestamp from this format into a number that can be 
         // used to analyse dates and order by chronological order
@@ -194,7 +210,7 @@ public class DataController: MonoBehaviour
 
         byte[] bytes = new System.Text.UTF8Encoding().GetBytes(JsonConvert.SerializeObject(scoreInput));
         scoreCal.uploadHandler = (UploadHandler)new UploadHandlerRaw(bytes);
-
+        Debug.Log("Making Score Request");
         yield return scoreCal.SendWebRequest();
 
         if(scoreCal.isNetworkError || scoreCal.isHttpError)

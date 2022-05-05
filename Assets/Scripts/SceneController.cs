@@ -40,7 +40,7 @@ public class SceneController : MonoBehaviour
     public void RefreshScene()
     {
         Scene active = SceneManager.GetActiveScene();
-        SceneManager.UnloadSceneAsync(active.buildIndex);
+        //SceneManager.UnloadSceneAsync(active.buildIndex);
         SceneManager.LoadSceneAsync(active.buildIndex);
     }
 

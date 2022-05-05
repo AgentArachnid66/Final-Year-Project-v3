@@ -86,8 +86,6 @@ public class RadialMenu : MonoBehaviour
         */
 
         CustomEvents.CustomEventsInstance.Select.AddListener(PressSelection);
-
-
         CustomEvents.CustomEventsInstance.ToggleRadialMenu.AddListener(ToggleMenu);
 
 
@@ -201,6 +199,7 @@ public class RadialMenu : MonoBehaviour
 
     void PressSelection()
     {
+        Debug.Log("Selection Pressed");
         menuItems[selection].Press();
     }
 

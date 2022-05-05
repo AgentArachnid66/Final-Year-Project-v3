@@ -295,11 +295,11 @@
                 },
                 {
                     "name": "",
-                    "id": "5e6ac1e5-8c04-4ae5-a157-c1fb21c1bd3e",
-                    "path": "<Mouse>/leftButton",
+                    "id": "cb8dac84-5e5a-4d1f-8adb-cbdf7c7c914d",
+                    "path": "<Mouse>/middleButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "KeyMouse",
                     "action": "Select",
                     "isComposite": false,
                     "isPartOfComposite": false

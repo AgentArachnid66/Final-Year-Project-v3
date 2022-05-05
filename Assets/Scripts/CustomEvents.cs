@@ -8,21 +8,21 @@ using UnityEngine.InputSystem;
 
 public class CustomEvents : MonoBehaviour
 {
-     private static CustomEvents customEvents;
-    
+    private static CustomEvents customEvents;
+
     public static CustomEvents CustomEventsInstance
     {
         get
         {
-            if (ReferenceEquals(customEvents, null))
-                customEvents = GameObject.FindObjectOfType<CustomEvents>();
+            customEvents = GameObject.FindObjectOfType<CustomEvents>();
 
             return customEvents;
         }
     }
 
 
-    private bool controlsActive = true;
+
+    [SerializeField]private bool controlsActive = true;
     private InputActions _playerInput;
     // Input from the left analog stick
     [SerializeField]private Vector2 _2dMove;
@@ -35,12 +35,14 @@ public class CustomEvents : MonoBehaviour
     private bool _shooting;
     private float _shootingValue;
     private bool _canShoot = true;
-    [SerializeField] private float _mousePressure = 0f;
+    [SerializeField] private float _mousePressure, _mouseAdjustPressure = 0f;
 
     private bool _adjustingTemp;
     private float _tempAdjustValue;
     private bool _canAdjustTemp = true;
-    private bool _switchedToTemp = true;
+    private bool _adjustingPress;
+    private bool _canAdjustPress= false;
+    [SerializeField]private bool _switchedToTemp = true;
 
     private bool _radialMenuOpen=false;
     private bool _radialMenuMouse=false;
@@ -69,6 +71,7 @@ public class CustomEvents : MonoBehaviour
 
     public UnityEventInt ChangeLiquid = new UnityEventInt();
     public UnityEventFloat AdjustTemp = new UnityEventFloat();
+    public UnityEventFloat AdjustPress = new UnityEventFloat();
     public UnityEventInt ChangeMode = new UnityEventInt();
 
     public UnityEventBoolFloat ToggleRadialMenu = new UnityEventBoolFloat();
@@ -79,49 +82,39 @@ public class CustomEvents : MonoBehaviour
     
     private void OnEnable()
     {
-        SetControlsActiveFunc(true);
+        _playerInput.Drone.MoveDrone.Enable();
+        _playerInput.Drone.VerticalMoveUp.Enable();
+        _playerInput.Drone.VerticalMoveDown.Enable();
+        _playerInput.Drone.Shoot.Enable();
+        _playerInput.Drone.RotateCamera.Enable();
+        _playerInput.Drone.Liquid.Enable();
+        _playerInput.Drone.Temp.Enable();
+        _playerInput.Drone.OpenModes.Enable();
+        _playerInput.Drone.Navigate.Enable();
+        _playerInput.Drone.Switch.Enable();
     }
     private void OnDisable()
     {
-        SetControlsActiveFunc(false);
-
+        _playerInput.Drone.MoveDrone.Disable();
+        _playerInput.Drone.VerticalMoveUp.Disable();
+        _playerInput.Drone.VerticalMoveDown.Disable();
+        _playerInput.Drone.Shoot.Disable();
+        _playerInput.Drone.RotateCamera.Disable();
+        _playerInput.Drone.Liquid.Disable();
+        _playerInput.Drone.Temp.Disable();
+        _playerInput.Drone.OpenModes.Disable();
+        _playerInput.Drone.Navigate.Disable();
+        _playerInput.Drone.Switch.Disable();
     }
 
     public void SetControlsActiveFunc(bool active)
     {
-        if (active)
-        {
-            _playerInput.Drone.MoveDrone.Enable();
-            _playerInput.Drone.VerticalMoveUp.Enable();
-            _playerInput.Drone.VerticalMoveDown.Enable();
-            _playerInput.Drone.Shoot.Enable();
-            _playerInput.Drone.RotateCamera.Enable();
-            _playerInput.Drone.Liquid.Enable();
-            _playerInput.Drone.Temp.Enable();
-            //_playerInput.
-
-            _playerInput.Drone.OpenModes.Enable();
-            _playerInput.Drone.Navigate.Enable();
-            _playerInput.Drone.Switch.Enable();
-        }
-        else
-        {
-            _playerInput.Drone.VerticalMoveUp.Disable();
-            _playerInput.Drone.VerticalMoveDown.Disable();
-            _playerInput.Drone.Shoot.Disable();
-            _playerInput.Drone.RotateCamera.Disable();
-            _playerInput.Drone.Liquid.Disable();
-            _playerInput.Drone.Temp.Disable();
-            _playerInput.Drone.OpenModes.Disable();
-            _playerInput.Drone.Navigate.Disable();
-            _playerInput.Drone.Switch.Disable();
-        }
+        Debug.Log($"{(active ? "Controls are now active" : "Controls are now Inactive")}");
     }
 
     private void Awake()
     {
         _playerInput = new InputActions();
-        
     
         _playerInput.Drone.MoveDrone.performed += ctx =>
         {
@@ -148,7 +141,7 @@ public class CustomEvents : MonoBehaviour
             }
         };
 
-        _playerInput.Drone.Switch.performed += ctx =>
+        _playerInput.Drone.Switch.started += ctx =>
         {
             _switchedToTemp = !_switchedToTemp;
         };
@@ -193,8 +186,9 @@ public class CustomEvents : MonoBehaviour
 
         _playerInput.Drone.Temp.performed += ctx =>{
             _adjustingTemp = true;
+            _adjustingPress = true;
             _tempAdjustValue = ctx.ReadValue<float>();
-            _mousePressure += ctx.ReadValue<float>();
+            _mouseAdjustPressure = ctx.ReadValue<float>();
         };
 
         _playerInput.Drone.OpenModes.performed += ctx =>
@@ -275,25 +269,26 @@ public class CustomEvents : MonoBehaviour
         if (_verticalMovement) DroneVertical.Invoke(_verticalMove);
 
 
-        if (_switchedToTemp)
+        if (_adjustingTemp && _canAdjustTemp && _switchedToTemp)
         {
-            if (_adjustingTemp && _canAdjustTemp)
-            {
-                Debug.Log(_tempAdjustValue);
-                AdjustTemp.Invoke(_tempAdjustValue);
+            Debug.Log(_tempAdjustValue);
+            AdjustTemp.Invoke(_tempAdjustValue);
 
-                StartCoroutine(ResetTemp(0.1f));
-            }
+            StartCoroutine(ResetTemp(0.1f));
         }
-        else
+
+
+        if (_adjustingPress && _canAdjustPress && !_switchedToTemp)
         {
-            if (_shooting && _canShoot)
-            {
+            _mousePressure += _mouseAdjustPressure / 100f;
+            AdjustPress.Invoke(_mousePressure);
+        }
+        
 
-                Shoot.Invoke(_mousePressure);
-                StartCoroutine(ResetShot(0.1f));
-            }
-
+        if (_shooting && _canShoot)
+        {
+            Shoot.Invoke(_mousePressure>0?_mousePressure:_shootingValue);
+            StartCoroutine(ResetShot(0.1f));
         }
 
         if (_radialMenuOpen && _radialMenuMouse)

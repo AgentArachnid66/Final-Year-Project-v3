@@ -19665,8 +19665,13 @@ PrefabInstance:
       objectReference: {fileID: 649603101}
     - target: {fileID: 6242592043494390390, guid: 09f11ddf20d8e064b98c9e5877f5b05c,
         type: 3}
+      propertyPath: SubmitInput.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242592043494390390, guid: 09f11ddf20d8e064b98c9e5877f5b05c,
+        type: 3}
       propertyPath: SubmitInput.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6242592043494390390, guid: 09f11ddf20d8e064b98c9e5877f5b05c,
         type: 3}
@@ -19676,7 +19681,7 @@ PrefabInstance:
     - target: {fileID: 6242592043494390390, guid: 09f11ddf20d8e064b98c9e5877f5b05c,
         type: 3}
       propertyPath: SubmitInput.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: 
+      value: SetLoginID
       objectReference: {fileID: 0}
     - target: {fileID: 6242592043494390390, guid: 09f11ddf20d8e064b98c9e5877f5b05c,
         type: 3}
@@ -19688,6 +19693,11 @@ PrefabInstance:
       propertyPath: SubmitInputString.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 1444108808}
+    - target: {fileID: 6242592043494390390, guid: 09f11ddf20d8e064b98c9e5877f5b05c,
+        type: 3}
+      propertyPath: SubmitInputString.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetLoginPassword
+      objectReference: {fileID: 0}
     - target: {fileID: 6242592043494390390, guid: 09f11ddf20d8e064b98c9e5877f5b05c,
         type: 3}
       propertyPath: SubmitInputString.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
@@ -21695,6 +21705,16 @@ PrefabInstance:
       propertyPath: SubmitInputString.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 1444108808}
+    - target: {fileID: 6242592043494390390, guid: 09f11ddf20d8e064b98c9e5877f5b05c,
+        type: 3}
+      propertyPath: SubmitInputString.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetLoginPassword
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242592043494390390, guid: 09f11ddf20d8e064b98c9e5877f5b05c,
+        type: 3}
+      propertyPath: SubmitInputString.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: AccountLogin
+      objectReference: {fileID: 0}
     - target: {fileID: 6242592043494390391, guid: 09f11ddf20d8e064b98c9e5877f5b05c,
         type: 3}
       propertyPath: m_Pivot.x

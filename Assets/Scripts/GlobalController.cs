@@ -28,6 +28,22 @@ public class GlobalController : MonoBehaviour
         {
             SharedInstance = this;
         }
+        else
+        {
+            if (GameObject.FindObjectsOfType<DataController>().Length > 1)
+            {
+                Debug.Log("Multiple Data Controllers");
+                foreach (var item in GameObject.FindObjectsOfType<GlobalController>())
+                {
+                    Debug.LogWarning(item.gameObject.name);
+                }
+            }
+            else
+            {
+                Debug.Log("Reference is pointing to previous scene");
+                SharedInstance = this;
+            }
+        }
     }
 
 

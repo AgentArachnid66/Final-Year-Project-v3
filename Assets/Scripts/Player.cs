@@ -41,6 +41,8 @@ public class Player : MonoBehaviour
     [Header("Pressure and Temperature")]
     public AnimationCurve pressureCurve;
     public AnimationCurve tempCurve;
+    private bool _usingMouse;
+    private float _currentPressure;
 
     public Liquid _currentLiquid;
     private float _currentTempLerp = 25f;
@@ -86,6 +88,7 @@ public class Player : MonoBehaviour
 
         CustomEvents.CustomEventsInstance.ChangeLiquid.AddListener(ChangeLiquid);
         CustomEvents.CustomEventsInstance.AdjustTemp.AddListener(AdjustTemp);
+        CustomEvents.CustomEventsInstance.AdjustPress.AddListener(AdjustTemp);
         CustomEvents.CustomEventsInstance.ChangeMode.AddListener(ChangeMode);
 
         CustomEvents.CustomEventsInstance.ToggleRadialMenu.AddListener(AdjustTimeScale);
@@ -213,7 +216,7 @@ public class Player : MonoBehaviour
     private void ShootWater(float input)
     {
 
-        _pressure = Mathf.Lerp(minPressure, maxPressure, input);
+        _pressure = _usingMouse ? _currentPressure: Mathf.Lerp(minPressure, maxPressure, input);
         UpdatePressureValue.Invoke(Mathf.Round(100*_pressure/maxPressure));
         Debug.Log($"Receivied: {_currentTemp}");
         GameObject globule = GlobuleObjectPool.sharedInstance.GetPooledObject();
@@ -291,6 +294,11 @@ public class Player : MonoBehaviour
         UpdateEvaluatedTemperatureValue.Invoke(_currentTempLerp/100f);
     }
 
+    private void AdjustPressure(float deltaP)
+    {
+        _usingMouse = true;
+        _currentPressure += deltaP;
+    }
 
     private void AdjustTimeScale(bool toggle, float input)
     {
