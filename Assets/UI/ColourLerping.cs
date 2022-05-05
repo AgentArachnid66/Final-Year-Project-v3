@@ -45,7 +45,8 @@ public class ColourLerping : ScriptableObject
     public void SetLerpValue_NoReturn(float absolute)
     {
         //Debug.Log($"New Current Lerp Value is {absolute}");
-        _currLerpValue = absolute;
+        _currLerpValue = Mathf.Clamp(absolute,0f,1f);
+        
         UpdateColour.Invoke(GetCurrentColour());
 
     }

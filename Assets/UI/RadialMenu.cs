@@ -154,7 +154,8 @@ public class RadialMenu : MonoBehaviour
                     
                     selectedIndex = (Mathf.Abs(mouseAngle - firstAngle) < Mathf.Abs(secondAngle - mouseAngle)) ? menuItems.Length - 1 : 0;
                 }
-                
+
+                selection = selectedIndex;
                 Debug.Log($"Index: {selectedIndex}");
                 
                 if (_prevSelection != selectedIndex && selectedIndex>=0)  

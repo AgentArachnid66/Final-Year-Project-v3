@@ -41,11 +41,15 @@ public class SessionData
     public WallData[] masks;
 
     [SerializeField]
-    public List<SpatialData> spatialData;
-
-    [SerializeField]
     public List<PickupData> pickupData;
 
+}
+
+[System.Serializable]
+public class SpatialData
+{
+	public List<SpatialDataInstance> spatialData = new List<SpatialDataInstance>();
+	public int playerID;
 }
 
 
@@ -109,13 +113,13 @@ public class PickupData
 }
 
 [System.Serializable]
-public class SpatialData
+public class SpatialDataInstance
 {
     public Vector3 position;
     public Vector3 velocity;
     public string time;
 
-    public SpatialData(Vector3 pos, Vector3 vel, string time)
+    public SpatialDataInstance(Vector3 pos, Vector3 vel, string time)
     {
         this.position = pos;
         this.velocity = vel;

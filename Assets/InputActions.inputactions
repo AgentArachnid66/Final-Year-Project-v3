@@ -296,7 +296,7 @@
                 {
                     "name": "",
                     "id": "cb8dac84-5e5a-4d1f-8adb-cbdf7c7c914d",
-                    "path": "<Mouse>/middleButton",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyMouse",
@@ -515,22 +515,11 @@
                 },
                 {
                     "name": "",
-                    "id": "80f79ba5-a347-429f-a853-02e31895c826",
-                    "path": "<Pointer>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyMouse",
-                    "action": "RotateCamera",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "2b37f8f2-1323-44f6-997b-43de1b1b58cd",
                     "path": "<Pointer>/delta",
                     "interactions": "",
                     "processors": "",
-                    "groups": "KeyMouse",
+                    "groups": "",
                     "action": "Navigate",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -943,6 +932,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyMouse",
+                    "action": "Submit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0c17f155-7431-4d63-8b2d-b04fd722bc47",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "Submit",
                     "isComposite": false,
                     "isPartOfComposite": false

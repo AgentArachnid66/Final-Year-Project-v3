@@ -106,6 +106,7 @@ public class UIController : MonoBehaviour
 
     public void UseTimePickup()
     {
+        Debug.LogWarning("Used Time Pickup");
         int id = -1;
         for (int i = 0; i < pickups.Length; i++)
         {

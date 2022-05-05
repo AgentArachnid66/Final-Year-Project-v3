@@ -42,7 +42,7 @@ public class Player : MonoBehaviour
     public AnimationCurve pressureCurve;
     public AnimationCurve tempCurve;
     private bool _usingMouse;
-    private float _currentPressure;
+    [SerializeField]private float _currentPressure;
 
     public Liquid _currentLiquid;
     private float _currentTempLerp = 25f;
@@ -88,7 +88,7 @@ public class Player : MonoBehaviour
 
         CustomEvents.CustomEventsInstance.ChangeLiquid.AddListener(ChangeLiquid);
         CustomEvents.CustomEventsInstance.AdjustTemp.AddListener(AdjustTemp);
-        CustomEvents.CustomEventsInstance.AdjustPress.AddListener(AdjustTemp);
+        CustomEvents.CustomEventsInstance.AdjustPress.AddListener(AdjustPressure);
         CustomEvents.CustomEventsInstance.ChangeMode.AddListener(ChangeMode);
 
         CustomEvents.CustomEventsInstance.ToggleRadialMenu.AddListener(AdjustTimeScale);
@@ -108,7 +108,7 @@ public class Player : MonoBehaviour
             ref _velocity, speed * Time.deltaTime));
 
 
-        if(_shouldAddSpatialData) DataController.sharedInstance.sessionData.spatialData.Add(new SpatialData(_rigidbody.position, _rigidbody.velocity, System.DateTime.Now.ToString("yyyyMMddHHmmss")));
+        if(_velocity.magnitude > 0.5f && _shouldAddSpatialData) DataController.sharedInstance.spatialData.spatialData.Add(new SpatialDataInstance(_rigidbody.position, _rigidbody.velocity, System.DateTime.Now.ToString("yyyyMMddHHmmss")));
 
         _currentRotation.x = Mathf.SmoothDamp(_currentRotation.x, _targetRotation.x + (-1f * _orientation.y), ref _rotationVelocity.x, banking);
         _currentRotation.y = Mathf.SmoothDamp(_currentRotation.y, _targetRotation.y + _orientation.x, ref _rotationVelocity.y, banking);
@@ -216,9 +216,9 @@ public class Player : MonoBehaviour
     private void ShootWater(float input)
     {
 
-        _pressure = _usingMouse ? _currentPressure: Mathf.Lerp(minPressure, maxPressure, input);
-        UpdatePressureValue.Invoke(Mathf.Round(100*_pressure/maxPressure));
-        Debug.Log($"Receivied: {_currentTemp}");
+        _pressure = Mathf.Lerp(minPressure, maxPressure, _usingMouse? _currentPressure: input);
+        //UpdatePressureValue.Invoke();
+        Debug.Log($"Received: {_currentTemp}");
         GameObject globule = GlobuleObjectPool.sharedInstance.GetPooledObject();
         if (globule != null)
         {
@@ -236,6 +236,8 @@ public class Player : MonoBehaviour
 
             AdjustTemp(.25f);
         }
+
+        _usingMouse = false;
     }
 
     private void ShootLaser(float input)
@@ -296,8 +298,12 @@ public class Player : MonoBehaviour
 
     private void AdjustPressure(float deltaP)
     {
+        Debug.LogWarning($"Delta Pressure is: {deltaP} with a current lerp {_currentPressure + deltaP}");
+        
         _usingMouse = true;
         _currentPressure += deltaP;
+        UpdatePressureValue.Invoke(_currentPressure);
+        UpdatePressureLerpValue.Invoke(_currentPressure);
     }
 
     private void AdjustTimeScale(bool toggle, float input)

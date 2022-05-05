@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -10,6 +9,7 @@ public class CustomEvents : MonoBehaviour
 {
     private static CustomEvents customEvents;
 
+    
     public static CustomEvents CustomEventsInstance
     {
         get
@@ -41,7 +41,7 @@ public class CustomEvents : MonoBehaviour
     private float _tempAdjustValue;
     private bool _canAdjustTemp = true;
     private bool _adjustingPress;
-    private bool _canAdjustPress= false;
+    private bool _canAdjustPress= true;
     [SerializeField]private bool _switchedToTemp = true;
 
     private bool _radialMenuOpen=false;
@@ -92,6 +92,7 @@ public class CustomEvents : MonoBehaviour
         _playerInput.Drone.OpenModes.Enable();
         _playerInput.Drone.Navigate.Enable();
         _playerInput.Drone.Switch.Enable();
+        _playerInput.Drone.Select.Enable();
     }
     private void OnDisable()
     {
@@ -105,6 +106,7 @@ public class CustomEvents : MonoBehaviour
         _playerInput.Drone.OpenModes.Disable();
         _playerInput.Drone.Navigate.Disable();
         _playerInput.Drone.Switch.Disable();
+        _playerInput.Drone.Select.Disable();
     }
 
     public void SetControlsActiveFunc(bool active)
@@ -170,8 +172,7 @@ public class CustomEvents : MonoBehaviour
             if (!_radialMenuOpen)
             {
                 _2dOrientate = ctx.control == Pointer.current.delta
-                    ? new Vector2(mouseRotateCamera.Evaluate(_2dOrientate.x),
-                        mouseRotateCamera.Evaluate(_2dOrientate.y))
+                    ? new Vector2(0f,0f)
                     : _2dOrientate;
                 _2dOrientate = ctx.ReadValue<Vector2>().normalized;
 
@@ -185,10 +186,16 @@ public class CustomEvents : MonoBehaviour
         };
 
         _playerInput.Drone.Temp.performed += ctx =>{
-            _adjustingTemp = true;
-            _adjustingPress = true;
-            _tempAdjustValue = ctx.ReadValue<float>();
-            _mouseAdjustPressure = ctx.ReadValue<float>();
+            if (_switchedToTemp)
+            {
+                _adjustingTemp = true;    
+                _tempAdjustValue = ctx.ReadValue<float>();
+            }
+            else
+            {
+                _adjustingPress = true;
+                _mouseAdjustPressure = ctx.ReadValue<float>();
+            }
         };
 
         _playerInput.Drone.OpenModes.performed += ctx =>
@@ -248,6 +255,7 @@ public class CustomEvents : MonoBehaviour
         _playerInput.Drone.Temp.canceled += ctx =>
         {
             _adjustingTemp = false;
+            _adjustingPress = false;
         };
 
     }
@@ -269,7 +277,7 @@ public class CustomEvents : MonoBehaviour
         if (_verticalMovement) DroneVertical.Invoke(_verticalMove);
 
 
-        if (_adjustingTemp && _canAdjustTemp && _switchedToTemp)
+        if (_adjustingTemp && _canAdjustTemp)
         {
             Debug.Log(_tempAdjustValue);
             AdjustTemp.Invoke(_tempAdjustValue);
@@ -278,16 +286,12 @@ public class CustomEvents : MonoBehaviour
         }
 
 
-        if (_adjustingPress && _canAdjustPress && !_switchedToTemp)
-        {
-            _mousePressure += _mouseAdjustPressure / 100f;
-            AdjustPress.Invoke(_mousePressure);
-        }
+        
         
 
         if (_shooting && _canShoot)
         {
-            Shoot.Invoke(_mousePressure>0?_mousePressure:_shootingValue);
+            Shoot.Invoke(_shootingValue);
             StartCoroutine(ResetShot(0.1f));
         }
 
@@ -338,6 +342,12 @@ public class CustomEvents : MonoBehaviour
         _canAdjustTemp = true;
     }
 
+    private IEnumerator ResetMousePressure(float rate)
+    {
+        _canAdjustPress = false;
+        yield return new WaitForSeconds(rate);
+        _canAdjustPress = true;
+    }
 
     public void UpdateMode(int index)
     {
@@ -467,9 +477,18 @@ public static class CustomUtility
     public static void SaveSessionToJSON(SessionData sessionData)
     {
         string data = JsonUtility.ToJson(sessionData);
-        string fileName ="/_id" + sessionData.PlayerID.ToString()+"_" +Time.time.ToString();
+        string fileName ="/_id_Session_" + sessionData.PlayerID.ToString()+"_" +Time.time.ToString();
         Debug.Log(Application.persistentDataPath + fileName);
         System.IO.File.WriteAllText(Application.persistentDataPath +fileName +".json", data);
+    }
+
+    public static void SaveSpatialToJSON(SpatialData spatialData)
+    {
+        string data = JsonUtility.ToJson(spatialData);
+        string fileName ="/_id_Spatial_" + spatialData.playerID.ToString()+"_" +Time.time.ToString();
+        Debug.Log(Application.persistentDataPath + fileName);
+        System.IO.File.WriteAllText(Application.persistentDataPath +fileName +".json", data);
+        
     }
     
     public static int CompareByAngleValue(RadialElement x, RadialElement y)

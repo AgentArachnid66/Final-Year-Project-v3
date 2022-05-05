@@ -5,6 +5,8 @@ using UnityEngine;
 using Newtonsoft.Json;
 using UnityEngine.Events;
 using System.Collections.Generic;
+using System.Configuration;
+using JetBrains.Annotations;
 
 public class DataController: MonoBehaviour
 {
@@ -31,6 +33,9 @@ public class DataController: MonoBehaviour
 
     [SerializeField]
     public SessionData sessionData = new SessionData();
+
+    [SerializeField]
+    public SpatialData spatialData = new SpatialData();
 
     [SerializeField]
     public ParticipantData participantData = new ParticipantData();
@@ -208,7 +213,7 @@ public class DataController: MonoBehaviour
         scoreCal.downloadHandler = new DownloadHandlerBuffer();
         scoreCal.SetRequestHeader("Content-Type", "application/json");
 
-        byte[] bytes = new System.Text.UTF8Encoding().GetBytes(JsonConvert.SerializeObject(scoreInput));
+        byte[] bytes = new System.Text.UTF8Encoding().GetBytes(JsonUtility.ToJson(scoreInput));
         scoreCal.uploadHandler = (UploadHandler)new UploadHandlerRaw(bytes);
         Debug.Log("Making Score Request");
         yield return scoreCal.SendWebRequest();
@@ -221,7 +226,7 @@ public class DataController: MonoBehaviour
         else
         { 
             Debug.Log(scoreCal.downloadHandler.text);
-            ScoreOutputData respond = JsonConvert.DeserializeObject<ScoreOutputData>(scoreCal.downloadHandler.text);
+            ScoreOutputData respond = JsonUtility.FromJson<ScoreOutputData>(scoreCal.downloadHandler.text);// <ScoreOutputData>(scoreCal.downloadHandler.text);
 
             if (respond.success)
             {
@@ -237,16 +242,32 @@ public class DataController: MonoBehaviour
     
     IEnumerator SaveSession()
     {
+        
+        string localURL = url + "Session";
+        CustomUtility.SaveSpatialToJSON(spatialData);
+        UnityWebRequest saveSpatial = new UnityWebRequest(localURL + "/Spatial", "POST");
+        saveSpatial.downloadHandler = new DownloadHandlerBuffer();
+        saveSpatial.SetRequestHeader("Content-Type", "application/json");
+
+
+        byte[] bytes = new System.Text.UTF8Encoding().GetBytes(JsonUtility.ToJson(spatialData));
+        saveSpatial.uploadHandler = (UploadHandler) new UploadHandlerRaw(bytes);
+        yield return saveSpatial.SendWebRequest();
+
+        if (saveSpatial.isNetworkError || saveSpatial.isHttpError)
+        {
+            Debug.Log("Error Occured" + saveSpatial.error);
+        }
+        
+        
         yield return new WaitUntil(CheckMasks);
         CustomUtility.SaveSessionToJSON(sessionData);
-        string localURL = url + "Session";
-        
-        Debug.Log(JsonConvert.SerializeObject(sessionData));
+        Debug.Log(JsonUtility.ToJson(sessionData));
         UnityWebRequest saveSession = new UnityWebRequest(localURL, "POST");
         saveSession.downloadHandler = new DownloadHandlerBuffer();
         saveSession.SetRequestHeader("Content-Type", "application/json");
          
-        byte[] bytes = new System.Text.UTF8Encoding().GetBytes(JsonConvert.SerializeObject(sessionData));
+        bytes = new System.Text.UTF8Encoding().GetBytes(JsonUtility.ToJson(sessionData));
         saveSession.uploadHandler = (UploadHandler)new UploadHandlerRaw(bytes);
 
         yield return saveSession.SendWebRequest();
@@ -273,7 +294,7 @@ public class DataController: MonoBehaviour
     IEnumerator CreateAccount()
     {
         string localURL = url + "Participant/Create";
-        string serial = JsonConvert.SerializeObject(participantData);
+        string serial = JsonUtility.ToJson(participantData);
         Debug.Log(serial);
         UnityWebRequest saveSession = new UnityWebRequest(localURL, "POST");
         saveSession.downloadHandler = new DownloadHandlerBuffer();
@@ -287,7 +308,7 @@ public class DataController: MonoBehaviour
         if (saveSession.isNetworkError || saveSession.isHttpError)
         {
 
-            ErrorOutputData respond = JsonConvert.DeserializeObject<ErrorOutputData>(saveSession.downloadHandler.text);
+            ErrorOutputData respond = JsonUtility.FromJson<ErrorOutputData>(saveSession.downloadHandler.text);
             Debug.Log("Error Occured: " + saveSession.error);
             if (ReferenceEquals(respond, null)){
                 RegisterAttemptCallback.Invoke(false, saveSession.error);
@@ -298,7 +319,7 @@ public class DataController: MonoBehaviour
         else
         {
             Debug.Log(saveSession.downloadHandler.text);
-            LoginOutputData respond = JsonConvert.DeserializeObject<LoginOutputData>(saveSession.downloadHandler.text);
+            LoginOutputData respond = JsonUtility.FromJson<LoginOutputData>(saveSession.downloadHandler.text);
             if (respond.success)
             {
                 // If the response is successful, then the PlayerID is set to the 
@@ -313,7 +334,7 @@ public class DataController: MonoBehaviour
     IEnumerator LoginAccount()
     {
         string localURL = url + "Participant/Login";
-        string serial = JsonConvert.SerializeObject(participantData);
+        string serial = JsonUtility.ToJson(participantData);
         Debug.Log(serial);
         UnityWebRequest saveSession = new UnityWebRequest(localURL, "POST");
         saveSession.downloadHandler = new DownloadHandlerBuffer();
@@ -328,7 +349,7 @@ public class DataController: MonoBehaviour
         {
             Debug.Log("Error Occured: " + saveSession.error);
             // Login Failed
-            ErrorOutputData respond = JsonConvert.DeserializeObject<ErrorOutputData>(saveSession.downloadHandler.text);
+            ErrorOutputData respond = JsonUtility.FromJson<ErrorOutputData>(saveSession.downloadHandler.text);
             Debug.Log("Server Responded with: " + respond.msg);
             LoginAttemptCallback.Invoke(false, respond.msg);
         }
@@ -336,7 +357,7 @@ public class DataController: MonoBehaviour
         {
             // Check if the participant login was successful before moving forward
             Debug.Log(saveSession.downloadHandler.text);
-            LoginOutputData respond = JsonConvert.DeserializeObject<LoginOutputData>(saveSession.downloadHandler.text);
+            LoginOutputData respond = JsonUtility.FromJson<LoginOutputData>(saveSession.downloadHandler.text);
             if (respond.success)
             {
                 // If the response is successful, then the PlayerID is set to the 
@@ -362,7 +383,7 @@ public class DataController: MonoBehaviour
 
             else
             {
-                _numSessions = JsonConvert.DeserializeObject<int>(retrieveNumSessions.downloadHandler.text);
+                _numSessions = JsonUtility.FromJson<int>(retrieveNumSessions.downloadHandler.text);
                 Debug.Log($"Number of Sessions played by this participant is {_numSessions}");
                 _numSessions += 1;
             }
