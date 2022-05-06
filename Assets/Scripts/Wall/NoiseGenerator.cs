@@ -65,25 +65,20 @@ public class NoiseGenerator : MonoBehaviour
         // _Water - A
         masterMask = new RenderTexture(sourceTexture);
 
-        // waterMask = new RenderTexture(sourceTexture);
-        // tempMask = new RenderTexture(sourceTexture);
-        // pressMask = new RenderTexture(sourceTexture);
-        // globalMask = new RenderTexture(sourceTexture);
 
-        UpdateRenderTextures();
+
+        UpdateTexture(masterMask);
+
 
         _block = new MaterialPropertyBlock();
 
         _renderer.GetPropertyBlock(_block, materialIndex);
-        //_block.SetTexture("Texture2D_1C6CB6F8", waterMask);
-        //_block.SetTexture("Texture2D_F6700227", tempMask);
-        //_block.SetTexture("Texture2D_28C91406", pressMask);
         _block.SetTexture("Texture2D_CA25BCB1", masterMask);
-
-        //_renderer.material.SetTexture("Texture2D_CA25BCB1", globalMask);
         _renderer.SetPropertyBlock(_block, materialIndex);
 
+
         Debug.LogError(_renderer.materials[materialIndex].name);
+
         DataController.sharedInstance.SaveSessionAction.AddListener(SaveAllMasks);
         DataController.sharedInstance.SaveMasksAction.AddListener(SaveAllMasks);
 
@@ -108,12 +103,7 @@ public class NoiseGenerator : MonoBehaviour
     [ContextMenu("Update Texture")]
     void UpdateTexture(RenderTexture target) {
 
-        if (_renderer != null)
-        {
-            _renderer.material.mainTexture = GenerateTexture();
-        }
         Debug.Log("Update Texture");
-        RandomiseValues();
         Graphics.Blit(GenerateTexture(), target);
     }
 
@@ -127,16 +117,6 @@ public class NoiseGenerator : MonoBehaviour
         RenderTexture.active = rt;
     }
 
-    public void SetMaterialTextureArray(string propertyName, Texture2DArray textArray)
-    {
-        _block = new MaterialPropertyBlock();
-
-        _renderer.GetPropertyBlock(_block, materialIndex);
-        _block.SetTexture(propertyName, textArray);
-        _renderer.SetPropertyBlock(_block, materialIndex);
-
-        Debug.Log("Material Set");
-    }
 
     [ContextMenu("Randomise Texture")]
     void RandomiseValues()
@@ -149,40 +129,31 @@ public class NoiseGenerator : MonoBehaviour
     [ContextMenu("Update All Render Textures")]
     void UpdateRenderTextures()
     {
-        UpdateTexture(masterMask);
-        Graphics.Blit(sourceTexture, masterMask);
+       // Graphics.Blit(sourceTexture, masterMask);
     }
 
     Texture2D GenerateTexture()
     {
         Texture2D texture = new Texture2D(width, height);
 
+        float value = initialFloat > 0? initialFloat: (float)(UnityEngine.Random.Range(0, 12) % 4) / 4f;
+        value += 0.25f;
+        Color sample = new Color(value, 0f, 0f, 0f);
+
+
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
             {
-                Color colour = CalculateColour(i, j);
-                texture.SetPixel(i, j, colour);
+                texture.SetPixel(i, j, sample);
             }
-
         }
         texture.Apply();
         return texture;
 
     }
 
-    Color CalculateColour(int x, int y)
-    {
-        float xCoord = (float)x / width * scale + offset_X;
-        float yCoord = (float)y / height * scale + offset_X;
 
-        float sample = (float)(UnityEngine.Random.Range(0, 12) % 4) / 4f;
-
-        // Step(Mathf.PerlinNoise(xCoord, yCoord) + initialFloat);
-        initialFloat = sample;
-
-        return new Color(sample, 0f, 0f);
-    }
 
     float Step(float sample)
     {
