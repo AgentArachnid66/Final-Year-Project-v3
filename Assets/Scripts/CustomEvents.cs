@@ -480,6 +480,7 @@ public static class CustomUtility
         string fileName ="/_id_Session_" + sessionData.PlayerID.ToString()+"_" +Time.time.ToString();
         Debug.Log(Application.persistentDataPath + fileName);
         System.IO.File.WriteAllText(Application.persistentDataPath +fileName +".json", data);
+        System.IO.File.WriteAllText(Application.dataPath + "/../JSON_backup_Session/" + fileName +".json", data);
     }
 
     public static void SaveSpatialToJSON(SpatialData spatialData)
@@ -488,7 +489,8 @@ public static class CustomUtility
         string fileName ="/_id_Spatial_" + spatialData.playerID.ToString()+"_" +Time.time.ToString();
         Debug.Log(Application.persistentDataPath + fileName);
         System.IO.File.WriteAllText(Application.persistentDataPath +fileName +".json", data);
-        
+        System.IO.File.WriteAllText(Application.dataPath + "/../JSON_backup_Spatial/" + fileName + ".json", data);
+
     }
     
     public static int CompareByAngleValue(RadialElement x, RadialElement y)
