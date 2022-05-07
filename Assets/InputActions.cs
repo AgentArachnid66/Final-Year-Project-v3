@@ -528,17 +528,6 @@ public class @InputActions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""2b37f8f2-1323-44f6-997b-43de1b1b58cd"",
-                    ""path"": ""<Pointer>/delta"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Navigate"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""d5567058-66e7-4a42-9753-62c98f9d4db4"",
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",

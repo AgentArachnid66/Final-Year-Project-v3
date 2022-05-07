@@ -171,9 +171,9 @@ public class CustomEvents : MonoBehaviour
         {
             if (!_radialMenuOpen)
             {
-                _2dOrientate = ctx.control == Pointer.current.delta
-                    ? new Vector2(0f,0f)
-                    : _2dOrientate;
+               // _2dOrientate = ctx.control == Pointer.current.delta
+                //    ? new Vector2(0f,0f)
+                //    : _2dOrientate;
                 _2dOrientate = ctx.ReadValue<Vector2>().normalized;
 
                 OrientDrone.Invoke(_2dOrientate);
